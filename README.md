@@ -1,3 +1,7 @@
 Team07Story
 ===========
-Michelle made a change to the Readme.
+
+AUTHORS
+=======
+Kelsey Gaboriau
+Michelle Naylor
