@@ -1,7 +1,11 @@
 Team07Story
 ===========
 
-
 AUTHORS
 =======
-Kelsey Gaboriau, Henry Hoang 
+<<<<<<< HEAD
+Kelsey Gaboriau
+=======
+Kelsey Gaboriau
+Michelle Naylor
+>>>>>>> origin
