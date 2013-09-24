@@ -4,4 +4,4 @@ Team07Story
 
 AUTHORS
 =======
-Kelsey Gaboriau, 
+Kelsey Gaboriau, Henry Hoang 
