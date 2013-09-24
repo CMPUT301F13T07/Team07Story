@@ -2,6 +2,6 @@ Team07Story
 ===========
 
 AUTHORS
-Kelsey Gaboriau
-Michelle Naylor
-Henry Hoang
+Kelsey Gaboriau\n
+Michelle Naylor\n
+Henry Hoang\n
