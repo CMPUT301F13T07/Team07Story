@@ -1,7 +1,8 @@
 Team07Story
 ===========
 
-AUTHORS:
+AUTHORS
+=======
 Kelsey Gaboriau
 Michelle Naylor
 Henry Hoang
