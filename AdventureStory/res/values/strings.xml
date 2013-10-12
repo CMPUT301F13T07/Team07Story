@@ -3,6 +3,11 @@
 
     <string name="app_name">AdventureStory</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_story_search">StorySearchActivity</string>
+    <string name="make_story">Make a New Story</string>
+    <string name="publish_story">Publish Your Story</string>
+    <string name="search_story">Search Stories</string>
+    <string name="txtview_search">Search Terms:</string>
+    <string name="search_results">Results:</string>
 
 </resources>
