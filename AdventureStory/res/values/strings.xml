@@ -4,5 +4,6 @@
     <string name="app_name">AdventureStory</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_story_search">StorySearchActivity</string>
 
 </resources>
