@@ -8,4 +8,33 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".StorySearchActivity" >
 
+    <TextView
+        android:id="@+id/search"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/txtview_search" />
+
+    <EditText
+        android:id="@+id/searchTxt"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/search"
+        android:layout_below="@+id/search"
+        android:layout_marginTop="15dp"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/searchResults"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/searchTxt"
+        android:layout_below="@+id/searchTxt"
+        android:layout_marginTop="28dp"
+        android:text="@string/search_results" />
+
 </RelativeLayout>
