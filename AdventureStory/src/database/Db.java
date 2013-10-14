@@ -2,10 +2,8 @@ package database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.provider.SyncStateContract.Constants;
 import android.util.Log;
 
 // Based on The Android Developer's Cookbook, Addison-Wesley, 2011 - Listing 9.9
@@ -13,15 +11,23 @@ import android.util.Log;
 /**
  * Performs database tasks including open, close, insert, update, and delete
  * 
- * @author michelle
+ * @author mnaylor
  *
  */
 public class Db {
 	private static SQLiteDatabase db;
 	private final Context context;
 	private final DbHelper dbhelper;
-
+	public static Table story_table;
+	public static Table option_table;
+	public static Table story_option_table;
+	public final static Table[] table_list = {story_table, option_table, 
+		                                      story_option_table};
+	
 	public Db(Context c){
+		story_table = new Story_Table();
+		option_table = new Option_Table();
+		story_option_table = new Story_Option_Table();
 		context = c;
 		dbhelper = new DbHelper(context,Table.database_name, null,
 								Table.database_version);

@@ -17,7 +17,9 @@ public class Table {
 	public static final int database_version = 1;
 	public static HashMap<String, String> table_create;
 	public String table_name = "";
-	public String create_table = "";
+	public String create = "";
+	
+	
 	
 	/**
 	 * Gets everything from a given table

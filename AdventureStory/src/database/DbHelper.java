@@ -20,16 +20,16 @@ public class DbHelper extends SQLiteOpenHelper{
     }
 
     /**
-     * Creates the tables defined in Tables.java
+     * Creates the tables which are subclasses of the Tables class
      * 
      * @see #Tables.java
      * @throws SQLiteException
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-    	for (Map.Entry table: Table.table_create.entrySet()) {
+    	for (Table table: Db.table_list) {
         	try {
-        		db.execSQL(Table.table_create.get(table));
+        		db.execSQL(table.create);
         	} catch(SQLiteException ex) {
         		Log.v("Create table exception", ex.getMessage());
         	}	
@@ -44,7 +44,7 @@ public class DbHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion,
     					  int newVersion) {
-    	for (Map.Entry table:Table.table_create.entrySet()) {
+    	for (Table table: Db.table_list) {
         	db.execSQL("drop table if exists " + table);	
     	}
     	onCreate(db);
