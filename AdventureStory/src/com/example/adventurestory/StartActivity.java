@@ -1,6 +1,7 @@
 package com.example.adventurestory;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -25,6 +26,7 @@ public class StartActivity extends Activity {
     	mkStory.setOnClickListener(new OnClickListener(){
     		public void onClick(View v){
     			// Bring up EditOptionActivity
+    			newStory();
     		}
     	});
     	
@@ -48,6 +50,13 @@ public class StartActivity extends Activity {
         getMenuInflater().inflate(R.menu.start, menu);
         return true;
     }
+    
+	/* Called when the user clicks the Make a New Story button */
+	private void newStory(){
+		// Bring up Option Edit Activity
+		Intent logViewIntent = new Intent(this, OptionEditActivity.class);
+		startActivity(logViewIntent);
+	}
     
 }
 

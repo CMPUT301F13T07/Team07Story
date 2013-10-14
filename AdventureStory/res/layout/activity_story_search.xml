@@ -36,5 +36,13 @@
         android:layout_below="@+id/searchTxt"
         android:layout_marginTop="28dp"
         android:text="@string/search_results" />
+    
+    <ListView
+        android:id = "@+id/storyList"
+        android:layout_width="fill_parent" 
+        android:dividerHeight="1dp"
+        android:layout_below="@+id/searchResults"
+        android:layout_height = "fill_parent" >
+    </ListView> 
 
 </RelativeLayout>
