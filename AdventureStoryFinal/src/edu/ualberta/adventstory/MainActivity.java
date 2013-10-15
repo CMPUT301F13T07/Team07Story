@@ -11,6 +11,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// this is my new feature
+		
+		// new 5 methods
+		
+		// new validation for searching fragments
 	}
 
 	@Override
