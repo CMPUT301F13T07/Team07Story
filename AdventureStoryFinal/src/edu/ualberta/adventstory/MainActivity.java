@@ -11,6 +11,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// this is my new feature
+		// new commit in the new brach
 		
 		// new 5 methods
 		
