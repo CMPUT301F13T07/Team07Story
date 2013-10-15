@@ -12,6 +12,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		// this is my new feature
 		// new commit in the new brach
+		// new dev
 		
 		// new 5 methods
 		
