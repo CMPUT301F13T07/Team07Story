@@ -1,4 +1,5 @@
-package com.example.story;
+package edu.ualberta.multimedia;
+import edu.ualberta.utils.*;
 
 public class SoundClip extends MultimediaAbstract{
 	int story_id;

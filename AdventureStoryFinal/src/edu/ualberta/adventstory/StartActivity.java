@@ -1,4 +1,4 @@
-package com.example.adventurestory;
+package edu.ualberta.adventstory;
 
 import android.app.Activity;
 import android.content.Intent;

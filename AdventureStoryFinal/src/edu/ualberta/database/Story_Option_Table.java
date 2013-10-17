@@ -1,6 +1,7 @@
-package database;
+package edu.ualberta.database;
 
 import android.content.ContentValues;
+import edu.ualberta.utils.*;
 
 /**
  * Note: This table does not need an update function because

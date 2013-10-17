@@ -1,10 +1,8 @@
-package database;
+package edu.ualberta.database;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-import android.provider.SyncStateContract.Constants;
-import android.util.Log;
+import edu.ualberta.utils.*;
+
 
 public class Story_Table extends Table{
 	public String table_name = "Story";

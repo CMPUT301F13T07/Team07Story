@@ -1,4 +1,4 @@
-package com.example.story;
+package edu.ualberta.multimedia;
 
 public class Picture extends MultimediaAbstract{
 

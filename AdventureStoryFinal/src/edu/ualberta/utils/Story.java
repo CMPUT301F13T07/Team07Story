@@ -1,4 +1,4 @@
-package edu.ualberta.adventstory;
+package edu.ualberta.utils;
 
 import java.util.*;
 

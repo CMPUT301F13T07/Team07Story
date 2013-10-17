@@ -1,4 +1,4 @@
-package com.example.adventurestory;
+package edu.ualberta.adventstory;
 
 import android.annotation.SuppressLint;
 import android.app.ListFragment;

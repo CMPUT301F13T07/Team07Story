@@ -1,6 +1,7 @@
-package com.example.online;
+package edu.ualberta.online;
 
 import org.apache.http.client.HttpClient;
+import edu.ualberta.utils.*;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.google.gson.Gson;
@@ -27,7 +28,8 @@ public class WebClient {
 	
 	//search the webserver for stories and return a story object, without saving to DB
 	public Story storySearch(String storyname) {
-		
+	
+		return new Story(null, null, null);
 	}
 
 	//Will search for story with same name/other identifier (TBD) and replace it with argument
