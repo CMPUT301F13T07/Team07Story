@@ -7,16 +7,16 @@ public class Story {
 	private Integer id;
 	private String title;
 	private String author;
-	private Option root;
+	private Page root;
 
-	//Like Option, overloaded constructors for when creating new story or loading from DB
-	public Story(String title, String author, Option root) {
+	//Like Page, overloaded constructors for when creating new story or loading from DB
+	public Story(String title, String author, Page root) {
 		this.id = null;
 		this.title = title;
 		this.author = author;
 		this.root = root;
 	}
-	public Story(Integer id, String title, String author, Option root) {
+	public Story(Integer id, String title, String author, Page root) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
@@ -29,12 +29,12 @@ public class Story {
 	public String getTitle() {return title;}
 	public void setAuthor(String a) {author = a;}
 	public String getAuthor() {return author;}
-	public void setRoot(Option r) {root = r;}
-	public Option getRoot() {return root;}
+	public void setRoot(Page r) {root = r;}
+	public Page getRoot() {return root;}
 	
-	//return all options, see Option class for more details
-	public ArrayList<Option> getAllOptions() {
-		ArrayList<Option> ret = root.getAllOptions();
+	//return all options, see Page class for more details
+	public ArrayList<Page> getAllPages() {
+		ArrayList<Page> ret = root.getAllPages();
 		ret.add(0, root);
 		return ret;
 	}
