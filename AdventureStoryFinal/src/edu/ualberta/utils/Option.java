@@ -44,9 +44,9 @@ public class Option {
 	public void addOption(Option o) {options.add(o);}
 	public void deleteOption(Integer i) {options.remove(i);}
 	
-	//get all options and return them in a simple arraylist. Should be useful for bulk saves of option branches
-	//or entire stories. 
-	//Get all options at and below current node
+	//get all options and return them in a simple arraylist. 
+	//Get all options at and below current node. Does not include the current option. 
+	//should you want it, you can include it at the call site. 
 	public ArrayList<Option> getAllOptions() {
 		return getAllOptions(this);
 	}

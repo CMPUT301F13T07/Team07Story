@@ -35,7 +35,7 @@ public class Story {
 	//return all options, see Option class for more details
 	public ArrayList<Option> getAllOptions() {
 		ArrayList<Option> ret = root.getAllOptions();
-		ret.add(root);
+		ret.add(0, root);
 		return ret;
 	}
 }
