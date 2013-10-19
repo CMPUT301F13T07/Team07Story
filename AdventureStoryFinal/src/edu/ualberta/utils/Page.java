@@ -11,8 +11,17 @@ public class Page {
 	//private ArrayList<Multimedia> multimedia;
 	private ArrayList<Page> pages;
 	
-	//Constructors overloaded for when creating new pages or loading them from DB
-	//Saving the DB id should make updating the DB simpler and more reliable
+	/*Constructors overloaded for when creating new pages or loading them from DB
+	*Saving the DB id should make updating the DB simpler and more reliable
+	*
+	*Constructor summary:
+	*Option id: the DB id, non-null if the page was loaded from the DB, otherwise not relevant
+	*title: the name of the page
+	*text; the text of the page
+	*parent: this nodes parent in the tree. See addPage() for more information on parent
+	*TO-DO: multimedia: the multimedia objects on the page
+	*pages: The list of pages the user can choose to go to next
+	*/
     public Page(Integer id, String title, String text, Page parent, ArrayList<Page> pages) {
 		this.id = id;
 		this.title = title;
@@ -46,7 +55,14 @@ public class Page {
 	public ArrayList<Page> getPages() {return pages;};
 	public Page getPage(Integer i) {return pages.get(i);}
 	public void setPage(Integer i, Page o) {pages.set(i, o);}
-	public void addPage(Page o) {pages.add(o);}
+	
+	//Should note here, if you pass null in the parent field of the constructor, parent will be initialized to
+	//the caller. Only the root in a Story object or stand-alone pages should be able to have null parent
+	public void addPage(Page o) {
+		if (o.getParent() == null)
+			o.setParent(this);
+		pages.add(o);
+	}
 	public void deletePage(Integer i) {pages.remove(i);}
 	
 	//get all pages and return them in a simple arraylist. 
@@ -59,7 +75,8 @@ public class Page {
 	//get all pages at and below the designated node
 	public ArrayList<Page> getAllPages(Page o) {
 		ArrayList<Page> ops = o.getPages();
-		for (int i=0; i < ops.size(); i++) {
+		int size = ops.size();
+		for (int i=0; i < size; i++) {
 			ops.addAll(getAllPages(ops.get(i)));
 		}
 		return ops;
