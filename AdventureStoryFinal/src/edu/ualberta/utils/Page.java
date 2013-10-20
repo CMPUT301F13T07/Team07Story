@@ -5,7 +5,8 @@ import java.util.*;
 //TO-DO Update attributes and constructors when have multimedia class of some kind.
 public class Page {
 	private Integer id;
-        private String title;
+    private String title;
+    private String author;
 	private String text;
 	private Page parent;
 	//private ArrayList<Multimedia> multimedia;
@@ -20,14 +21,16 @@ public class Page {
 	*Constructor summary:
 	*Option id: the DB id, non-null if the page was loaded from the DB, otherwise not relevant
 	*title: the name of the page
+	*author: the author of the page
 	*text; the text of the page
 	*parent: this nodes parent in the tree. See addPage() for more information on parent
 	*TO-DO: multimedia: the multimedia objects on the page
 	*pages: The list of pages the user can choose to go to next
 	*/
-    public Page(Integer id, String title, String text, Page parent, ArrayList<Page> pages) {
+    public Page(Integer id, String title, String author, String text, Page parent, ArrayList<Page> pages) {
 		this.id = id;
 		this.title = title;
+		this.author = author;
 		this.text = text;
 		this.parent = parent;
 		if (pages == null)
@@ -35,9 +38,10 @@ public class Page {
 		else
 			this.pages = pages;
 	}
-    public Page(String title, String text, Page parent, ArrayList<Page> pages) {
+    public Page(String title, String author, String text, Page parent, ArrayList<Page> pages) {
 		this.id = null;
 		this.title = title;
+		this.author = author;
 		this.text = text;
 		this.parent = parent;
 		if (pages == null)
@@ -50,6 +54,8 @@ public class Page {
 	public Integer getID() {return id;}
     public void setTitle(String t) {title = t;}
     public String getTitle() {return title;}
+    public void setAuthor(String a) {author = a;}
+    public String getAuthor() {return author;}
 	public void setText(String t) {text = t;}
 	public String getText() {return text;}
 	public void setParent(Page p) {parent = p;}
@@ -68,8 +74,8 @@ public class Page {
 	}
 	public void deletePage(Integer i) {pages.remove(i);}
 	
-	//get all pages and return them in a simple arraylist, ordered by depth in tree. 
-	//Get all pages at and below current node. Does not include the current Page. 
+	//get all pages and return them in a simple arraylist. 
+	//Get all pages at and below current node. Does not include the current option. 
 	//should you want it, you can include it at the call site. 
 	public ArrayList<Page> getAllPages() {
 		ArrayList<Page> ret = new ArrayList<Page>();
@@ -89,5 +95,43 @@ public class Page {
 		int size = ops.size();
 		for (int i=0; i < size; i++) 
 			getAllPages(ops.get(i), level+1);
+	}
+	
+	//searches do not return in any particular order at the moment, can do this later if desirable
+	public ArrayList<Page> searchByTitle(String t) {
+		ArrayList<Page> res = new ArrayList<Page>();
+		
+		if (this.getTitle().equals(t))
+			res.add(this);
+		ArrayList<Page> ops = this.getPages();
+		for (int i=0; i<ops.size(); i++)
+			res.addAll(ops.get(i).searchByTitle(t));
+		return res;
+	}
+	
+	public ArrayList<Page> searchByAuthor(String a) {
+		ArrayList<Page> res = new ArrayList<Page>();
+		
+		if (this.getAuthor().equals(a))
+			res.add(this);
+		ArrayList<Page> ops = this.getPages();
+		for (int i=0; i<ops.size(); i++)
+			res.addAll(ops.get(i).searchByAuthor(a));
+		return res;
+	}
+	
+	public ArrayList<Page> searchByID(Integer id) {
+		ArrayList<Page> res = new ArrayList<Page>();
+		
+		if (this.getID() == null && id == null) {
+			res.add(this);
+		} else {
+			if (this.getID().equals(id))
+				res.add(this);
+		}
+		ArrayList<Page> ops = this.getPages();
+		for (int i=0; i<ops.size(); i++)
+			res.addAll(ops.get(i).searchByID(id));
+		return res;
 	}
 }
