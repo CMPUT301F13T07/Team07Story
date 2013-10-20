@@ -11,6 +11,9 @@ public class Page {
 	//private ArrayList<Multimedia> multimedia;
 	private ArrayList<Page> pages;
 	
+	//for internal use only
+	private ArrayList<ArrayList<Page>> levellist = new ArrayList<ArrayList<Page>>();
+	
 	/*Constructors overloaded for when creating new pages or loading them from DB
 	*Saving the DB id should make updating the DB simpler and more reliable
 	*
@@ -69,16 +72,22 @@ public class Page {
 	//Get all pages at and below current node. Does not include the current option. 
 	//should you want it, you can include it at the call site. 
 	public ArrayList<Page> getAllPages() {
-		return getAllPages(this);
+		ArrayList<Page> ret = new ArrayList<Page>();
+		getAllPages(this, 0);
+		for (int i=0; i<levellist.size(); i++) 
+			ret.addAll(levellist.get(i));
+		levellist.clear();
+		return ret;
 	}
 	
-	//get all pages at and below the designated node
-	public ArrayList<Page> getAllPages(Page o) {
+	//internal use
+	private void getAllPages(Page o, int level) {
+		if ((level+1) > levellist.size()) 
+			levellist.add(new ArrayList<Page>());
+		levellist.get(level).addAll(o.getPages());
 		ArrayList<Page> ops = o.getPages();
 		int size = ops.size();
-		for (int i=0; i < size; i++) {
-			ops.addAll(getAllPages(ops.get(i)));
-		}
-		return ops;
+		for (int i=0; i < size; i++) 
+			getAllPages(ops.get(i), level+1);
 	}
 }
