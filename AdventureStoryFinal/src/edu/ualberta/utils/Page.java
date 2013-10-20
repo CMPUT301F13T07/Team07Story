@@ -74,8 +74,8 @@ public class Page {
 	}
 	public void deletePage(Integer i) {pages.remove(i);}
 	
-	//get all pages and return them in a simple arraylist. 
-	//Get all pages at and below current node. Does not include the current option. 
+	//get all pages and return them in a simple arraylist. Ordered by depth in tree
+	//Get all pages at and below current node. Does not include the current page. 
 	//should you want it, you can include it at the call site. 
 	public ArrayList<Page> getAllPages() {
 		ArrayList<Page> ret = new ArrayList<Page>();
