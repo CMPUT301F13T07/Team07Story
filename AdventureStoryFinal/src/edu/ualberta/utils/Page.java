@@ -75,10 +75,10 @@ public class Page {
 	public void deletePage(Integer i) {pages.remove(i);}
 	
 	//get all pages and return them in a simple arraylist. Ordered by depth in tree
-	//Get all pages at and below current node. Does not include the current page. 
-	//should you want it, you can include it at the call site. 
+	//Get all pages at and below current node. Includes current page
 	public ArrayList<Page> getAllPages() {
 		ArrayList<Page> ret = new ArrayList<Page>();
+		ret.add(this);
 		getAllPages(this, 0);
 		for (int i=0; i<levellist.size(); i++) 
 			ret.addAll(levellist.get(i));
@@ -88,12 +88,11 @@ public class Page {
 	
 	//internal use
 	private void getAllPages(Page o, int level) {
-		if ((level+1) > levellist.size()) 
+		if (level >= levellist.size()) 
 			levellist.add(new ArrayList<Page>());
 		levellist.get(level).addAll(o.getPages());
 		ArrayList<Page> ops = o.getPages();
-		int size = ops.size();
-		for (int i=0; i < size; i++) 
+		for (int i=0; i < ops.size(); i++) 
 			getAllPages(ops.get(i), level+1);
 	}
 	

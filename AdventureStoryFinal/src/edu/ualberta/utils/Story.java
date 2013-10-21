@@ -37,8 +37,6 @@ public class Story {
 	
 	//return all pages, see Page class for more details
 	public ArrayList<Page> getAllPages() {
-		ArrayList<Page> ret = root.getAllPages();
-		ret.add(0, root);
-		return ret;
+		return root.getAllPages();
 	}
 }
