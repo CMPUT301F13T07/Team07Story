@@ -23,27 +23,26 @@ public class Page {
 	*title: the name of the page
 	*author: the author of the page
 	*text; the text of the page
-	*parent: this nodes parent in the tree. See addPage() for more information on parent
 	*TO-DO: multimedia: the multimedia objects on the page
 	*pages: The list of pages the user can choose to go to next
 	*/
-    public Page(Integer id, String title, String author, String text, Page parent, ArrayList<Page> pages) {
+    public Page(Integer id, String title, String author, String text, ArrayList<Page> pages) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.text = text;
-		this.parent = parent;
+		this.parent = null;
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
 			this.pages = pages;
 	}
-    public Page(String title, String author, String text, Page parent, ArrayList<Page> pages) {
+    public Page(String title, String author, String text, ArrayList<Page> pages) {
 		this.id = null;
 		this.title = title;
 		this.author = author;
 		this.text = text;
-		this.parent = parent;
+		this.parent = null;
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
@@ -58,18 +57,15 @@ public class Page {
     public String getAuthor() {return author;}
 	public void setText(String t) {text = t;}
 	public String getText() {return text;}
-	public void setParent(Page p) {parent = p;}
 	public Page getParent() {return parent;}
 	public void setPages(ArrayList<Page> o) {pages = o;}
 	public ArrayList<Page> getPages() {return pages;};
 	public Page getPage(Integer i) {return pages.get(i);}
 	public void setPage(Integer i, Page o) {pages.set(i, o);}
 	
-	//Should note here, if you pass null in the parent field of the constructor, parent will be initialized to
-	//the caller. Only the root in a Story object or stand-alone pages should be able to have null parent
+	//Sets the parent of a newly added page to the page that it is being added to
 	public void addPage(Page o) {
-		if (o.getParent() == null)
-			o.setParent(this);
+		o.parent = this;
 		pages.add(o);
 	}
 	public void deletePage(Integer i) {pages.remove(i);}
