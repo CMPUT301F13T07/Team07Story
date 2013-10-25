@@ -35,6 +35,19 @@ public class Story {
 	public ArrayList<Page> searchByID(Integer id) {return root.searchByID(id);}
 	public ArrayList<Page> searchByAuthor(String a) {return root.searchByAuthor(a);}
 	
+	//Clones the story object and ALL its pages. See Page.java for more information on cloning
+	public Story cloneEntireStory() {
+		Story nstory = this.clone();
+		nstory.root = this.root.cloneAllChildren();
+		return nstory;
+	}
+	
+	//overriding so as not to have to deal with casting and exception nonsense
+	public Story clone() {
+		return new Story(this.id, this.title, this.author, this.root);
+	
+	}
+	
 	//return all pages, see Page class for more details
 	public ArrayList<Page> getAllPages() {
 		return root.getAllPages();

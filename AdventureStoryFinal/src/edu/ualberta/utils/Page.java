@@ -61,7 +61,10 @@ public class Page {
 	public void setPages(ArrayList<Page> o) {pages = o;}
 	public ArrayList<Page> getPages() {return pages;};
 	public Page getPage(Integer i) {return pages.get(i);}
-	public void setPage(Integer i, Page o) {pages.set(i, o);}
+	public void setPage(Integer i, Page o) {
+		o.parent = this;
+		pages.set(i, o);
+	}
 	
 	//Sets the parent of a newly added page to the page that it is being added to
 	public void addPage(Page o) {
@@ -69,6 +72,30 @@ public class Page {
 		pages.add(o);
 	}
 	public void deletePage(Integer i) {pages.remove(i);}
+	
+	/*Overrides to make sure Pages aren't referencing parent or child nodes they shouldn't when cloned
+	*specifically, a cloned page's children will point towards the original, not cloned node. 
+	*It will effectively be a stand-alone page until you do something with it
+	*It wouldn't make much sense for the child to point to the parent but the parent not to point at the child or 
+	*vice versa
+	*You can add a clone back to the tree with a call to addPage
+	*
+	*If you want to get an entire branch of the tree, se cloneAllChildren below
+	*/
+	public Page clone() {
+		return new Page(this.id, this.title, this.author, this.text, null);
+	}
+	
+	//Clones the caller and all Pages below it in the tree. 
+	public Page cloneAllChildren() {
+		Page root = this.clone();
+		ArrayList<Page> pages = this.getPages();
+		for (int i=0; i<pages.size(); i++) {
+			root.addPage(pages.get(i).cloneAllChildren());
+		}
+		
+		return root;
+	}
 	
 	//get all pages and return them in a simple arraylist. Ordered by depth in tree
 	//Get all pages at and below current node. Includes current page
