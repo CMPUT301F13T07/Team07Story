@@ -31,11 +31,12 @@ public class Story {
 	public String getAuthor() {return author;}
 	public void setRoot(Page r) {root = r;}
 	public Page getRoot() {return root;}
+	public ArrayList<Page> searchByTitle(String t) {return root.searchByTitle(t);}
+	public ArrayList<Page> searchByID(Integer id) {return root.searchByID(id);}
+	public ArrayList<Page> searchByAuthor(String a) {return root.searchByAuthor(a);}
 	
-	//return all options, see Page class for more details
+	//return all pages, see Page class for more details
 	public ArrayList<Page> getAllPages() {
-		ArrayList<Page> ret = root.getAllPages();
-		ret.add(0, root);
-		return ret;
+		return root.getAllPages();
 	}
 }
