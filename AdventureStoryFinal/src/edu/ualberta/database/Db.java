@@ -15,8 +15,6 @@ import edu.ualberta.utils.Story;
 // Also based on mnaylor's CMPUT301 Assignment1
 /**
  * Performs database tasks including open, close, insert, update, and delete
- * 
- * @author mnaylor
  *
  */
 public class Db {
@@ -73,6 +71,7 @@ public class Db {
 	 * @return id number of inserted page
 	 */
 	// TODO: add children pages to Story_Page table
+	// necessary? When would a newly inserted/created page ever have a child?
 	public long insert_page(Page page) {
 		ContentValues values = new ContentValues();
 	    values.put(Constant.PAGE_TITLE, page.getTitle());
@@ -84,7 +83,6 @@ public class Db {
 			Log.v("Insert into database exception caught", ex.getMessage());
 			return -1;
 		}
-		
 	}
 	
 	/**
@@ -94,14 +92,13 @@ public class Db {
 	 * @param option
 	 * @return number of rows inserted
 	 */
-	public long insert_page_option(Story story, Page page, Page option) {
+	public long insert_page_option(Page page, Page option) {
 		ContentValues values = new ContentValues();
-	    values.put(Constant.STORY_ID, story.getID());
 	    values.put(Constant.PAGE_ID, page.getID());
 	    values.put(Constant.NEXT_PAGE_ID, option.getID());
 		try{
-			return db.insert(Constant.TABLE_PAGE, null, values);
-		} 
+			return db.insert(Constant.TABLE_PAGE_CHILDREN, null, values);
+		}
 		catch(SQLiteException ex) {
 			Log.v("Insert into database exception caught", ex.getMessage());
 			return -1;
@@ -133,6 +130,10 @@ public class Db {
 		Cursor c = get_from_db(Constant.TABLE_PAGE, Constant.PAGE_ID, id);
 		return page_from_cursor(c).get(0);
 	}
+	public ArrayList<Page> get_page_options(Integer id) {
+		Cursor c = get_from_db(Constant.TABLE_PAGE_CHILDREN, Constant.PAGE_ID, id);
+		return page_from_cursor(c);
+	}
 	
 	/**
 	 * Fetches story(ies) or page(s) from the db
@@ -145,7 +146,6 @@ public class Db {
 		String select = "SELECT * FROM " + table
 				+ "WHERE " + column + " LIKE %"
 				+ term + "%";
-		
 		try {
 			return db.rawQuery(select, null);
 		} catch(SQLiteException ex) {
@@ -172,7 +172,6 @@ public class Db {
 		}
 	}
 	
-	// TODO: does not query Story_Page to get option/child pages
 	public ArrayList<Page> page_from_cursor(Cursor c) {
 		Integer id;
 	    String title;
@@ -188,7 +187,10 @@ public class Db {
 			author = c.getString(c.getColumnIndex(Constant.PAGE_AUTHOR));
 			text = c.getString(c.getColumnIndex(Constant.PAGE_TEXT));
 			
-			Page page = new Page(id, title, author, text, null);
+			ArrayList<Page> options = new ArrayList<Page>();
+			options = get_page_options(id);
+			
+			Page page = new Page(id, title, author, text, options);
 			pages.add(page);
 		}
 		
