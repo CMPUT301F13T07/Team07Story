@@ -72,6 +72,7 @@ public class Db {
 	 * @param page
 	 * @return id number of inserted page
 	 */
+	// TODO: add children pages to Story_Page table
 	public long insert_page(Page page) {
 		ContentValues values = new ContentValues();
 	    values.put(Constant.PAGE_TITLE, page.getTitle());
@@ -83,6 +84,7 @@ public class Db {
 			Log.v("Insert into database exception caught", ex.getMessage());
 			return -1;
 		}
+		
 	}
 	
 	/**

@@ -7,7 +7,7 @@ public class Constant {
 	// table titles
 	public static final String TABLE_STORY = "Story";
 	public static final String TABLE_PAGE = "Page";
-	public static final String TABLE_STORY_PAGE = "Story_Page";
+	public static final String TABLE_PAGE_CHILDREN = "Page_Children";
 	//public static final String TABLE_MULTIMEDIA = "Multimedia";
 	
 	// common column titles
@@ -46,17 +46,13 @@ public class Constant {
 			  										 + ") REFERENCES " + TABLE_PAGE
 			  										 + " (" + PAGE_ID + "))";
 	
-	public static final String CREATE_STORY_PAGE_TABLE = "CREATE TABLE IF NOT EXISTS "
-														  + TABLE_STORY_PAGE + " ("
-														  + STORY_ID + " INTEGER, "
-														  + PAGE_ID + " INTEGER, "
+	public static final String CREATE_PAGE_CHILDREN_TABLE = "CREATE TABLE IF NOT EXISTS "
+														  + TABLE_PAGE_CHILDREN + "(" + PAGE_ID + " INTEGER, "
 														  + NEXT_PAGE_ID + " INTEGER, "
-														  + "PRIMARY KEY (" + STORY_ID 
+														  + "PRIMARY KEY (" 
 														  + ", " + PAGE_ID + " ,"
 														  + NEXT_PAGE_ID + "), FOREIGN KEY ("
-														  + STORY_ID + "REFERENCES " 
-														  + TABLE_STORY + " (" + STORY_ID 
-														  + "), FOREIGN KEY (" + PAGE_ID
+														  + PAGE_ID
 														  + ") REFERENCES " + TABLE_PAGE
 														  + " (" + PAGE_ID 
 														  + "), FOREIGN KEY (" + NEXT_PAGE_ID
