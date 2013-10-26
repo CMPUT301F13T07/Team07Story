@@ -1,7 +1,5 @@
 package edu.ualberta.database;
 
-import java.util.Map;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -12,7 +10,11 @@ import android.util.Log;
 
 // Based on The Android Developer's Cookbook, Addison-Wesley, 2011 - Listing 9.10
 // Also based on mnaylor's CMPUT301 Assignment1
+
+// TODO: Add multimedia tables
+
 public class DbHelper extends SQLiteOpenHelper{
+
 	
     public DbHelper(Context context, String name, CursorFactory factory, 
     				int version) {
@@ -27,13 +29,13 @@ public class DbHelper extends SQLiteOpenHelper{
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-    	for (Table table: Db.table_list) {
-        	try {
-        		db.execSQL(table.create);
-        	} catch(SQLiteException ex) {
-        		Log.v("Create table exception", ex.getMessage());
-        	}	
-    	}
+        try {
+        	db.execSQL(Constant.CREATE_STORY_TABLE);
+        	db.execSQL(Constant.CREATE_PAGE_TABLE);
+        	db.execSQL(Constant.CREATE_STORY_PAGE_TABLE);
+        } catch(SQLiteException ex) {
+        	Log.v("Create table exception", ex.getMessage());
+        }	
     }
     
     /**
@@ -44,9 +46,9 @@ public class DbHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion,
     					  int newVersion) {
-    	for (Table table: Db.table_list) {
-        	db.execSQL("drop table if exists " + table);	
-    	}
+        db.execSQL("drop table if exists " + TABLE_STORY);
+        db.execSQL("drop table if exists " + TABLE_PAGE);
+        db.execSQL("drop table if exists " + TABLE_STORY_PAGE);
     	onCreate(db);
     }
 }
