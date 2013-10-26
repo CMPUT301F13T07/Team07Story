@@ -1,6 +1,9 @@
 package edu.ualberta.database;
 
 public class Constant {
+	public static final String DATABASE_NAME = "story_page_storage";
+    public static final int DATABASE_VERSION = 1;
+    
 	// table titles
 	public static final String TABLE_STORY = "Story";
 	public static final String TABLE_PAGE = "Page";
@@ -19,6 +22,9 @@ public class Constant {
 	// page table columns
 	public static final String PAGE_TITLE = "page_title";
 	public static final String PAGE_AUTHOR = "page_author";
+	public static final String PAGE_TEXT = "page_text";
+	// TODO: Do we need a parent?
+	//public static final String PARENT_ID = "parent_id";
 	
 	// story_page columns
 	public static final String NEXT_PAGE_ID = "next_page_id"; 
@@ -27,7 +33,8 @@ public class Constant {
 												    + TABLE_PAGE + " ("
 												    + PAGE_ID + " INTEGER PRIMARY KEY, "
 												    + PAGE_TITLE + " TEXT, "
-												    + PAGE_AUTHOR + " TEXT)";
+												    + PAGE_AUTHOR + " TEXT, "
+												    + PAGE_TEXT + " TEXT)";
 	
 	public static final String CREATE_STORY_TABLE = "CREATE TABLE IF NOT EXISTS " 
 			  										 + TABLE_STORY + " ("

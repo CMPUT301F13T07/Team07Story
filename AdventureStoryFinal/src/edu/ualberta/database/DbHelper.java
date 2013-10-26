@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.SyncStateContract.Constants;
 import android.util.Log;
 
 // Based on The Android Developer's Cookbook, Addison-Wesley, 2011 - Listing 9.10
@@ -14,7 +13,7 @@ import android.util.Log;
 // TODO: Add multimedia tables
 
 public class DbHelper extends SQLiteOpenHelper{
-
+	
 	
     public DbHelper(Context context, String name, CursorFactory factory, 
     				int version) {
@@ -46,9 +45,9 @@ public class DbHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion,
     					  int newVersion) {
-        db.execSQL("drop table if exists " + TABLE_STORY);
-        db.execSQL("drop table if exists " + TABLE_PAGE);
-        db.execSQL("drop table if exists " + TABLE_STORY_PAGE);
+        db.execSQL("drop table if exists " + Constant.TABLE_STORY);
+        db.execSQL("drop table if exists " + Constant.TABLE_PAGE);
+        db.execSQL("drop table if exists " + Constant.TABLE_STORY_PAGE);
     	onCreate(db);
     }
 }
