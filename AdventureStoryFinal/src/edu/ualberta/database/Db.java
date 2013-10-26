@@ -18,7 +18,7 @@ import edu.ualberta.utils.Story;
  *
  */
 public class Db {
-	private static SQLiteDatabase db;
+	public static SQLiteDatabase db;
 	private final Context context;
 	private final DbHelper dbhelper;
 	
@@ -27,7 +27,7 @@ public class Db {
 		dbhelper = new DbHelper(context,Constant.DATABASE_NAME, null,
 								Constant.DATABASE_VERSION);
 	}
-
+	
 	public void close() {
 		db.close();
 	}
@@ -172,6 +172,11 @@ public class Db {
 		}
 	}
 	
+	/**
+	 * Takes a cursor full of pages and returns an array of page objects
+	 * @param c
+	 * @return ArrayList<Page>
+	 */
 	public ArrayList<Page> page_from_cursor(Cursor c) {
 		Integer id;
 	    String title;
@@ -197,6 +202,11 @@ public class Db {
 		return pages;
 	}
 	
+	/**
+	 * Takes a cursor full of stories and returns an array of story objects
+	 * @param c
+	 * @return ArrayList<Story>
+	 */
 	public ArrayList<Story> story_from_cursor(Cursor c) {
 		Integer id;
 		String title;
@@ -221,9 +231,42 @@ public class Db {
 		return stories;
 	}
 	
+	/**
+	 * Updates a story's author, title, and or root page
+	 * @param old
+	 * @param updated
+	 * @return
+	 */
+	public long update_story(Story story) {
+		ContentValues values = new ContentValues();
+		String where = Constant.STORY_ID + " = " + story.getID();
+		
+	    values.put(Constant.STORY_TITLE, story.getTitle());
+	    values.put(Constant.STORY_AUTHOR, story.getAuthor());
+	    values.put(Constant.ROOT, story.getRoot().getID());
+	    
+	    return update(Constant.TABLE_STORY, values, where);
+	}
 	
-	// TODO: Update methods
-	// TODO: Delete methods
+	/**
+	 * Updates a page's author, title, and/or text
+	 * Does NOT update the page's children
+	 * @see insert_page_option
+	 * @see delete_page_option
+	 * @param page
+	 * @return
+	 */
+	public long update_page(Page page) {
+		ContentValues values = new ContentValues();
+		String where = Constant.PAGE_ID + " = " + page.getID();
+		
+	    values.put(Constant.PAGE_TITLE, page.getTitle());
+	    values.put(Constant.PAGE_AUTHOR, page.getAuthor());
+	    values.put(Constant.PAGE_TEXT, page.getText());
+	    
+	    return update(Constant.TABLE_PAGE, values, where);
+	}
+	
 	/**
 	 * 
 	 * @param table
@@ -239,6 +282,45 @@ public class Db {
 			Log.v("Insert into database exception caught", ex.getMessage());
 			return -1;
 		}
+	}
+	
+	/**
+	 * Deletes a story from the story table
+	 * @param story
+	 * @return 0 if successful, -1 if not successful
+	 */
+	public long delete_story(Story story) {
+		String where = Constant.STORY_ID + " = " + story.getID(); 
+		return delete(Constant.TABLE_STORY, where);)
+	}
+	
+	/**
+	 * Deletes a page and its connection to its children from the db
+	 * @param page
+	 * @return
+	 */
+	public long delete_page(Page page) {
+		long result;
+		String where = Constant.PAGE_ID + " = " + page.getID();
+		
+		/* Delete children from PAGE_CHILDREN table */
+		result = delete(Constant.TABLE_PAGE_CHILDREN, where);
+		if (result == -1) {return -1;}
+		
+		/* Delete page from page table */
+		return delete(Constant.TABLE_PAGE, where);
+	}
+	
+	/**
+	 * Deletes page, child row from page_children table
+	 * @param page
+	 * @param child
+	 * @return
+	 */
+	public long delete_page_option(Page page, Page child) {
+		String where = Constant.PAGE_ID + " = " + page.getID() + " AND "
+				       + Constant.NEXT_PAGE_ID + " = " + child.getID();
+		return delete(Constant.TABLE_PAGE_CHILDREN, where);
 	}
 	
 	/**
