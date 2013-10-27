@@ -1,5 +1,46 @@
 package edu.ualberta.utils;
 
+/*
+ * The Page class
+ * This class comes with all the components and functionality needed to represent a page in the Adventure Story
+ * It takes the form of a dynamic tree data structure where each page can have a (theoretically) limitless number
+ * of children pages. 
+ * 
+ * It also contains the parent (when it has one) which can be accessed by users and authors but cannot be manually
+ * set by them, this is handled automatically when adding or modifying an existing page. This is done to prevent
+ * mismatches between parents and children, since finding a bug caused by this would likely be a nightmare. 
+ * 
+ * See Constructor summary below the attribute list for more details on the constructors
+ * 
+ * Overrode clone feature to ensure parent/child reference safety as mention above. See clone() and cloneAllChildren for
+ * further information
+ * 
+ * REMINDER ABOUT JAVA OBJECTS: If you are familiar with how Java handles objects in memory and the difference between assigning
+ * and cloning, you can ignore this next section. If you don't know what I'm talking about, READ THIS, it might save you
+ * many a headache. 
+ * In regards to above mentioned clones, remember, changes made to an object not cloned from
+ * the tree WILL AFFECT THE TREE, all you are doing is copying the reference to the object, you are not mapping new 
+ * memory for it. 
+ * Ex: 
+ * Page root = new Page("ex", "Lyle", "text", null);
+ * Story mystory = new Story("mystory", "Lyle", root);
+ * Page page = mystory.getRoot();
+ * page.setText("new text");
+ * System.out.println(mystory.getRoot().getText());
+ * This will print "new text", NOT "text". If I were to add .clone() after getRoot(), it would print "text". Remember, you are copying
+ * only a reference to page, not allocating a new object. The sheer number of times I've seen even experienced programmers
+ * make this mistake forces me to harp on it. Sorry for being long winded, blame Java's documention on the 
+ * difference between pass-by-reference and pass-by-value.
+ * 
+ * For non=trivial implementation specific information, see the specific functions. The prototypes, in order are;
+ * Page clone() : clones the caller, creating a new Page which is SEPARATE from the tree, it will not have a parent or children
+ * Page cloneAllChildren() : Like above, but will clone all the children of the caller, returning a clone of the caller
+ * ArrayList<Page> getAllPages() : Gets a list of Pages, ordered by level in the tree
+ * ArrayList<Page> searchByTitle(String) : return a list of pages whose title matches the passed string. Currently case sensitive
+ * ArrayList<Page> searchByAuthor(Sting) : return a list of pages whose author field matches argument. Currently case sensitive
+ * ArrayList<Page> searchByID(Integer) : return a list of pages whose ID matches argument. ID can be null
+ */
+
 import java.util.*;
 
 //TO-DO Update attributes and constructors when have multimedia class of some kind.
@@ -16,7 +57,8 @@ public class Page {
 	private ArrayList<ArrayList<Page>> levellist = new ArrayList<ArrayList<Page>>();
 	
 	/*Constructors overloaded for when creating new pages or loading them from DB
-	*Saving the DB id should make updating the DB simpler and more reliable
+	*Saving the DB id should make updating the DB simpler and more reliable, but does not really matter
+	*for when creating new pages
 	*
 	*Constructor summary:
 	*Option id: the DB id, non-null if the page was loaded from the DB, otherwise not relevant
@@ -61,6 +103,8 @@ public class Page {
 	public void setPages(ArrayList<Page> o) {pages = o;}
 	public ArrayList<Page> getPages() {return pages;};
 	public Page getPage(Integer i) {return pages.get(i);}
+	
+	//Modifies and existing page, updating the parent of the passed Page
 	public void setPage(Integer i, Page o) {
 		o.parent = this;
 		pages.set(i, o);
@@ -86,7 +130,12 @@ public class Page {
 		return new Page(this.id, this.title, this.author, this.text, null);
 	}
 	
-	//Clones the caller and all Pages below it in the tree. 
+	/*Clones the caller and all Pages below it in the tree. 
+	 * Implementation: 
+	 * clones the current page, then gets the list of children from the ORIGINAL page
+	 * iterates through those pages, performing a recursive call on them. The return value is the clone
+	 * of the current page, which will be added to the children of the clone
+	 */
 	public Page cloneAllChildren() {
 		Page root = this.clone();
 		ArrayList<Page> pages = this.getPages();
@@ -97,8 +146,16 @@ public class Page {
 		return root;
 	}
 	
-	//get all pages and return them in a simple arraylist. Ordered by depth in tree
-	//Get all pages at and below current node. Includes current page
+	/*
+	 * get all pages and return them in a simple arraylist. Ordered by depth in tree
+	 * Get all pages at and below current node. Includes current page
+	 * Implementation: 
+	 * This one is is a hack and duct tape solution that I really don't like but it works and don't 
+	 * feel like changing it at the moment. It creates a new array list, addes the caller to the list
+	 * then calls the recursive half of the function, which sifts between the levels of the tree, adding them
+	 * to their corresponding arraylist in the arraylist. 
+	 * When it returns, the populated arraylist of arraylists are combined and returned
+	*/
 	public ArrayList<Page> getAllPages() {
 		ArrayList<Page> ret = new ArrayList<Page>();
 		ret.add(this);
@@ -119,7 +176,14 @@ public class Page {
 			getAllPages(ops.get(i), level+1);
 	}
 	
-	//searches do not return in any particular order at the moment, can do this later if desirable
+	/*
+	 * searches do not return in any particular order at the moment, can do this later if desirable
+	 * Implementation:
+	 * All the searches are pretty much the same, look to see if the caller if the caller equals the provided 
+	 * string/Integer, adding it to the list if it does. Changes the caller by recursively running through the children
+	 * of each, and so on and so forth. each return combines the arraylists of the individual calls providing a list
+	 * of all matches. Will return an empty arraylist if there are no matches. 
+	 */
 	public ArrayList<Page> searchByTitle(String t) {
 		ArrayList<Page> res = new ArrayList<Page>();
 		

@@ -2,6 +2,11 @@ package edu.ualberta.utils;
 
 import java.util.*;
 
+/*
+ * This class represents the "book cover" of the story for the most part, and as such, most of the functionality
+ * in this class is actually just wrappers around functions in Page.java. 
+ * Refer to that for further information. 
+ */
 
 public class Story {
 	private Integer id;
