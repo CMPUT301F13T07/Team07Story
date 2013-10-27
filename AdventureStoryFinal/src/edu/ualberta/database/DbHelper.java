@@ -31,7 +31,7 @@ public class DbHelper extends SQLiteOpenHelper{
         try {
         	db.execSQL(Constant.CREATE_STORY_TABLE);
         	db.execSQL(Constant.CREATE_PAGE_TABLE);
-        	db.execSQL(Constant.CREATE_STORY_PAGE_TABLE);
+        	db.execSQL(Constant.CREATE_PAGE_CHILDREN_TABLE);
         } catch(SQLiteException ex) {
         	Log.v("Create table exception", ex.getMessage());
         }	
@@ -47,7 +47,7 @@ public class DbHelper extends SQLiteOpenHelper{
     					  int newVersion) {
         db.execSQL("drop table if exists " + Constant.TABLE_STORY);
         db.execSQL("drop table if exists " + Constant.TABLE_PAGE);
-        db.execSQL("drop table if exists " + Constant.TABLE_STORY_PAGE);
+        db.execSQL("drop table if exists " + Constant.TABLE_PAGE_CHILDREN);
     	onCreate(db);
     }
 }
