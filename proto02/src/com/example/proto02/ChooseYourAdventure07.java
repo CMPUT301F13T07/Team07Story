@@ -5,14 +5,12 @@
 package com.example.proto02;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import android.app.Application;
 import android.app.Activity;
 
 import com.example.multimedia.*;
-import com.example.multimedia.MultimediaAbstract;
-import com.example.multimedia.MultimediaDB;
-import com.example.multimedia.StringExtended;
 import com.example.utils.Page;
 import com.example.utils.Story;
 
@@ -21,8 +19,8 @@ public class ChooseYourAdventure07 extends Application {
 	
 	// Test data.
 	private Story mStory;
-	private Page mOldPage;
 	private Page mCurrentPage;
+	private Stack<Page> mPageHistory;
 	
 	public void onCreate(){
 		super.onCreate();
@@ -82,15 +80,15 @@ public class ChooseYourAdventure07 extends Application {
 		p.add(third);
 		test01.setPages(p);
 		mStory = new Story("Test Story", "someone", test01);
-		mOldPage = null;
 		mCurrentPage = test01;
+		mPageHistory = new Stack<Page>();
 	}
 	
 	public Activity getCurrentActivity(){return mCurrentActivity;}
 	
 	public void setCurrentActivity(Activity currentActivity){mCurrentActivity = currentActivity;}
 	
-	public Page getOldPage(){ return mOldPage; }
+	public Page getOldPage(){return mPageHistory.peek();}
 	
 	public Story getCurrentStory(){return mStory;}
 	public Page getCurrentPage(){return mCurrentPage;}
@@ -98,15 +96,13 @@ public class ChooseYourAdventure07 extends Application {
 	public void setCurrentStory(Story story){ mStory = story; }
 	
 	public void revertPage(){
-		if(mOldPage != null){
-			Page temp = mCurrentPage;
-			mCurrentPage = mOldPage;
-			mOldPage = temp;
+		if(mPageHistory.empty() == false){
+			mCurrentPage = mPageHistory.pop();
 		}
 	}
 	
 	public void setCurrentPage(Page page){
-		mOldPage = mCurrentPage;
+		mPageHistory.push(mCurrentPage);
 		mCurrentPage = page;
 	}
 }
