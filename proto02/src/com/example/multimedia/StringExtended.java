@@ -75,26 +75,8 @@ public class StringExtended {
 						
 						@Override
 						public void onClick(View widget) {
-							// TODO Auto-generated method stub
-							Toast.makeText(mContext, "Image Clicked ", 
-									Toast.LENGTH_SHORT).show();
-							
-							switch(mMultimedia.getMediaType()){
-							case MultimediaAbstract.PHOTO:
-								// Do no nothing.
-								return;
-							case MultimediaAbstract.SOUND:
-								SoundClip sc = (SoundClip)mMultimedia;
-								sc.playSound();
-								return;
-							case MultimediaAbstract.VIDEO:
-								Video v = (Video)mMultimedia;
-								v.playVideo();
-								return;
-							default:
-								// Not suppose to be in here.
-								return;
-							}
+							// TODO Auto-generated method stub							
+								mMultimedia.play();							
 						}										
 					}
 					
