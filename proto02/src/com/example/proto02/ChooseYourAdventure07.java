@@ -2,6 +2,7 @@
 //		 or should Page should be able to determine it's parent?
 //		 I persnally would recommend the latter since we are always sure
 //		 the old page is the parent page.
+// SHOULD DO: remember the scrolling index?
 package com.example.proto02;
 
 import java.util.ArrayList;
@@ -88,7 +89,12 @@ public class ChooseYourAdventure07 extends Application {
 	
 	public void setCurrentActivity(Activity currentActivity){mCurrentActivity = currentActivity;}
 	
-	public Page getOldPage(){return mPageHistory.peek();}
+	public Page getOldPage(){ 
+		if(mPageHistory.empty() == false)
+			return mPageHistory.peek();
+		else 
+			return null;
+	}
 	
 	public Story getCurrentStory(){return mStory;}
 	public Page getCurrentPage(){return mCurrentPage;}
