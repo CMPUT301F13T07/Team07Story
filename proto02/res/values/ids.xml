@@ -1,0 +1,6 @@
+<!-- These values are for views that don't deserved to have their own layout xml 
+	due to bsimplicity. -->
+<resources>
+	<item type="id" name="FragmentID"/>
+	<item type="id" name="VideoViewID"/>
+</resources>
