@@ -20,7 +20,7 @@ public class Video extends MultimediaAbstract{
 	}
 	
 	public Bitmap loadPhoto(){
-		if( super.index == -1 ){
+		if( super.pictureId== -1 ){
 			return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_video);
 		}else{

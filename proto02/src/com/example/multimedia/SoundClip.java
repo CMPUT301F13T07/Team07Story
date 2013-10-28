@@ -54,7 +54,7 @@ public class SoundClip extends MultimediaAbstract{
 	
 	@Override
 	public Bitmap loadPhoto(){
-		if( super.index == -1 ){
+		if( super.pictureId == -1 ){
 			return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_audio);
 		}else{
