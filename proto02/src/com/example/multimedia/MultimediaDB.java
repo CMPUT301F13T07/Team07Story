@@ -45,7 +45,7 @@ public class MultimediaDB {
 	static final String BITMAP_TABLE = "bitmaptable";
 	static final String SOUND_TABLE = "soundtable";
 	static final String VIDEO_TABLE = "videotable";
-	static final int DATABASE_VERSION = 13;
+	static final int DATABASE_VERSION = 14;
 	
 	static final String BITMAP_DB_CREATE = 
 			"CREATE TABLE " + BITMAP_TABLE + 

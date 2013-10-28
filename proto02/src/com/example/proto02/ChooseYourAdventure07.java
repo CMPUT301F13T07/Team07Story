@@ -43,7 +43,7 @@ public class ChooseYourAdventure07 extends Application {
 			
 		}
 		if( MultimediaDB.getVideoDirectory(1, this) == null){
-			MultimediaDB.insertVideoDirectory(v1.getId(), "/sdcard/Movies/RickRoll D.mkv", this);
+			MultimediaDB.insertVideoDirectory(v1.getId(), "/sdcard/Movies/wc.mp4", this);
 			
 		}
 		

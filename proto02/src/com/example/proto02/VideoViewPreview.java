@@ -12,14 +12,14 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.content.Context;
 import android.os.SystemClock;
 
 import com.example.multimedia.MultimediaDB;
 import com.example.utils.Utility;
 
-public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callback,
-													MediaPlayer.OnCompletionListener{
+public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callback{
 	MediaPlayer mMediaPlayer;
 	SurfaceHolder sh;
 	Context mContext;	
@@ -65,6 +65,13 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		LayoutParams lp = new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);				
 		this.setLayoutParams(lp);
+		
+		// Exit when exit.
+		mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+			public void onCompletion(MediaPlayer mp){
+				switcthToOriginalLayout();				
+			}
+		});
 	}
 		
 	long currentTime;
@@ -112,11 +119,6 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 	public MediaPlayer getMediaPlayer(){
 		return mMediaPlayer;
 	}
-
-	@Override
-	public void onCompletion(MediaPlayer mp) {
-		switcthToOriginalLayout();		
-	}	
 	
 		
 	public void switcthToOriginalLayout(){
