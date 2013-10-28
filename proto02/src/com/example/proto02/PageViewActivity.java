@@ -6,6 +6,7 @@ package com.example.proto02;
 // 		 is better.
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -189,7 +190,7 @@ public class PageViewActivity extends ActivityExtended{
 				public void onClick(View view){
 					// Go to the next page.
 					mAdventureTime.setCurrentPage(p);
-					recreate();
+					mAdventureTime.getCurrentActivity().recreate();
 				}
 			});
 			mOuterLayout.addView(btn);
@@ -254,5 +255,26 @@ public class PageViewActivity extends ActivityExtended{
 	public void switchOriginalLayout(){
 		super.switchOriginalLayout();
 		this.setContentView(mScrollView, mOuterLayoutParam);
+	}
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+	    if (Integer.parseInt(android.os.Build.VERSION.SDK) < 5
+	            && keyCode == KeyEvent.KEYCODE_BACK
+	            && event.getRepeatCount() == 0) {	
+	        onBackPressed();
+	        return true;
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public void onBackPressed(){
+		if( mAdventureTime.getOldPage() == null ){
+			// Do nothing.
+		}else{
+			mAdventureTime.revertPage();
+			this.recreate();
+		}
 	}
 }

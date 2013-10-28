@@ -95,9 +95,18 @@ public class ChooseYourAdventure07 extends Application {
 	public Story getCurrentStory(){return mStory;}
 	public Page getCurrentPage(){return mCurrentPage;}
 	
-	public void setCurrentStory(Story story){ mStory = story; } 
+	public void setCurrentStory(Story story){ mStory = story; }
+	
+	public void revertPage(){
+		if(mOldPage != null){
+			Page temp = mCurrentPage;
+			mCurrentPage = mOldPage;
+			mOldPage = temp;
+		}
+	}
+	
 	public void setCurrentPage(Page page){
-		mOldPage = page;
+		mOldPage = mCurrentPage;
 		mCurrentPage = page;
 	}
 }
