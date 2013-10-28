@@ -79,8 +79,7 @@ public class StringExtended {
 								mMultimedia.play();							
 						}										
 					}
-					
-					Context context = multimedia.getContext();
+										
 					ClickableSpanEx cse = new ClickableSpanEx(multimedia, 
 														multimedia.getContext());
 					
