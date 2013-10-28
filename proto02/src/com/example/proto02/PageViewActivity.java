@@ -213,15 +213,13 @@ public class PageViewActivity extends ActivityExtended{
 	}
 
 	void setStoryText( StringExtended storyText, float textSize){
-		mStoryTextView.setMovementMethod(LinkMovementMethod.getInstance());
-		
+		mStoryTextView.setMovementMethod(LinkMovementMethod.getInstance());		
 		String s = "\n\n" + storyText.getParagraph(); // Add some space.
 		// Create a new StringExtended to not replace the old one.
 		StringExtended se = new StringExtended(s, storyText.getAllMultimedia());
 		se.setParagraph(s);
 		
 		mStoryTextView.setText(se.getSpannableStringBuilder(), BufferType.SPANNABLE);
-		mStoryTextView.setTextSize(textSize);
 	}
 	
 	@Override
