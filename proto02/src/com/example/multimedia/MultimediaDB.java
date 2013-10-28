@@ -9,7 +9,7 @@
  */
 
 // TODO: Add static methods for inserting/getting.
-
+// 		 Add another integer so that these database save index. 
 package com.example.multimedia;
 
 import java.io.File;

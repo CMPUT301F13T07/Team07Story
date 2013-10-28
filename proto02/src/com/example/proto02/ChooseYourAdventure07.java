@@ -1,3 +1,7 @@
+// TODO: Unsure if this should have an mOldPage to be able to go back
+//		 or should Page should be able to determine it's parent?
+//		 I persnally would recommend the latter since we are always sure
+//		 the old page is the parent page.
 package com.example.proto02;
 
 import java.util.ArrayList;
@@ -17,6 +21,7 @@ public class ChooseYourAdventure07 extends Application {
 	
 	// Test data.
 	private Story mStory;
+	private Page mOldPage;
 	private Page mCurrentPage;
 	
 	public void onCreate(){
@@ -77,20 +82,22 @@ public class ChooseYourAdventure07 extends Application {
 		p.add(third);
 		test01.setPages(p);
 		mStory = new Story("Test Story", "someone", test01);
+		mOldPage = null;
 		mCurrentPage = test01;
 	}
 	
-	public Activity getCurrentActivity(){
-		return mCurrentActivity;
-	}
+	public Activity getCurrentActivity(){return mCurrentActivity;}
 	
-	public void setCurrentActivity(Activity currentActivity){
-		mCurrentActivity = currentActivity;
-	}
+	public void setCurrentActivity(Activity currentActivity){mCurrentActivity = currentActivity;}
+	
+	public Page getOldPage(){ return mOldPage; }
 	
 	public Story getCurrentStory(){return mStory;}
 	public Page getCurrentPage(){return mCurrentPage;}
 	
 	public void setCurrentStory(Story story){ mStory = story; } 
-	public void setCurrentPage(Page page){ mCurrentPage = page; } 
+	public void setCurrentPage(Page page){
+		mOldPage = page;
+		mCurrentPage = page;
+	}
 }

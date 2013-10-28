@@ -129,7 +129,7 @@ public class PageViewActivity extends ActivityExtended{
 		// Place the inner layout inside the outer layout.
 		mOuterLayout.addView(mInnerLayout, mInnerLayoutParam);
 		
-		AddNextPageButton();
+		AddButtons();
 				
 		this.setContentView(mScrollView, mOuterLayoutParam);
 	}
@@ -179,7 +179,7 @@ public class PageViewActivity extends ActivityExtended{
 		// caching.
 	}
 	
-	void AddNextPageButton(){
+	void AddButtons(){
 		for(final Page p : mPage.getPages()){
 			Button btn = new Button(this);
 			btn.setText(p.getTitle());
