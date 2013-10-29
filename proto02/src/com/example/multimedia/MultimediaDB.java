@@ -36,16 +36,25 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class MultimediaDB {
-	static final String KEY_ROWID = "_id";				// Bitmap id.
+	static final String KEY_ROWID = "_id";				// id.
+	static final String KEY_PICTUREID = "pic_id";		// Picture id.
+	static final String KEY_INDEX = "index";			// position index.
 	static final String KEY_DIRECTORY = "directory";	// filename.
 	
 	static final String TAG = "MultimediaDB";
 	
 	static final String DATABASE_NAME = "MultimediaDB";
+	// I suggest separating the two to avoid duplicate resource.
+	// This is for retreiving the fileNames of object.
 	static final String BITMAP_TABLE = "bitmaptable";
 	static final String SOUND_TABLE = "soundtable";
-	static final String VIDEO_TABLE = "videotable";
-	static final int DATABASE_VERSION = 14;
+	static final String VIDEO_TABLE = "videotable";	
+	// This is for retrieving MultimediaAbstract object.
+	static final String PICTUREOBJ_TABLE = "pictureObj_table";
+	static final String SOUNDOBJ_TABLE = "soundObj_table";
+	static final String VIDEOOBJ_TABLE = "videoObj_table";
+	
+	static final int DATABASE_VERSION = 18;
 	
 	static final String BITMAP_DB_CREATE = 
 			"CREATE TABLE " + BITMAP_TABLE + 

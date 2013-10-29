@@ -125,7 +125,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		ActivityExtended ae = 
 				(ActivityExtended)((ChooseYourAdventure07)mContext.
 						getApplicationContext()).getCurrentActivity();
-		ae.switchOriginalLayout();
+		ae.switchToOriginalLayout();
 	}
 	
 	public void lockLandscape(){

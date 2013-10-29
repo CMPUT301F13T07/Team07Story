@@ -6,18 +6,17 @@ package com.example.proto02;
 
 import android.app.Activity;
 
-public class ActivityExtended extends Activity{
+abstract public class ActivityExtended extends Activity{
 	
 	public ActivityExtended() {
 		super();
 	}
 	
+	// Override these methods.
 	
-	public void switchVideoViewPreview(String directory){				
-		// Override this.
-	}
-	
-	public void switchOriginalLayout(){
-		// Override this.
-	}
+	// Override to display video. The argument is directory of video.
+	abstract public void switchToVideoViewPreview(String directory); 
+	// Override to revert to original layout of Activity.
+	abstract public void switchToOriginalLayout();
+
 }

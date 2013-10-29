@@ -21,7 +21,7 @@ public class ChooseYourAdventure07 extends Application {
 	// Test data.
 	private Story mStory;
 	private Page mCurrentPage;
-	private Stack<Page> mPageHistory;
+	private Stack<Page> mPageHistory;	// This might be deleted.
 	
 	public void onCreate(){
 		super.onCreate();
@@ -47,7 +47,7 @@ public class ChooseYourAdventure07 extends Application {
 			
 		}
 		if( MultimediaDB.getVideoDirectory(1, this) == null){
-			MultimediaDB.insertVideoDirectory(v1.getId(), "/sdcard/Movies/wc.mp4", this);
+			MultimediaDB.insertVideoDirectory(v1.getId(), "/sdcard/Movies/RickRoll D.mp4", this);
 			
 		}
 		
@@ -71,11 +71,11 @@ public class ChooseYourAdventure07 extends Application {
 				"any fuhrer. This is simply aint Reich. They should burn to heil or something.";
 		
 		StringExtended se = new StringExtended(par, medias);
-		Page test01 = new Page(1, "first page", "someone", se, null);
-		StringExtended se2 = new StringExtended("once upon a time writers dont exist.", null);
-		Page second = new Page(2, "third page", "someoneElse", se2, null);
-		StringExtended se3 = new StringExtended("what plot?", null);
-		Page third = new Page(3, "second page", "someoneElse", se3, null);
+		Page test01 = new Page(1, "The rise of Trolls", "someone.", se, null);
+		StringExtended se2 = new StringExtended("Told you will be disappointed.", null);
+		Page second = new Page(2, "You will be disappointed.", "someoneElse", se2, null);
+		StringExtended se3 = new StringExtended("Times like these when end of civilization seems iminent.", null);
+		Page third = new Page(3, "Really?", "someoneElse", se3, null);
 		ArrayList<Page> p = new ArrayList<Page>();
 		p.add(second);
 		p.add(third);

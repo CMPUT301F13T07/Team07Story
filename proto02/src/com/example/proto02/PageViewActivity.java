@@ -221,17 +221,19 @@ public class PageViewActivity extends ActivityExtended{
 		se.setParagraph(s);
 		
 		mStoryTextView.setText(se.getSpannableStringBuilder(), BufferType.SPANNABLE);
+		mStoryTextView.setTextSize(textSize);
 	}
 	
 	@Override
-	public void switchVideoViewPreview(String directory){
+	// Video Preview 
+	public void switchToVideoViewPreview(String directory){
+		//super.switchToVideoViewPreview(directory);
 		// Create an (x) button.
 		RelativeLayout.LayoutParams rLP = new RelativeLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		
 		RelativeLayout rL = new RelativeLayout(this);
-		
-		super.switchVideoViewPreview(directory);
+		 		
 		VideoViewPreview vvp = new VideoViewPreview(directory, getBaseContext());
 		rL.addView(vvp);
 		
@@ -239,9 +241,10 @@ public class PageViewActivity extends ActivityExtended{
 		iv.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				switchOriginalLayout();
+				switchToOriginalLayout();
 			}
 		});
+		
 		iv.setImageDrawable(getResources().getDrawable(R.drawable.ic_exit));
 		RelativeLayout.LayoutParams buttonRLP = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -252,11 +255,12 @@ public class PageViewActivity extends ActivityExtended{
 	}
 	
 	@Override
-	public void switchOriginalLayout(){
-		super.switchOriginalLayout();
+	public void switchToOriginalLayout(){	
+		//super.switchToOriginalLayout();
 		this.setContentView(mScrollView, mOuterLayoutParam);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event)  {
 	    if (Integer.parseInt(android.os.Build.VERSION.SDK) < 5
@@ -268,6 +272,7 @@ public class PageViewActivity extends ActivityExtended{
 	    return super.onKeyDown(keyCode, event);
 	}
 	
+	// TODO: Make sure to link to last activity when no oldPage.
 	@Override
 	public void onBackPressed(){
 		if( mAdventureTime.getOldPage() == null ){
