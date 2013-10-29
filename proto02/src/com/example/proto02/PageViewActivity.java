@@ -135,7 +135,6 @@ public class PageViewActivity extends ActivityExtended{
 		this.setContentView(mScrollView, mOuterLayoutParam);
 	}
 
-	
 	@Override
 	public void onStart(){
 		super.onStart();

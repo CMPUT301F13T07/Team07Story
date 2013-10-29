@@ -62,4 +62,11 @@ public class SoundClip extends MultimediaAbstract{
 			return BitmapFactory.decodeFile(tempFileName);			
 		}
 	}
+	
+	@Override
+	public boolean equals( Object obj ){
+		if( obj == null ) return false;
+		if( obj == this ) return true;
+		return super.equals(obj);
+	}
 }

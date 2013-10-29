@@ -29,9 +29,10 @@ public class ChooseYourAdventure07 extends Application {
 		// Load the database.
 		Picture p1 = new Picture(1, 2, this);
 		Picture p2 = new Picture(2, 450, this);
-		SoundClip sc1 = new SoundClip(1, 40, -1, this);
-		Video v1 = new Video(1, 100, -1, this);
+		SoundClip sc1 = new SoundClip(3, 40, -1, this);
+		Video v1 = new Video(4, 100, -1, this);
 		
+		// NOTE: We have different id's independent of the Multimedia Type.
 		// Initialize photo index 1.
 		if( MultimediaDB.getBitmapDirectory(1, this) == null){
 			MultimediaDB.inserBitmapDirectory(p1.getId(), "/sdcard/Pictures/troll.jpg", this);
@@ -42,15 +43,14 @@ public class ChooseYourAdventure07 extends Application {
 			MultimediaDB.inserBitmapDirectory(p2.getId(), "/sdcard/Pictures/herp_derp.jpg", this);
 			
 		}
-		if( MultimediaDB.getSoundDirectory(1, this) == null){
+		if( MultimediaDB.getSoundDirectory(3, this) == null){
 			MultimediaDB.insertSoundDirectory(sc1.getId(), "/sdcard/Music/pewpew.mp3", this);
 			
 		}
-		if( MultimediaDB.getVideoDirectory(1, this) == null){
+		if( MultimediaDB.getVideoDirectory(4, this) == null){
 			MultimediaDB.insertVideoDirectory(v1.getId(), "/sdcard/Movies/RickRoll D.mp4", this);
-			
 		}
-		
+	
 		ArrayList<MultimediaAbstract> medias = new ArrayList<MultimediaAbstract>();
 		medias.add(p1);
 		medias.add(p2);

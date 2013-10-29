@@ -6,12 +6,7 @@ import android.graphics.BitmapFactory;
 
 import com.example.proto02.R;
 
-public class MultimediaAbstract {
-	// TODO: Use enum class instead of these constants.
-	static final int PHOTO = 0;
-	static final int SOUND = 1;
-	static final int VIDEO = 2;
-	
+abstract public class MultimediaAbstract {
 	protected int id;
 	protected int index;			// Position from first character.
 	
@@ -44,5 +39,19 @@ public class MultimediaAbstract {
 	
 	public void play(){
 		// Override.
+	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj == null) return false;
+		if(this == obj) return true;
+		MultimediaAbstract ma = (MultimediaAbstract)obj;
+		if( this.id == ma.id &&
+			this.index == ma.index &&
+			this.pictureId == ma.pictureId &&
+			this.context == ma.context ){
+			return true;
+		}
+		return false;
 	}
 }
