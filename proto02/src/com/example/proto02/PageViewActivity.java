@@ -6,6 +6,7 @@ package com.example.proto02;
 // 		 is better.
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +30,6 @@ import com.example.multimedia.StringExtended;
 public class PageViewActivity extends ActivityExtended{
 	// Not the base activity. Transfer this to the base activity then.
 	protected ChooseYourAdventure07 mAdventureTime;
-
 	
 	private TextView mStoryTitleTextView;			// Story Title TextView.
 	private TextView mPageTitleTextView;			// Page Title TextView.
@@ -131,8 +131,12 @@ public class PageViewActivity extends ActivityExtended{
 		mOuterLayout.addView(mInnerLayout, mInnerLayoutParam);
 		
 		AddButtons();
-				
-		this.setContentView(mScrollView, mOuterLayoutParam);
+		
+		if(mOnVideoViewPreview){
+			this.switchToVideoViewPreview(mVideoDirectory);
+		}else{
+			this.setContentView(mScrollView, mOuterLayoutParam);
+		}
 	}
 
 	@Override
@@ -152,6 +156,11 @@ public class PageViewActivity extends ActivityExtended{
 		getMenuInflater().inflate(R.menu.page_view, menu);
 		CreateMenu(menu);
 		return true;
+	}
+	
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
 	}
 	
 	@Override
@@ -226,36 +235,12 @@ public class PageViewActivity extends ActivityExtended{
 	@Override
 	// Video Preview 
 	public void switchToVideoViewPreview(String directory){
-		//super.switchToVideoViewPreview(directory);
-		// Create an (x) button.
-		RelativeLayout.LayoutParams rLP = new RelativeLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		
-		RelativeLayout rL = new RelativeLayout(this);
-		 		
-		VideoViewPreview vvp = new VideoViewPreview(directory, getBaseContext());
-		rL.addView(vvp);
-		
-		ImageView iv = new ImageView(this);
-		iv.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v){
-				switchToOriginalLayout();
-			}
-		});
-		
-		iv.setImageDrawable(getResources().getDrawable(R.drawable.ic_exit));
-		RelativeLayout.LayoutParams buttonRLP = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		buttonRLP.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-		rL.addView(iv, buttonRLP);
-		
-		this.setContentView(rL, rLP);
+		super.switchToVideoViewPreview(directory);
 	}
 	
 	@Override
 	public void switchToOriginalLayout(){	
-		//super.switchToOriginalLayout();
+		super.switchToOriginalLayout();
 		this.setContentView(mScrollView, mOuterLayoutParam);
 	}
 	

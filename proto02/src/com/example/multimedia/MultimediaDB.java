@@ -54,7 +54,7 @@ public class MultimediaDB {
 	static final String SOUNDOBJ_TABLE = "soundObj_table";
 	static final String VIDEOOBJ_TABLE = "videoObj_table";
 	
-	static final int DATABASE_VERSION = 18;
+	static final int DATABASE_VERSION = 19;
 	
 	static final String BITMAP_DB_CREATE = 
 			"CREATE TABLE " + BITMAP_TABLE + 

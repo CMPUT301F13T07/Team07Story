@@ -107,6 +107,7 @@ public class StringExtended {
 
 	public boolean addMultimedia(MultimediaAbstract ma) {return mMultimedia.add(ma);}
 	public boolean removeMultimedia(MultimediaAbstract ma){return mMultimedia.remove(ma);}
+	
 	public boolean removeMultimedia(int id){ 
 		// Note: This delete the first object with following id.
 		for( MultimediaAbstract m: mMultimedia){

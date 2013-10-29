@@ -15,7 +15,7 @@ public class Video extends MultimediaAbstract{
 	public void play(){
 		ChooseYourAdventure07 cya = (ChooseYourAdventure07)super.context.
 													getApplicationContext();
-		((ActivityExtended)cya.getCurrentActivity()).switchToVideoViewPreview(
+		cya.getCurrentActivity().switchToVideoViewPreview(
 				MultimediaDB.getVideoDirectory(super.id, super.context));
 	}
 	

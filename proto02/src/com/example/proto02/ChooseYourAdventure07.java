@@ -10,19 +10,19 @@ import java.util.Stack;
 
 import android.app.Application;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 
 import com.example.multimedia.*;
 import com.example.utils.Page;
 import com.example.utils.Story;
 
 public class ChooseYourAdventure07 extends Application {
-	private Activity mCurrentActivity = null;
+	private ActivityExtended mCurrentActivity = null;
 	
 	// Test data.
 	private Story mStory;
 	private Page mCurrentPage;
 	private Stack<Page> mPageHistory;	// This might be deleted.
-	
 	public void onCreate(){
 		super.onCreate();
 		// TEST.
@@ -48,7 +48,7 @@ public class ChooseYourAdventure07 extends Application {
 			
 		}
 		if( MultimediaDB.getVideoDirectory(4, this) == null){
-			MultimediaDB.insertVideoDirectory(v1.getId(), "/sdcard/Movies/RickRoll D.mp4", this);
+			MultimediaDB.insertVideoDirectory(v1.getId(), "/sdcard/Movies/chtr.mp4", this);
 		}
 	
 		ArrayList<MultimediaAbstract> medias = new ArrayList<MultimediaAbstract>();
@@ -85,9 +85,9 @@ public class ChooseYourAdventure07 extends Application {
 		mPageHistory = new Stack<Page>();
 	}
 	
-	public Activity getCurrentActivity(){return mCurrentActivity;}
+	public ActivityExtended getCurrentActivity(){return mCurrentActivity;}
 	
-	public void setCurrentActivity(Activity currentActivity){mCurrentActivity = currentActivity;}
+	public void setCurrentActivity(ActivityExtended currentActivity){mCurrentActivity = currentActivity;}
 	
 	public Page getOldPage(){ 
 		if(mPageHistory.empty() == false)

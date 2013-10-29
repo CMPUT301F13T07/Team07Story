@@ -4,41 +4,132 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.content.pm.ActivityInfo;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Point;
 import android.os.SystemClock;
 
+import com.example.controller.OnSwipeTouchListener;
 import com.example.multimedia.MultimediaDB;
 import com.example.utils.Utility;
 
-public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callback{
+public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callback,
+															 View.OnTouchListener{
 	MediaPlayer mMediaPlayer;
-	SurfaceHolder sh;
+	SurfaceHolder mSurfaceHolder;
 	Context mContext;	
 	ImageView mImageView;
-	boolean isPlay;
+	boolean mIsPlaying;
+	String mDirectory;
 	
 	@SuppressWarnings("deprecation")
 	public VideoViewPreview(String directory, Context context){
 		super(context);
-		mContext = context;
-				
-		sh = getHolder();
-		sh.addCallback(this);
-		sh.setFixedSize(400, 300);
-		sh.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		mContext = context;		
+		mSurfaceHolder = getHolder();
+		mSurfaceHolder.addCallback(this);
+		mSurfaceHolder.setFixedSize(400, 300);
+		mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
+		mDirectory = directory;
+		
+		// CREATE LAYOUT.
+		// Layout for mOuterLayout.		
+		LayoutParams lp = new LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);				
+		this.setLayoutParams(lp);
+		
+		ImageView iv = new ImageView(mContext);
+		iv.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				switchToOriginalLayout();
+			}
+		});		
+		
+		RelativeLayout.LayoutParams rLP = new RelativeLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		
+		RelativeLayout rL = new RelativeLayout(mContext);
+		rL.addView(this);
+		
+		ImageView ivExitButton = new ImageView(mContext);
+		ivExitButton.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				switchToOriginalLayout();
+			}
+		});		
+		ivExitButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_exit));
+		
+		// RelativeLayout.LayoutParam for just the button.
+		RelativeLayout.LayoutParams exitLP = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		
+		exitLP.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		rL.addView(ivExitButton, exitLP);
+
+		final ImageView ivPlayButton = new ImageView(mContext);
+		ivPlayButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_play));
+		ivPlayButton.setScaleX(3.0f);
+		ivPlayButton.setScaleY(3.0f);
+		ivPlayButton.setAlpha(0.0f);
+		ivPlayButton.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				if(isPlaying()){
+					// Pause.
+					onPlayPause();
+					ivPlayButton.setAlpha(1.0f);
+				}else{
+					// Play.
+					onPlayPause();
+					// Show button.
+					ivPlayButton.setAlpha(0.0f);
+				}
+			}
+		});
+		
+		// RelativeLyout.LayoutParam for the play button.
+		RelativeLayout.LayoutParams playLP = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		playLP.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		playLP.addRule(RelativeLayout.CENTER_VERTICAL);
+		// Set Width/Height manually.
+		playLP.width = 100;
+		playLP.height = 100;		
+		rL.addView(ivPlayButton, playLP);
+		((ActivityExtended)mContext).addContentView(rL, rLP); 
+		((ActivityExtended)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		this.setOnTouchListener(this);
+	}
+	
+	
+		
+	void loadVideo(){
 		mMediaPlayer = new MediaPlayer();
 		
-		File file = new File(directory);
+		File file = new File(mDirectory);
 		try {
 			byte[] byteArray = Utility.load(file, mContext);
 			MultimediaDB mdb = new MultimediaDB(mContext);
@@ -61,36 +152,24 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 			e.printStackTrace();
 		} 	
 		
-		// Layout for mOuterLayout.		
-		LayoutParams lp = new LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);				
-		this.setLayoutParams(lp);
-		
 		// Exit when exit.
 		mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
 			public void onCompletion(MediaPlayer mp){
-				switcthToOriginalLayout();				
+				switchToOriginalLayout();				
 			}
 		});
-	}
 		
-	long currentTime;
-	@Override
-	public boolean onTouchEvent(MotionEvent me){
-		if(isPlay){
-			if((SystemClock.uptimeMillis()-currentTime) > 200){
-				mMediaPlayer.pause();
-				isPlay = false;
-				currentTime = SystemClock.uptimeMillis();	
-			}		
+		final SurfaceView sv = this;
+	}
+			
+	public void onPlayPause(){
+		if(mIsPlaying){
+			mMediaPlayer.pause();
+			mIsPlaying = false;			
 		}else{
-			if((SystemClock.uptimeMillis()-currentTime) > 200){
-				mMediaPlayer.start();
-				isPlay = true;
-				currentTime = SystemClock.uptimeMillis();
-			}
-		}
-		return true;
+			mMediaPlayer.start();
+			mIsPlaying = true;
+		}	
 	}
 
 	@Override
@@ -103,10 +182,15 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 	public void surfaceCreated(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
 		//lockLandscape();
-		mMediaPlayer.setDisplay(sh);
+		loadVideo();
+		mMediaPlayer.setDisplay(mSurfaceHolder);
 		mMediaPlayer.start();
-		isPlay = true;
-		currentTime = SystemClock.uptimeMillis();
+		mIsPlaying = true;
+		
+		Animation fadeIn = new AlphaAnimation(0, 1);
+		fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
+		fadeIn.setDuration(1000);
+		this.startAnimation(fadeIn);
 	}
 
 	@Override
@@ -121,10 +205,11 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 	}
 	
 		
-	public void switcthToOriginalLayout(){
+	public void switchToOriginalLayout(){		
 		ActivityExtended ae = 
 				(ActivityExtended)((ChooseYourAdventure07)mContext.
 						getApplicationContext()).getCurrentActivity();
+		((ActivityExtended)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 		ae.switchToOriginalLayout();
 	}
 	
@@ -133,5 +218,61 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 				(PageViewActivity)((ChooseYourAdventure07)mContext.
 						getApplicationContext()).getCurrentActivity();
 		pva.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+	}
+	
+	public boolean isPlaying(){
+		return mIsPlaying;
+	}
+
+
+	// TODO: Create a super class SurfaceView.
+	// TODO: Make the a threshold parameter.
+	// TODO: Make a controller for this.
+	private int _xOld;
+	private int _yOld;
+    private float deltaX;
+    private float deltaY;
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		WindowManager wm = ((ActivityExtended)mContext).getWindowManager();
+		Display d = wm.getDefaultDisplay();
+		Point p = new Point();
+		d.getSize(p);
+	    final int X = (int) event.getRawX();
+	    final int Y = (int) event.getRawY();
+
+	    switch (event.getAction() & MotionEvent.ACTION_MASK) {
+	        case MotionEvent.ACTION_DOWN:
+	            deltaX = X - _xOld;
+	            deltaY = Y - _yOld;
+	            break;
+	        case MotionEvent.ACTION_UP:
+	        	if(this.getY() <= (p.y-150)){
+	        		// Place back to original position.
+	        		this.setY(0);
+	        		this.setX(0);
+	        	}
+	            break;
+	        case MotionEvent.ACTION_POINTER_DOWN:
+	            break;
+	        case MotionEvent.ACTION_POINTER_UP:
+	        	if(this.getY() <= (p.y-150)){
+	        		// Place back to original position.
+	        		this.setY(0);
+	        		this.setX(0);
+	        	}
+	            break;
+	        case MotionEvent.ACTION_MOVE:	            
+	            float newX = X - deltaX;
+	            float newY = Y - deltaY;
+	            _xOld = X;
+	            _xOld = Y;
+	            if(this.getY() > (p.y-200)) this.switchToOriginalLayout();
+	            this.setY(newY);	            
+	            break;
+	    }
+	    this.invalidate();
+	    return true;
 	}
 }
