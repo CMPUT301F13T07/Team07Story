@@ -27,9 +27,11 @@
             android:label="@string/title_activity_search" >
         </activity>
         <activity
-            android:name="edu.ualberta.adventstory.CreateNewActivity"
+            android:name="edu.ualberta.adventstory.CreateNewStoryActivity"
             android:label="@string/title_activity_create_new" >
         </activity>
+        <activity android:name="edu.ualberta.adventstory.PageEditActivity"></activity>
+        <activity android:name="edu.ualberta.adventstory.PageViewActivity"></activity>
     </application>
 
 </manifest>
