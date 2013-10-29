@@ -8,7 +8,7 @@
         android:id="@+id/labelOnline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Online: " />
+        android:text="@string/labelOnline" />
 
     <Spinner
         android:id="@+id/spinnerOnline"
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spinnerOnline"
-        android:text="Search By: " />
+        android:text="@string/labelSearchBy" />
 
     <Spinner
         android:id="@+id/spinnerSearchBy"
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/spinnerSearchBy"
-        android:text="Search: " />
+        android:text="@string/labelSearch" />
 
     <EditText
         android:id="@+id/searchEntry"
@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/searchEntry"
-        android:text="Results: " />
+        android:text="@string/labelResults" />
     
     <ListView
         android:id = "@+id/listResults"
