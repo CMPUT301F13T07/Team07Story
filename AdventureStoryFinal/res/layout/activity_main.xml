@@ -5,39 +5,39 @@
     android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/publish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/button3"
+            android:layout_below="@+id/newPage"
             android:text="@string/publish" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/findStory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/button2"
+            android:layout_below="@+id/publish"
             android:text="@string/findStory" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/findPage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/button4"
+            android:layout_below="@+id/findStory"
             android:text="@string/findPage" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/newPage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/button1"
+            android:layout_below="@+id/newStory"
             android:text="@string/newPage" />
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/newStory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -46,4 +46,3 @@
             android:text="@string/newStory" />
 
     </RelativeLayout>
-    

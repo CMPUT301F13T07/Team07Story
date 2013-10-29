@@ -9,8 +9,7 @@
     <string name="findPage">Find a Page</string>
     <string name="findStory">Find a Story</string>
     <string name="publish">Publish a Story</string>
-    
-	<string name="newstory">New Story</string>
+    <string name="newstory">New Story</string>
     <string name="title">Title: </string>
     <string name="titlehint">Story title</string>
     <string name="author">Author: </string>
@@ -18,10 +17,12 @@
     <string name="firstpage">First Page</string>
     <string name="buttonSubmit">Submit</string>
     <string name="buttonCancel">Cancel</string>
-	<string-array name="first_page_array">
-	    <item>Existing Page</item>
-	    <item>New Page</item>
-	</string-array>
-    
-    
+
+    <string-array name="first_page_array">
+        <item>Existing Page</item>
+        <item>New Page</item>
+    </string-array>
+
+    <string name="title_activity_main">MainActivity</string>
+
 </resources>
