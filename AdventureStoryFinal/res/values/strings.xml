@@ -13,7 +13,7 @@
     <string name="title">Title: </string>
     <string name="titlehint">Story title</string>
     <string name="author">Author: </string>
-    <string name="authorhint">Author's name</string>
+    <string name="authorhint">Author\'s name</string>
     <string name="firstpage">First Page</string>
     <string name="buttonSubmit">Submit</string>
     <string name="buttonCancel">Cancel</string>
@@ -22,17 +22,21 @@
         <item>Existing Page</item>
         <item>New Page</item>
     </string-array>
-    
     <string-array name="online_toggle">
         <item>Yes</item>
         <item>No</item>
     </string-array>
-    
     <string-array name="searchBy_dropdown">
         <item>Title</item>
         <item>Author</item>
     </string-array>
 
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_storysearch">StorySearchActivity</string>
+    <string name="title_activity_createnewstory">CreateNewStoryActivity</string>
+    <string name="title_activity_test">TEST</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_create_new">CreateNewActivity</string>
 
 </resources>
