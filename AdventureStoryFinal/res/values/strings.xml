@@ -17,6 +17,10 @@
     <string name="firstpage">First Page</string>
     <string name="buttonSubmit">Submit</string>
     <string name="buttonCancel">Cancel</string>
+    <string name="labelOnline">Online: </string>
+    <string name="labelSearchBy">Search By: </string>
+    <string name="labelSearch">Search: </string>
+    <string name="labelResults">Results: </string>
 
     <string-array name="first_page_array">
         <item>Existing Page</item>

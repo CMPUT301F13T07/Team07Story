@@ -68,16 +68,12 @@ public final class R {
         public static final int textView3=0x7f090012;
     }
     public static final class layout {
-        public static final int activity_create_new=0x7f030000;
-        public static final int activity_main=0x7f030001;
-        public static final int activity_newstory=0x7f030002;
-        public static final int activity_page_view=0x7f030003;
-        public static final int activity_pageedit=0x7f030004;
-        public static final int activity_pageview=0x7f030005;
-        public static final int activity_search=0x7f030006;
-        public static final int activity_start=0x7f030007;
-        public static final int activity_story_search=0x7f030008;
-        public static final int activity_test=0x7f030009;
+        public static final int activity_main=0x7f030000;
+        public static final int activity_newstory=0x7f030001;
+        public static final int activity_page_view=0x7f030002;
+        public static final int activity_pageedit=0x7f030003;
+        public static final int activity_pageview=0x7f030004;
+        public static final int activity_story_search=0x7f030005;
     }
     public static final class menu {
         public static final int create_new=0x7f080000;
@@ -98,19 +94,23 @@ public final class R {
         public static final int findStory=0x7f050006;
         public static final int firstpage=0x7f05000d;
         public static final int hello_world=0x7f050002;
+        public static final int labelOnline=0x7f050010;
+        public static final int labelResults=0x7f050013;
+        public static final int labelSearch=0x7f050012;
+        public static final int labelSearchBy=0x7f050011;
         public static final int newPage=0x7f050004;
         public static final int newStory=0x7f050003;
         public static final int newstory=0x7f050008;
         public static final int publish=0x7f050007;
         public static final int title=0x7f050009;
-        public static final int title_activity_create_new=0x7f050016;
-        public static final int title_activity_createnewstory=0x7f050012;
-        public static final int title_activity_main=0x7f050010;
-        public static final int title_activity_page_view=0x7f050017;
-        public static final int title_activity_search=0x7f050015;
-        public static final int title_activity_start=0x7f050014;
-        public static final int title_activity_storysearch=0x7f050011;
-        public static final int title_activity_test=0x7f050013;
+        public static final int title_activity_create_new=0x7f05001a;
+        public static final int title_activity_createnewstory=0x7f050016;
+        public static final int title_activity_main=0x7f050014;
+        public static final int title_activity_page_view=0x7f05001b;
+        public static final int title_activity_search=0x7f050019;
+        public static final int title_activity_start=0x7f050018;
+        public static final int title_activity_storysearch=0x7f050015;
+        public static final int title_activity_test=0x7f050017;
         public static final int titlehint=0x7f05000a;
     }
     public static final class style {
