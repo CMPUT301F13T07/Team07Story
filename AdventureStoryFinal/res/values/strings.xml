@@ -9,12 +9,19 @@
     <string name="findPage">Find a Page</string>
     <string name="findStory">Find a Story</string>
     <string name="publish">Publish a Story</string>
+    
+	<string name="newstory">New Story</string>
     <string name="title">Title: </string>
     <string name="titlehint">Story title</string>
     <string name="author">Author: </string>
     <string name="authorhint">Author's name</string>
     <string name="firstpage">First Page</string>
-    <string name="submit">Submit</string>
-    <string name="cancel">Cancel</string>
-
+    <string name="buttonSubmit">Submit</string>
+    <string name="buttonCancel">Cancel</string>
+	<string-array name="first_page_array">
+	    <item>Existing Page</item>
+	    <item>New Page</item>
+	</string-array>
+    
+    
 </resources>
