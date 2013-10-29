@@ -1,5 +1,9 @@
 package edu.ualberta.adventstory;
 
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.Menu;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +12,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class MainActivity extends Activity {
-	
+public class StartActivity extends Activity {
+
 	private Button mkStory, publish, searchPage, searchStory, mkPage;
 
     @Override
@@ -68,8 +72,8 @@ public class MainActivity extends Activity {
 	/* Called when the user clicks the Make a New Story button */
 	private void newStory(){
 		// Bring up Option Edit Activity
-		Intent logViewIntent = new Intent(this, OptionEditActivity.class);
-		startActivity(logViewIntent);
+		//Intent logViewIntent = new Intent(this, OptionEditActivity.class);
+		//startActivity(logViewIntent);
 	}
     
 }
