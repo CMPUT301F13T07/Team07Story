@@ -6,14 +6,10 @@ package edu.ualberta.utils;
  * It takes the form of a dynamic tree data structure where each page can have a (theoretically) limitless number
  * of children pages. 
  * 
- * It also contains the parent (when it has one) which can be accessed by users and authors but cannot be manually
- * set by them, this is handled automatically when adding or modifying an existing page. This is done to prevent
- * mismatches between parents and children, since finding a bug caused by this would likely be a nightmare. 
- * 
  * See Constructor summary below the attribute list for more details on the constructors
  * 
- * Overrode clone feature to ensure parent/child reference safety as mention above. See clone() and cloneAllChildren for
- * further information
+ * Overrode clone feature since I did previously and this way don't have to deal with casting and exception handling
+ * annoyingness
  * 
  * REMINDER ABOUT JAVA OBJECTS: If you are familiar with how Java handles objects in memory and the difference between assigning
  * and cloning, you can ignore this next section. If you don't know what I'm talking about, READ THIS, it might save you
@@ -49,7 +45,6 @@ public class Page {
     private String title;
     private String author;
 	private String text;
-	private Page parent;
 	//private ArrayList<Multimedia> multimedia;
 	private ArrayList<Page> pages;
 	
@@ -73,7 +68,6 @@ public class Page {
 		this.title = title;
 		this.author = author;
 		this.text = text;
-		this.parent = null;
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
@@ -84,7 +78,6 @@ public class Page {
 		this.title = title;
 		this.author = author;
 		this.text = text;
-		this.parent = null;
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
@@ -99,31 +92,19 @@ public class Page {
     public String getAuthor() {return author;}
 	public void setText(String t) {text = t;}
 	public String getText() {return text;}
-	public Page getParent() {return parent;}
 	public void setPages(ArrayList<Page> o) {pages = o;}
 	public ArrayList<Page> getPages() {return pages;};
 	public Page getPage(Integer i) {return pages.get(i);}
-	
-	//Modifies and existing page, updating the parent of the passed Page
 	public void setPage(Integer i, Page o) {
-		o.parent = this;
 		pages.set(i, o);
 	}
-	
-	//Sets the parent of a newly added page to the page that it is being added to
 	public void addPage(Page o) {
-		o.parent = this;
 		pages.add(o);
 	}
 	public void deletePage(Integer i) {pages.remove(i);}
 	
-	/*Overrides to make sure Pages aren't referencing parent or child nodes they shouldn't when cloned
-	*specifically, a cloned page's children will point towards the original, not cloned node. 
-	*It will effectively be a stand-alone page until you do something with it
-	*It wouldn't make much sense for the child to point to the parent but the parent not to point at the child or 
-	*vice versa
-	*You can add a clone back to the tree with a call to addPage
-	*
+	/*
+	*Overridden to avoid casting and exemption garbage, and it was already here for previous design branch not taken
 	*If you want to get an entire branch of the tree, se cloneAllChildren below
 	*/
 	public Page clone() {
