@@ -26,7 +26,13 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
+        public static final int ic_audio=0x7f020000;
+        public static final int ic_exit=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
+        public static final int ic_multimedia=0x7f020003;
+        public static final int ic_picture=0x7f020004;
+        public static final int ic_play=0x7f020005;
+        public static final int ic_video=0x7f020006;
     }
     public static final class id {
         public static final int LinearLayout1=0x7f09000d;
@@ -65,19 +71,21 @@ public final class R {
         public static final int activity_create_new=0x7f030000;
         public static final int activity_main=0x7f030001;
         public static final int activity_newstory=0x7f030002;
-        public static final int activity_pageedit=0x7f030003;
-        public static final int activity_pageview=0x7f030004;
-        public static final int activity_search=0x7f030005;
-        public static final int activity_start=0x7f030006;
-        public static final int activity_story_search=0x7f030007;
-        public static final int activity_test=0x7f030008;
+        public static final int activity_page_view=0x7f030003;
+        public static final int activity_pageedit=0x7f030004;
+        public static final int activity_pageview=0x7f030005;
+        public static final int activity_search=0x7f030006;
+        public static final int activity_start=0x7f030007;
+        public static final int activity_story_search=0x7f030008;
+        public static final int activity_test=0x7f030009;
     }
     public static final class menu {
         public static final int create_new=0x7f080000;
         public static final int main=0x7f080001;
-        public static final int search=0x7f080002;
-        public static final int start=0x7f080003;
-        public static final int test=0x7f080004;
+        public static final int page_view=0x7f080002;
+        public static final int search=0x7f080003;
+        public static final int start=0x7f080004;
+        public static final int test=0x7f080005;
     }
     public static final class string {
         public static final int action_settings=0x7f050001;
@@ -98,6 +106,7 @@ public final class R {
         public static final int title_activity_create_new=0x7f050016;
         public static final int title_activity_createnewstory=0x7f050012;
         public static final int title_activity_main=0x7f050010;
+        public static final int title_activity_page_view=0x7f050017;
         public static final int title_activity_search=0x7f050015;
         public static final int title_activity_start=0x7f050014;
         public static final int title_activity_storysearch=0x7f050011;

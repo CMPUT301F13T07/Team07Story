@@ -30,6 +30,10 @@
             android:name="edu.ualberta.adventstory.CreateNewActivity"
             android:label="@string/title_activity_create_new" >
         </activity>
+        <activity
+            android:name="edu.ualberta.adventstory.PageViewActivity"
+            android:label="@string/title_activity_page_view" >
+        </activity>
     </application>
 
 </manifest>
