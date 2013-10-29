@@ -21,6 +21,8 @@ public class MainActivity extends Activity {
         mkStory = (Button)findViewById(R.id.newStory);
     	publish = (Button)findViewById(R.id.publish);
     	searchPage = (Button)findViewById(R.id.findPage);
+    	searchStory = (Button)findViewById(R.id.findStory);
+    	mkPage = (Button)findViewById(R.id.newPage);
     	
     	// Check for user button clicks
     	mkStory.setOnClickListener(new OnClickListener(){
@@ -37,6 +39,18 @@ public class MainActivity extends Activity {
     	});
     	
     	searchPage.setOnClickListener(new OnClickListener(){
+    		public void onClick(View v){
+    			// Bring up Story Search Activity
+    		}
+    	});
+    	
+    	mkPage.setOnClickListener(new OnClickListener(){
+    		public void onClick(View v){
+    			// Call code for publishing a story
+    		}
+    	});
+    	
+    	searchStory.setOnClickListener(new OnClickListener(){
     		public void onClick(View v){
     			// Bring up Story Search Activity
     		}
