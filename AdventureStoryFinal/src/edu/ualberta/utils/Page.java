@@ -38,14 +38,15 @@ package edu.ualberta.utils;
  */
 
 import java.util.*;
+import edu.ualberta.multimedia.*;
 
 //TO-DO Update attributes and constructors when have multimedia class of some kind.
 public class Page {
 	private Integer id;
     private String title;
     private String author;
-	private String text;
-	//private ArrayList<Multimedia> multimedia;
+	private StringExtended content;
+	//private ArrayList<MultimediaAbstract> multimedia;
 	private ArrayList<Page> pages;
 	
 	//for internal use only
@@ -67,7 +68,7 @@ public class Page {
 		this.id = id;
 		this.title = title;
 		this.author = author;
-		this.text = text;
+		this.content = new StringExtended(text, null);
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
@@ -77,12 +78,32 @@ public class Page {
 		this.id = null;
 		this.title = title;
 		this.author = author;
-		this.text = text;
+		this.content = new StringExtended(text, null);
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
 			this.pages = pages;
 	}
+    public Page(Integer id, String title, String author, String text, ArrayList<MultimediaAbstract> mm, ArrayList<Page> pages) {
+    	this.id = id;
+    	this.title = title;
+    	this.author = author;
+    	this.content = new StringExtended(text, mm);
+    	if (pages == null)
+    		this.pages = new ArrayList<Page>();
+    	else
+    		this.pages = pages;
+    }
+    public Page(String title, String author, String text, ArrayList<MultimediaAbstract> mm, ArrayList<Page> pages) {
+    	this.id = null;
+    	this.title = title;
+    	this.author = author;
+    	this.content = new StringExtended(text, mm);
+    	if (pages == null)
+    		this.pages = new ArrayList<Page>();
+    	else
+    		this.pages = pages;
+    }
 	
 	public void setID(Integer i) {id = i;}
 	public Integer getID() {return id;}
@@ -90,8 +111,11 @@ public class Page {
     public String getTitle() {return title;}
     public void setAuthor(String a) {author = a;}
     public String getAuthor() {return author;}
-	public void setText(String t) {text = t;}
-	public String getText() {return text;}
+	public void setText(String t) {content.setParagraph(t);}
+	public String getText() {return content.getParagraph();}
+	public void addMultimedia(MultimediaAbstract ma) {content.addMultimedia(ma);}
+	public ArrayList<MultimediaAbstract> getMultimedia() {return content.getAllMultimedia();}
+	public StringExtended getFormattedContent() {return content;}
 	public void setPages(ArrayList<Page> o) {pages = o;}
 	public ArrayList<Page> getPages() {return pages;};
 	public Page getPage(Integer i) {return pages.get(i);}
@@ -108,7 +132,7 @@ public class Page {
 	*If you want to get an entire branch of the tree, se cloneAllChildren below
 	*/
 	public Page clone() {
-		return new Page(this.id, this.title, this.author, this.text, null);
+		return new Page(this.id, this.title, this.author, this.content.getParagraph(), this.content.getAllMultimedia(), null);
 	}
 	
 	/*Clones the caller and all Pages below it in the tree. 
