@@ -291,7 +291,7 @@ public class Db {
 	 */
 	public long delete_story(Story story) {
 		String where = Constant.STORY_ID + " = " + story.getID(); 
-		return delete(Constant.TABLE_STORY, where);)
+		return delete(Constant.TABLE_STORY, where);
 	}
 	
 	/**
