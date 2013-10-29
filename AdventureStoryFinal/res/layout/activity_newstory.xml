@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/activity_newstory_texttitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title" />
+
+    <EditText
+        android:id="@+id/activity_newstory_edittitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/activity_newstory_texttitle"
+        android:ems="10"
+        android:hint="@string/titlehint" />
+
+    <TextView
+        android:id="@+id/activity_newstory_textauthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/activity_newstory_edittitle"
+        android:text="@string/author" />
+
+
+
+	<TextView
+        android:id="@+id/activity_newstory_textfirstpage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/activity_newstory_editauthor"
+        android:text="@string/firstpage" />
+        
+    <Spinner
+        android:id="@+id/activity_newstory_pagespinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/activity_newstory_textfirstpage" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/buttonCancel" />
+
+    <Button
+        android:id="@+id/buttonSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonCancel"
+        android:layout_alignParentLeft="true"
+        android:text="@string/buttonSubmit" />
+
+    <EditText
+        android:id="@+id/activity_newstory_editauthor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/activity_newstory_textauthor"
+        android:ems="10"
+        android:hint="@string/authorhint" >
+
+        <requestFocus />
+    </EditText>
+
+</RelativeLayout>
