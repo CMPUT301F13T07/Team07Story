@@ -8,19 +8,24 @@ import android.view.Menu;
 import android.widget.EditText;
 
 public class StorySearchActivity extends Activity {
+	
+	private EditText searchEntry = (EditText) findViewById(R.id.searchEntry);
+	
+	// Find out of the user is searching stories or pages
+	private Bundle bundle = getIntent().getBundleExtra("android.intent.extra.INTENT");
+	private boolean isStory = bundle.getBoolean("BOOL_IS_STORY");
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_story_search);
 		
-		final EditText searchEntry = (EditText) findViewById(R.id.searchEntry);
-		
-		// Find out of the user is searching stories or pages
-		Bundle bundle = getIntent().getBundleExtra("android.intent.extra.INTENT");
-		final boolean isStory = bundle.getBoolean("BOOL_IS_STORY");
-		
 		// Checks to see if the user has input text into the search box
+		searchText();	
+		
+	}
+	
+	private void searchText() {
 	    searchEntry.addTextChangedListener(new TextWatcher(){
 	        public void afterTextChanged(Editable s) {
 	            // Check if the user is searching pages or stories
@@ -49,8 +54,9 @@ public class StorySearchActivity extends Activity {
 					int count) {}
 	        
 	    }); 
+		
 	}
-	
+
 	// Called when the search field is blank. Returns all pages/stories
 	protected void emptySearch(boolean isStory){
 		if (isStory){
