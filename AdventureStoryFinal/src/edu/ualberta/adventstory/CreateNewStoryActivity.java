@@ -10,13 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import edu.ualberta.database.DbHelper;
 
-public class CreateNewStoryActivity extends Activity implements OnItemSelectedListener{
+public class CreateNewStoryActivity extends Activity {
 	
 	private EditText mTitleText;
 	private EditText mAuthorText;
-	private DbHelper mDbHelper;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -24,31 +23,27 @@ public class CreateNewStoryActivity extends Activity implements OnItemSelectedLi
 		mTitleText = (EditText) findViewById(R.id.activity_newstory_edittitle);
 		mAuthorText = (EditText) findViewById(R.id.activity_newstory_editauthor);
 		
-		Spinner spinner = (Spinner) findViewById(R.id.activity_newstory_pagespinner);
+//		Spinner spinner = (Spinner) findViewById(R.id.activity_newstory_pagespinner);
 		Button submitButton = (Button) findViewById(R.id.buttonSubmit);
 		Button cancelButton = (Button) findViewById(R.id.buttonCancel);
-		
+	
 		/*
 		 * Set the spinner
 		 * from android site
 		 * developer.android.com/guide/topics/ui/controls/spinner.html
-		 */
+		 *
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, 
 				R.array.first_page_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);
 		
-		/*
+		
 		 * When Submit Button is pressed, the story is created and user is transfered to pageEdit Activity
 		 */
 		submitButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				insertStory();
-				/*
-				 * Need to make it change to pageEdit Activity
-				 */
 				setResult(RESULT_OK);
 				finish();
 				
@@ -82,11 +77,11 @@ public class CreateNewStoryActivity extends Activity implements OnItemSelectedLi
 	 * This method creates an intent for the PageEdit Activity
 	 */
 	private void pageEdit() {
-		//Intent i = new Intent(this, PageEditActivity.class);
-		//startActivityForResult(i, 0);
+		Intent i = new Intent(this, PageEditActivity.class);
+		startActivityForResult(i, 0);
 	}
 
-
+/*
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int pos,
 			long id) {
@@ -101,5 +96,5 @@ public class CreateNewStoryActivity extends Activity implements OnItemSelectedLi
 		// Another interface callback
 		
 	}
-
+*/
 }
