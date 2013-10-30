@@ -45,6 +45,7 @@ public class StartActivity extends Activity {
     	searchPage.setOnClickListener(new OnClickListener(){
     		public void onClick(View v){
     			// Bring up Story Search Activity
+    			search(false);
     		}
     	});
     	
@@ -57,6 +58,7 @@ public class StartActivity extends Activity {
     	searchStory.setOnClickListener(new OnClickListener(){
     		public void onClick(View v){
     			// Bring up Story Search Activity
+    			search(true);
     		}
     	});
     }
@@ -74,6 +76,17 @@ public class StartActivity extends Activity {
 		// Bring up Option Edit Activity
 		Intent logViewIntent = new Intent(this, CreateNewStoryActivity.class);
 		startActivity(logViewIntent);
+	}
+	
+	/* Called when the user clicks a find button */
+	private void search(boolean isStory){
+		// Bring up  Activity and pass boolean telling it if we are finding a story or page
+		Bundle bundle = new Bundle();
+		bundle.putBoolean("BOOL_IS_STORY", isStory);
+		
+		Intent searchIntent = new Intent(this, CreateNewStoryActivity.class);
+		searchIntent.putExtra("android.intent.extra.INTENT", bundle);
+		startActivity(searchIntent);
 	}
     
 }
