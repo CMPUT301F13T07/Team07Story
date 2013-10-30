@@ -1,7 +1,0 @@
-// 10/26/2013
-- PageViewActivity.java: should we allow the developer to set textSize
-						 or should we enforce our own layout to achieve
-						 consistent design?
-- Discuss Font convention.
-- Make a singleton method in application class and make these keep track of the ids.
-- Change page using the Application class (or it's extended class).

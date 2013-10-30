@@ -21,6 +21,8 @@ public class StartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        // Create instance of the databse
+        
         // Define Buttons
         mkStory = (Button)findViewById(R.id.newStory);
     	publish = (Button)findViewById(R.id.publish);
@@ -45,6 +47,7 @@ public class StartActivity extends Activity {
     	searchPage.setOnClickListener(new OnClickListener(){
     		public void onClick(View v){
     			// Bring up Story Search Activity
+    			search(false);
     		}
     	});
     	
@@ -57,6 +60,7 @@ public class StartActivity extends Activity {
     	searchStory.setOnClickListener(new OnClickListener(){
     		public void onClick(View v){
     			// Bring up Story Search Activity
+    			search(true);
     		}
     	});
     }
@@ -74,6 +78,18 @@ public class StartActivity extends Activity {
 		// Bring up Option Edit Activity
 		Intent logViewIntent = new Intent(this, CreateNewStoryActivity.class);
 		startActivity(logViewIntent);
+	}
+	
+	/* Called when the user clicks a find button */
+	private void search(boolean isStory){
+		// Bring up  Activity and pass boolean telling it if we are finding a story or page
+		Bundle bundle = new Bundle();
+		bundle.putBoolean("BOOL_IS_STORY", isStory);
+		// This will be the database bundle.putSerializable(key, value)
+		
+		Intent searchIntent = new Intent(this, CreateNewStoryActivity.class);
+		searchIntent.putExtra("android.intent.extra.INTENT", bundle);
+		startActivity(searchIntent);
 	}
     
 }
