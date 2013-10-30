@@ -9,10 +9,13 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 public class StorySearchActivity extends Activity {
 	
 	private EditText searchEntry = (EditText) findViewById(R.id.searchEntry);
+	private Spinner searchBy = (Spinner) findViewById(R.id.spinnerSearchBy);
+	private Spinner searchOnline = (Spinner) findViewById(R.id.spinnerOnline);
 	
 	// Find out of the user is searching stories or pages
 	private Bundle bundle = getIntent().getBundleExtra("android.intent.extra.INTENT");
@@ -33,23 +36,22 @@ public class StorySearchActivity extends Activity {
 	private void searchText() {
 	    searchEntry.addTextChangedListener(new TextWatcher(){
 	        public void afterTextChanged(Editable s) {
-	            // Check if the user is searching pages or stories
-	        	if (isStory){
-	        		// Check for blank entry
-	        		if (searchEntry.getText().equals("")){
-	        			emptySearch(isStory);
-	        		}
-	        		// Populate results with appropriate stories
-	        		results = new ArrayList<Story>();
-	        		
-	        	} else{
-	        		// Check for blank entry
-	        		if (searchEntry.getText().equals("")){
-	        			emptySearch(isStory);
-	        		}
-	        		// Populate results with appropriate pages
-	        		results = new ArrayList<Page>();
-	        	}
+	        	// Check for blank entry
+        		if (!searchEntry.getText().equals("")){
+        			// Check if the user is searching pages or stories
+            		if (isStory){
+    	        		// Populate results with appropriate stories
+    	        		results = new ArrayList<Story>();
+    	        		
+    	        	} else{
+    	        		// Populate results with appropriate pages
+    	        		results = new ArrayList<Page>();
+    	        	}
+        		}
+        		else {
+        			emptySearch(isStory);
+        		}
+	            
 	        }
 
 			@Override

@@ -21,6 +21,8 @@ public class StartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        // Create instance of the databse
+        
         // Define Buttons
         mkStory = (Button)findViewById(R.id.newStory);
     	publish = (Button)findViewById(R.id.publish);
@@ -83,6 +85,7 @@ public class StartActivity extends Activity {
 		// Bring up  Activity and pass boolean telling it if we are finding a story or page
 		Bundle bundle = new Bundle();
 		bundle.putBoolean("BOOL_IS_STORY", isStory);
+		// This will be the database bundle.putSerializable(key, value)
 		
 		Intent searchIntent = new Intent(this, CreateNewStoryActivity.class);
 		searchIntent.putExtra("android.intent.extra.INTENT", bundle);
