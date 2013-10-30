@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.media.MediaPlayer;
 
 import edu.ualberta.adventstory.R;
-import edu.ualberta.multimedia.StringExtended;
+import edu.ualberta.utils.Content;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
@@ -225,11 +225,11 @@ public class PageViewActivity extends ActivityExtended{
 		mPageTitleTextView.setTextSize(textSize);
 	}
 
-	void setStoryText( StringExtended storyText, float textSize){
+	void setStoryText( Content storyText, float textSize){
 		mStoryTextView.setMovementMethod(LinkMovementMethod.getInstance());		
 		String s = "\n\n" + storyText.getParagraph(); // Add some space.
 		// Create a new StringExtended to not replace the old one.
-		StringExtended se = new StringExtended(s, storyText.getAllMultimedia());
+		Content se = new Content(s, storyText.getAllMultimedia());
 		se.setParagraph(s);
 		
 		mStoryTextView.setText(se.getSpannableStringBuilder(), BufferType.SPANNABLE);

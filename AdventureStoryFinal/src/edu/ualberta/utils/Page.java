@@ -45,7 +45,7 @@ public class Page {
 	private Integer id;
     private String title;
     private String author;
-	private StringExtended content;
+	private Content content;
 	//private ArrayList<MultimediaAbstract> multimedia;
 	private ArrayList<Page> pages;
 	
@@ -68,7 +68,7 @@ public class Page {
 		this.id = id;
 		this.title = title;
 		this.author = author;
-		this.content = new StringExtended(text, null);
+		this.content = new Content(text, null);
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
@@ -78,7 +78,7 @@ public class Page {
 		this.id = null;
 		this.title = title;
 		this.author = author;
-		this.content = new StringExtended(text, null);
+		this.content = new Content(text, null);
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
@@ -88,7 +88,7 @@ public class Page {
     	this.id = id;
     	this.title = title;
     	this.author = author;
-    	this.content = new StringExtended(text, mm);
+    	this.content = new Content(text, mm);
     	if (pages == null)
     		this.pages = new ArrayList<Page>();
     	else
@@ -98,7 +98,7 @@ public class Page {
     	this.id = null;
     	this.title = title;
     	this.author = author;
-    	this.content = new StringExtended(text, mm);
+    	this.content = new Content(text, mm);
     	if (pages == null)
     		this.pages = new ArrayList<Page>();
     	else
@@ -115,7 +115,7 @@ public class Page {
 	public String getText() {return content.getParagraph();}
 	public void addMultimedia(MultimediaAbstract ma) {content.addMultimedia(ma);}
 	public ArrayList<MultimediaAbstract> getMultimedia() {return content.getAllMultimedia();}
-	public StringExtended getFormattedContent() {return content;}
+	public Content getFormattedContent() {return content;}
 	public void setPages(ArrayList<Page> o) {pages = o;}
 	public ArrayList<Page> getPages() {return pages;};
 	public Page getPage(Integer i) {return pages.get(i);}

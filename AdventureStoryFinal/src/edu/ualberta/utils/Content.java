@@ -4,9 +4,11 @@
  * 	 contain multimedia.s
  */
 
-package edu.ualberta.multimedia;
+package edu.ualberta.utils;
 
 import java.util.ArrayList;
+
+import edu.ualberta.multimedia.MultimediaAbstract;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,11 +19,11 @@ import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.Toast;
 
-public class StringExtended {
+public class Content {
 	String mParagraph;
 	ArrayList<MultimediaAbstract> mMultimedia;
 
-	public StringExtended(String paragraph,
+	public Content(String paragraph,
 			ArrayList<MultimediaAbstract> multimedia) {
 		if (multimedia == null) {
 			mMultimedia = new ArrayList<MultimediaAbstract>();
@@ -33,7 +35,7 @@ public class StringExtended {
 	}
 
 	// Hard-Copy Constructor.
-	public StringExtended(StringExtended source) {
+	public Content(Content source) {
 		this.mParagraph = new String(source.getParagraph());
 
 		ArrayList<MultimediaAbstract> mAA = source.getAllMultimedia();
