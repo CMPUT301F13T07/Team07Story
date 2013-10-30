@@ -1,5 +1,8 @@
 package edu.ualberta.adventstory;
 
+import java.util.ArrayList;
+import edu.ualberta.utils.Page;
+import edu.ualberta.utils.Story;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +17,8 @@ public class StorySearchActivity extends Activity {
 	// Find out of the user is searching stories or pages
 	private Bundle bundle = getIntent().getBundleExtra("android.intent.extra.INTENT");
 	private boolean isStory = bundle.getBoolean("BOOL_IS_STORY");
+	
+	private ArrayList<?> results;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,7 @@ public class StorySearchActivity extends Activity {
 	        			emptySearch(isStory);
 	        		}
 	        		// Populate results with appropriate stories
+	        		results = new ArrayList<Story>();
 	        		
 	        	} else{
 	        		// Check for blank entry
@@ -42,6 +48,7 @@ public class StorySearchActivity extends Activity {
 	        			emptySearch(isStory);
 	        		}
 	        		// Populate results with appropriate pages
+	        		results = new ArrayList<Page>();
 	        	}
 	        }
 
@@ -61,8 +68,10 @@ public class StorySearchActivity extends Activity {
 	protected void emptySearch(boolean isStory){
 		if (isStory){
 			// Populate results list with all stories
+			results = new ArrayList<Story>();
 		} else if (!isStory){
 			// Populate results list with all pages
+			results = new ArrayList<Page>();
 		}
 	}
 
