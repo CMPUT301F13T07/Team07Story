@@ -73,18 +73,18 @@ public class ChooseYourAdventure07 extends Application {
 		
 		// TODO: Temporarily Page.text is string.
 		Content se = new Content(par, medias);
-		Page test01 = new Page(1, "The rise of Trolls", "someone.", se, null);
+		Page test01 = new Page(1, "The rise of Trolls", "someone.", se.getParagraph(), null);
 		Content se2 = new Content("Told you will be disappointed.", null);
-		Page second = new Page(2, "You will be disappointed.", "someoneElse", se, null);
+		//Page second = new Page(2, "You will be disappointed.", "someoneElse", se, null);
 		Content se3 = new Content("Times like these when end of civilization seems iminent.", null);
-		Page third = new Page(3, "Really?", "someoneElse", se3, null);
+		//Page third = new Page(3, "Really?", "someoneElse", se3, null);
 		ArrayList<Page> p = new ArrayList<Page>();
-		p.add(second);
-		p.add(third);
-		test01.setPages(p);
-		mStory = new Story("Test Story", "someone", test01);
-		mCurrentPage = test01;
-		mPageHistory = new Stack<Page>();
+		//p.add(second);
+		//p.add(third);
+		//test01.setPages(p);
+		//mStory = new Story("Test Story", "someone", test01);
+		//mCurrentPage = test01;
+		//mPageHistory = new Stack<Page>();
 	}
 	
 	public ActivityExtended getCurrentActivity(){return mCurrentActivity;}
