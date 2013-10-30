@@ -12,13 +12,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class StartActivity extends Activity {
-
+public class StartActivity extends ActivityExtended{
+	
+	private ChooseYourAdventure07 mAdventureTime;
 	private Button mkStory, publish, searchPage, searchStory, mkPage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        
+        mAdventureTime = (ChooseYourAdventure07)this.getApplicationContext();
+        
         setContentView(R.layout.activity_main);
         
         // Define Buttons
@@ -51,6 +55,7 @@ public class StartActivity extends Activity {
     	mkPage.setOnClickListener(new OnClickListener(){
     		public void onClick(View v){
     			// Call code for publishing a story
+    			newPage();
     		}
     	});
     	
@@ -60,7 +65,6 @@ public class StartActivity extends Activity {
     		}
     	});
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -74,6 +78,18 @@ public class StartActivity extends Activity {
 		// Bring up Option Edit Activity
 		Intent logViewIntent = new Intent(this, CreateNewStoryActivity.class);
 		startActivity(logViewIntent);
+	}
+	
+	private void newPage(){
+		// Bring up Option Edit Activity
+		Intent pageEdit = new Intent(this, PageEditActivity.class);
+		startActivity(pageEdit);
+	}
+	
+	@Override
+	protected void onResume(){
+		super.onResume();
+		mAdventureTime.setCurrentActivity(this);
 	}
     
 }
