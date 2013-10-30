@@ -50,7 +50,7 @@ public class Constant {
 														  + TABLE_PAGE_CHILDREN + "(" + PAGE_ID + " INTEGER, "
 														  + NEXT_PAGE_ID + " INTEGER, "
 														  + "PRIMARY KEY (" 
-														  + ", " + PAGE_ID + " ,"
+														  + PAGE_ID + ", "
 														  + NEXT_PAGE_ID + "), FOREIGN KEY ("
 														  + PAGE_ID
 														  + ") REFERENCES " + TABLE_PAGE

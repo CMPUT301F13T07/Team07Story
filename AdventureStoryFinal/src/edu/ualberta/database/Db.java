@@ -56,6 +56,7 @@ public class Db {
 	    values.put(Constant.STORY_TITLE, story.getTitle());
 	    values.put(Constant.STORY_AUTHOR, story.getAuthor());
 	    values.put(Constant.ROOT, story.getRoot().getID());
+	    System.out.println("root_id at story creation: " + story.getRoot().getID());
 		try{
 			return db.insert(Constant.TABLE_STORY, null, values);
 		} 
@@ -115,9 +116,10 @@ public class Db {
 		return story_from_cursor(c);
 	}
 	public Story get_story_by_id(Integer id) {
-		Cursor c = get_from_db(Constant.TABLE_STORY, Constant.PAGE_ID, id);
+		Cursor c = get_from_db(Constant.TABLE_STORY, Constant.STORY_ID, id);
 		return story_from_cursor(c).get(0);
 	}
+	
 	public ArrayList<Page> get_pages_by_title(String search_title) {
 		Cursor c = get_from_db(Constant.TABLE_PAGE, Constant.PAGE_TITLE, search_title);
 		return page_from_cursor(c);
@@ -128,11 +130,14 @@ public class Db {
 	}
 	public Page get_page_by_id(Integer id) {
 		Cursor c = get_from_db(Constant.TABLE_PAGE, Constant.PAGE_ID, id);
+		if (c.getCount() == 0) {
+			return null;
+		}
 		return page_from_cursor(c).get(0);
 	}
 	public ArrayList<Page> get_page_options(Integer id) {
 		Cursor c = get_from_db(Constant.TABLE_PAGE_CHILDREN, Constant.PAGE_ID, id);
-		return page_from_cursor(c);
+		return page_from_cursor_children(c);
 	}
 	
 	/**
@@ -144,8 +149,8 @@ public class Db {
 	 */
 	public Cursor get_from_db(String table, String column, String term) {
 		String select = "SELECT * FROM " + table
-				+ "WHERE " + column + " LIKE %"
-				+ term + "%";
+				+ " WHERE " + column + " LIKE '%"
+				+ term + "%'";
 		try {
 			return db.rawQuery(select, null);
 		} catch(SQLiteException ex) {
@@ -163,13 +168,27 @@ public class Db {
 	 */
 	public Cursor get_from_db(String table, String column, Integer id) {
 		String select = "SELECT * FROM " + table
-				+ "WHERE " + column + " = " + id;
+				+ " WHERE " + column + " = " + id;
+		System.out.println(select);
 		try {
 			return db.rawQuery(select, null);
 		} catch(SQLiteException ex) {
 			Log.v("Select from database exception caught", ex.getMessage());
 			return null;
 		}
+	}
+	
+	public ArrayList<Page> page_from_cursor_children(Cursor c) {
+		Integer id;
+		ArrayList<Page> pages = new ArrayList<Page>();
+		
+		while (c.moveToNext()) {
+			id = c.getInt(c.getColumnIndex(Constant.NEXT_PAGE_ID));
+			
+			Page page = get_page_by_id(id);
+			pages.add(page);
+		}
+		return pages;
 	}
 	
 	/**
@@ -184,9 +203,8 @@ public class Db {
 		String text;
 		
 		ArrayList<Page> pages = new ArrayList<Page>();
-		
-		while (c != null) {
-			c.moveToNext();
+				
+		while (c.moveToNext()) {
 			id = c.getInt(c.getColumnIndex(Constant.PAGE_ID));
 			title = c.getString(c.getColumnIndex(Constant.PAGE_TITLE));
 			author = c.getString(c.getColumnIndex(Constant.PAGE_AUTHOR));
@@ -215,13 +233,13 @@ public class Db {
 		Page root;
 		
 		ArrayList<Story> stories = new ArrayList<Story>();
-		
-		while (c != null) {
-			c.moveToNext();
+		while (c.moveToNext()) {
 			id = c.getInt(c.getColumnIndex(Constant.STORY_ID));
 			title = c.getString(c.getColumnIndex(Constant.STORY_TITLE));
 			author = c.getString(c.getColumnIndex(Constant.STORY_AUTHOR));
 			root_id = c.getInt(c.getColumnIndex(Constant.ROOT));
+			
+			System.out.println("root id: " + root_id);
 			
 			root = get_page_by_id(root_id);
 			Story story = new Story(id, title, author, root);
