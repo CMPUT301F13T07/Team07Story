@@ -1,14 +1,15 @@
 /*
- * Paragraph.java
- * - This module is responsible for saving paragraphs that
- * 	 contain multimedia.s
+ * Content.java
+ * - This module is responsible for saving String and Multimedia
+ *   that belongs to the Body of page. This is done since Android
+ *   have SpannableStringBuilder which allows for integration of
+ *   Bitmap to texts. To retrieve/set String use getter/setter function
+ *   getParagraph():String/setParagraph(String paragraph).
  */
 
 package edu.ualberta.utils;
 
 import java.util.ArrayList;
-
-import edu.ualberta.multimedia.MultimediaAbstract;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,7 +18,8 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.view.View;
-import android.widget.Toast;
+
+import edu.ualberta.multimedia.MultimediaAbstract;
 
 public class Content {
 	String mParagraph;
