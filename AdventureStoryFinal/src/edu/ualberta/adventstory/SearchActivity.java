@@ -1,7 +1,6 @@
 package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-public class StorySearchActivity extends Activity implements OnItemSelectedListener{
+public class SearchActivity extends Activity implements OnItemSelectedListener{
 	
 	private EditText searchEntry = (EditText) findViewById(R.id.searchEntry);
 	private Spinner searchBy = (Spinner) findViewById(R.id.spinnerSearchBy);
@@ -23,7 +22,7 @@ public class StorySearchActivity extends Activity implements OnItemSelectedListe
 	// Find out of the user is searching stories or pages
 	private Bundle bundle = getIntent().getBundleExtra("android.intent.extra.INTENT");
 	private boolean isStory = bundle.getBoolean("BOOL_IS_STORY");
-	private boolean isTitle;
+	private boolean isTitle = true;
 	
 	private ArrayList<?> results;
 	
@@ -74,8 +73,7 @@ public class StorySearchActivity extends Activity implements OnItemSelectedListe
 					//results = DataBase.get_pages_by_author(searchEntry.getText().toString());
 				}
 				
-			 
-
+				updateList(results);
 
 			}
 
@@ -100,6 +98,8 @@ public class StorySearchActivity extends Activity implements OnItemSelectedListe
 			// Populate results list with all pages
 			results = new ArrayList<Page>();
 		}
+		
+		updateList(results);
 	}**/
 
 	@Override
@@ -112,24 +112,36 @@ public class StorySearchActivity extends Activity implements OnItemSelectedListe
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, 
             int pos, long id) {
+		// Handles user selections from drop down menus
 		Spinner searchBy = (Spinner)parent;
         Spinner searchOnline = (Spinner)parent;
 		// Set isTitle boolean to reflect spinner selection
 		Integer selected = (Integer) parent.getItemAtPosition(pos);
 		if(searchBy.getId() == R.id.spinnerSearchBy){
 			if (selected == 0){
+				// User selected to search by title
 				isTitle = true;
 			} else if (selected == 1){
+				// User selected to search by author
 				isTitle = false;
 			}
 		}
 		if(searchOnline.getId() == R.id.spinnerOnline){
-			
+			if (selected == 0){
+				
+			} else if (selected == 1){
+				
+			}
 		}
 		
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {}
+	
+	// Updates the list view with the results for the user
+	public void updateList(ArrayList<?> results){
+		
+	}
 
 }

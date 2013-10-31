@@ -86,7 +86,7 @@ public class StartActivity extends Activity {
 		Bundle bundle = new Bundle();
 		bundle.putBoolean("BOOL_IS_STORY", isStory);
 		
-		Intent searchIntent = new Intent(this, CreateNewStoryActivity.class);
+		Intent searchIntent = new Intent(this, SearchActivity.class);
 		searchIntent.putExtra("android.intent.extra.INTENT", bundle);
 		startActivity(searchIntent);
 	}
