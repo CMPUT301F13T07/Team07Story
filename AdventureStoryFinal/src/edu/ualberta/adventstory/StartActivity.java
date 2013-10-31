@@ -1,9 +1,5 @@
 package edu.ualberta.adventstory;
 
-import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,17 +7,21 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import edu.ualberta.database.Db;
 
 public class StartActivity extends Activity {
 
 	private Button mkStory, publish, searchPage, searchStory, mkPage;
+	public Db database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        // Create instance of the databse
+        // Create instance of the database
+        database = new Db(this);
+        database.open();
         
         // Define Buttons
         mkStory = (Button)findViewById(R.id.newStory);
