@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
+import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
@@ -56,14 +57,7 @@ public class Db {
 	    values.put(Constant.STORY_TITLE, story.getTitle());
 	    values.put(Constant.STORY_AUTHOR, story.getAuthor());
 	    values.put(Constant.ROOT, story.getRoot().getID());
-	    System.out.println("root_id at story creation: " + story.getRoot().getID());
-		try{
-			return db.insert(Constant.TABLE_STORY, null, values);
-		} 
-		catch(SQLiteException ex) {
-			Log.v("Insert into database exception caught", ex.getMessage());
-			return -1;
-		}
+	    return insert(Constant.TABLE_STORY, values);
 	}
 	
 	/**
@@ -71,19 +65,11 @@ public class Db {
 	 * @param page
 	 * @return id number of inserted page
 	 */
-	// TODO: add children pages to Story_Page table
-	// necessary? When would a newly inserted/created page ever have a child?
 	public long insert_page(Page page) {
 		ContentValues values = new ContentValues();
 	    values.put(Constant.PAGE_TITLE, page.getTitle());
 	    values.put(Constant.PAGE_AUTHOR, page.getAuthor());
-		try{
-			return db.insert(Constant.TABLE_PAGE, null, values);
-		} 
-		catch(SQLiteException ex) {
-			Log.v("Insert into database exception caught", ex.getMessage());
-			return -1;
-		}
+		return insert(Constant.TABLE_PAGE, values);
 	}
 	
 	/**
@@ -97,9 +83,25 @@ public class Db {
 		ContentValues values = new ContentValues();
 	    values.put(Constant.PAGE_ID, page.getID());
 	    values.put(Constant.NEXT_PAGE_ID, option.getID());
+		return insert(Constant.TABLE_PAGE_CHILDREN, values);
+	}
+	
+	/**
+	 * Inserts a new multimedia item into the multimedia table
+	 * @param mult
+	 * @return
+	 */
+	public long insert_multimedia(MultimediaAbstract mult, int page_id) {
+		ContentValues values = new ContentValues();
+		values.put(Constant.DIRECTORY, mult.getFileDir());
+		values.put(Constant.PAGE_ID, page_id);
+		return insert(Constant.TABLE_MULT, values);
+	}
+	
+	public long insert(String table, ContentValues values) {
 		try{
-			return db.insert(Constant.TABLE_PAGE_CHILDREN, null, values);
-		}
+			return db.insert(table, null, values);
+		} 
 		catch(SQLiteException ex) {
 			Log.v("Insert into database exception caught", ex.getMessage());
 			return -1;
@@ -138,6 +140,10 @@ public class Db {
 	public ArrayList<Page> get_page_options(Integer id) {
 		Cursor c = get_from_db(Constant.TABLE_PAGE_CHILDREN, Constant.PAGE_ID, id);
 		return page_from_cursor_children(c);
+	}
+	public ArrayList<MultimediaAbstract> get_multimedia_by_page_id(Integer page_id) {
+		Cursor c = get_from_db(Constant.TABLE_MULT, Constant.PAGE_ID, page_id);
+		return multimedia_from_cursor(c);
 	}
 	
 	/**
@@ -178,6 +184,12 @@ public class Db {
 		}
 	}
 	
+	/**
+	 * Takes cursor filled with a page's children and returns 
+	 * an arraylist of pages
+	 * @param c
+	 * @return
+	 */
 	public ArrayList<Page> page_from_cursor_children(Cursor c) {
 		Integer id;
 		ArrayList<Page> pages = new ArrayList<Page>();
@@ -247,6 +259,23 @@ public class Db {
 			stories.add(story);
 		}
 		return stories;
+	}
+	
+	public ArrayList<MultimediaAbstract> multimedia_from_cursor(Cursor c) {
+		Integer mult_id;
+		String file_dir;
+		
+		ArrayList<MultimediaAbstract> multimedia = 
+				new ArrayList<MultimediaAbstract>();
+		while(c.moveToNext()) {
+			mult_id = c.getInt(c.getColumnIndex(Constant.MULT_ID));
+			file_dir = c.getString(c.getColumnIndex(Constant.DIRECTORY));
+			
+			// TODO: this is dirty. Anyone know a better way to handle this?
+			MultimediaAbstract ma = new MultimediaAbstract(mult_id, file_dir){};
+			multimedia.add(ma);
+		}
+		return multimedia;
 	}
 	
 	/**

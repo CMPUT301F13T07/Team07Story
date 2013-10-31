@@ -13,10 +13,13 @@ import android.media.MediaPlayer;
 import edu.ualberta.adventstory.R;
 import edu.ualberta.utils.Utility;
 
-public class SoundClip extends MultimediaAbstract{	
-	public SoundClip(int id, int index, int pictureId, 
-			Context context){
-		super(id, index, pictureId, context);		
+public class SoundClip extends MultimediaAbstract {
+	
+	public SoundClip(int id, String file_dir) {
+		super(id, file_dir);		
+	}
+	public SoundClip(String file_dir) {
+		super(file_dir);
 	}
 	
 	public void play() {
@@ -54,20 +57,20 @@ public class SoundClip extends MultimediaAbstract{
 	}
 	
 	@Override
-	public Bitmap loadPhoto(){
-		if( super.pictureId == -1 ){
+	public Bitmap loadPhoto() {
+		if(super.id == -1){
 			return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_audio);
 		}else{
-			String tempFileName = MultimediaDB.getBitmapDirectory(pictureId, context);
-			return BitmapFactory.decodeFile(tempFileName);			
+			String tempFileName = MultimediaDB.getBitmapDirectory(id, context);
+			return BitmapFactory.decodeFile(tempFileName);
 		}
 	}
 	
 	@Override
-	public boolean equals( Object obj ){
-		if( obj == null ) return false;
-		if( obj == this ) return true;
+	public boolean equals(Object obj) {
+		if(obj == null) return false;
+		if(obj == this) return true;
 		return super.equals(obj);
 	}
 }
