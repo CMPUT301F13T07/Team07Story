@@ -47,11 +47,6 @@ public class Db {
 		}
 	}
 
-	/**
-	 * Inserts a story into the Story table
-	 * @param story
-	 * @return id number of the inserted story
-	 */
 	public long insert_story(Story story) {
 		ContentValues values = new ContentValues();
 	    values.put(Constant.STORY_TITLE, story.getTitle());
@@ -60,11 +55,6 @@ public class Db {
 	    return insert(Constant.TABLE_STORY, values);
 	}
 	
-	/**
-	 * Inserts a page into the Page table
-	 * @param page
-	 * @return id number of inserted page
-	 */
 	public long insert_page(Page page) {
 		ContentValues values = new ContentValues();
 	    values.put(Constant.PAGE_TITLE, page.getTitle());
@@ -72,13 +62,6 @@ public class Db {
 		return insert(Constant.TABLE_PAGE, values);
 	}
 	
-	/**
-	 * Inserts a new page option into a page, for a given story
-	 * @param story
-	 * @param page
-	 * @param option
-	 * @return number of rows inserted
-	 */
 	public long insert_page_option(Page page, Page option) {
 		ContentValues values = new ContentValues();
 	    values.put(Constant.PAGE_ID, page.getID());
@@ -86,11 +69,6 @@ public class Db {
 		return insert(Constant.TABLE_PAGE_CHILDREN, values);
 	}
 	
-	/**
-	 * Inserts a new multimedia item into the multimedia table
-	 * @param mult
-	 * @return
-	 */
 	public long insert_multimedia(MultimediaAbstract mult, int page_id) {
 		ContentValues values = new ContentValues();
 		values.put(Constant.DIRECTORY, mult.getFileDir());
@@ -278,12 +256,6 @@ public class Db {
 		return multimedia;
 	}
 	
-	/**
-	 * Updates a story's author, title, and or root page
-	 * @param old
-	 * @param updated
-	 * @return
-	 */
 	public long update_story(Story story) {
 		ContentValues values = new ContentValues();
 		String where = Constant.STORY_ID + " = " + story.getID();
@@ -295,14 +267,6 @@ public class Db {
 	    return update(Constant.TABLE_STORY, values, where);
 	}
 	
-	/**
-	 * Updates a page's author, title, and/or text
-	 * Does NOT update the page's children
-	 * @see insert_page_option
-	 * @see delete_page_option
-	 * @param page
-	 * @return
-	 */
 	public long update_page(Page page) {
 		ContentValues values = new ContentValues();
 		String where = Constant.PAGE_ID + " = " + page.getID();
@@ -341,11 +305,6 @@ public class Db {
 		return delete(Constant.TABLE_STORY, where);
 	}
 	
-	/**
-	 * Deletes a page and its connection to its children from the db
-	 * @param page
-	 * @return
-	 */
 	public long delete_page(Page page) {
 		long result;
 		String where = Constant.PAGE_ID + " = " + page.getID();
@@ -358,12 +317,6 @@ public class Db {
 		return delete(Constant.TABLE_PAGE, where);
 	}
 	
-	/**
-	 * Deletes page, child row from page_children table
-	 * @param page
-	 * @param child
-	 * @return
-	 */
 	public long delete_page_option(Page page, Page child) {
 		String where = Constant.PAGE_ID + " = " + page.getID() + " AND "
 				       + Constant.NEXT_PAGE_ID + " = " + child.getID();
