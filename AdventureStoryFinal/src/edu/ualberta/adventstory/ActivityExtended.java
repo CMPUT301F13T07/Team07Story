@@ -4,20 +4,14 @@
  */
 package edu.ualberta.adventstory;
 
-import edu.ualberta.controller.OnSwipeTouchListener;
-
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import edu.ualberta.database.Db;
 
 abstract public class ActivityExtended extends Activity{
 	protected boolean mOnVideoViewPreview = false;
 	protected String mVideoDirectory = null;
+	public Db database;
 	
 	public ActivityExtended() {
 		super();
@@ -36,6 +30,9 @@ abstract public class ActivityExtended extends Activity{
 				}
 			}
 		}
+        // Create instance of the database
+        database = new Db(this);
+        database.open();
 	}
 	
 	// Override these methods.
