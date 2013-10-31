@@ -1,17 +1,20 @@
 package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
-import edu.ualberta.utils.Page;
-import edu.ualberta.utils.Story;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-public class StorySearchActivity extends Activity {
+public class StorySearchActivity extends Activity implements OnItemSelectedListener{
 	
 	private EditText searchEntry = (EditText) findViewById(R.id.searchEntry);
 	private Spinner searchBy = (Spinner) findViewById(R.id.spinnerSearchBy);
@@ -20,13 +23,27 @@ public class StorySearchActivity extends Activity {
 	// Find out of the user is searching stories or pages
 	private Bundle bundle = getIntent().getBundleExtra("android.intent.extra.INTENT");
 	private boolean isStory = bundle.getBoolean("BOOL_IS_STORY");
+	private boolean isTitle;
 	
 	private ArrayList<?> results;
+	
+	// Access the database
+	//private Db DataBase = ((AdventureStoryFinal)getApplication()).DataBase;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_story_search);
+		
+		// Create an ArrayAdapter using the string array and a default spinner layout
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+		        R.array.searchBy_dropdown, android.R.layout.simple_spinner_item);
+		// Specify the layout to use when the list of choices appears
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Apply the adapter to the spinner
+		searchBy.setAdapter(adapter);
+		
+		searchBy.setOnItemSelectedListener(this);
 		
 		// Checks to see if the user has input text into the search box
 		searchText();	
@@ -34,25 +51,33 @@ public class StorySearchActivity extends Activity {
 	}
 	
 	private void searchText() {
-	    searchEntry.addTextChangedListener(new TextWatcher(){
-	        public void afterTextChanged(Editable s) {
-	        	// Check for blank entry
-        		if (!searchEntry.getText().equals("")){
-        			// Check if the user is searching pages or stories
-            		if (isStory){
-    	        		// Populate results with appropriate stories
-    	        		results = new ArrayList<Story>();
-    	        		
-    	        	} else{
-    	        		// Populate results with appropriate pages
-    	        		results = new ArrayList<Page>();
-    	        	}
-        		}
-        		else {
-        			emptySearch(isStory);
-        		}
-	            
-	        }
+		searchEntry.addTextChangedListener(new TextWatcher(){
+			public void afterTextChanged(Editable s) {
+				// Check if search is by author or title and set isTitle variable
+				// THIS IS WHERE THE SPINNER IS READ
+				
+				// Check if the user is searching pages or stories
+				if (isStory && isTitle){
+					// Populate results with appropriate stories based on title
+					//results = DataBase.get_stories_by_author(searchEntry.getText().toString());
+					
+				} else if (isStory && !isTitle){
+					// Populate results with appropriate stories based on author
+					//results = DataBase.get_stories_by_title(searchEntry.getText().toString());
+					
+				} else if (!isStory && isTitle){
+					// Populate results with appropriate pages based on title
+					//results = DataBase.get_pages_by_title(searchEntry.getText().toString());
+					
+				} else {
+					// Populate results with appropriate pages based on author
+					//results = DataBase.get_pages_by_author(searchEntry.getText().toString());
+				}
+				
+			 
+
+
+			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
@@ -66,7 +91,7 @@ public class StorySearchActivity extends Activity {
 		
 	}
 
-	// Called when the search field is blank. Returns all pages/stories
+	/** Called when the search field is blank. Returns all pages/stories
 	protected void emptySearch(boolean isStory){
 		if (isStory){
 			// Populate results list with all stories
@@ -75,7 +100,7 @@ public class StorySearchActivity extends Activity {
 			// Populate results list with all pages
 			results = new ArrayList<Page>();
 		}
-	}
+	}**/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,5 +108,28 @@ public class StorySearchActivity extends Activity {
 		getMenuInflater().inflate(R.menu.search, menu);
 		return true;
 	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, 
+            int pos, long id) {
+		Spinner searchBy = (Spinner)parent;
+        Spinner searchOnline = (Spinner)parent;
+		// Set isTitle boolean to reflect spinner selection
+		Integer selected = (Integer) parent.getItemAtPosition(pos);
+		if(searchBy.getId() == R.id.spinnerSearchBy){
+			if (selected == 0){
+				isTitle = true;
+			} else if (selected == 1){
+				isTitle = false;
+			}
+		}
+		if(searchOnline.getId() == R.id.spinnerOnline){
+			
+		}
+		
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {}
 
 }
