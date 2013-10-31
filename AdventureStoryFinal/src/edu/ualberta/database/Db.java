@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
+import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
@@ -46,59 +47,39 @@ public class Db {
 		}
 	}
 
-	/**
-	 * Inserts a story into the Story table
-	 * @param story
-	 * @return id number of the inserted story
-	 */
 	public long insert_story(Story story) {
 		ContentValues values = new ContentValues();
 	    values.put(Constant.STORY_TITLE, story.getTitle());
 	    values.put(Constant.STORY_AUTHOR, story.getAuthor());
 	    values.put(Constant.ROOT, story.getRoot().getID());
-		try{
-			return db.insert(Constant.TABLE_STORY, null, values);
-		} 
-		catch(SQLiteException ex) {
-			Log.v("Insert into database exception caught", ex.getMessage());
-			return -1;
-		}
+	    return insert(Constant.TABLE_STORY, values);
 	}
 	
-	/**
-	 * Inserts a page into the Page table
-	 * @param page
-	 * @return id number of inserted page
-	 */
-	// TODO: add children pages to Story_Page table
-	// necessary? When would a newly inserted/created page ever have a child?
 	public long insert_page(Page page) {
 		ContentValues values = new ContentValues();
 	    values.put(Constant.PAGE_TITLE, page.getTitle());
 	    values.put(Constant.PAGE_AUTHOR, page.getAuthor());
-		try{
-			return db.insert(Constant.TABLE_PAGE, null, values);
-		} 
-		catch(SQLiteException ex) {
-			Log.v("Insert into database exception caught", ex.getMessage());
-			return -1;
-		}
+		return insert(Constant.TABLE_PAGE, values);
 	}
 	
-	/**
-	 * Inserts a new page option into a page, for a given story
-	 * @param story
-	 * @param page
-	 * @param option
-	 * @return number of rows inserted
-	 */
 	public long insert_page_option(Page page, Page option) {
 		ContentValues values = new ContentValues();
 	    values.put(Constant.PAGE_ID, page.getID());
 	    values.put(Constant.NEXT_PAGE_ID, option.getID());
+		return insert(Constant.TABLE_PAGE_CHILDREN, values);
+	}
+	
+	public long insert_multimedia(MultimediaAbstract mult, int page_id) {
+		ContentValues values = new ContentValues();
+		values.put(Constant.DIRECTORY, mult.getFileDir());
+		values.put(Constant.PAGE_ID, page_id);
+		return insert(Constant.TABLE_MULT, values);
+	}
+	
+	public long insert(String table, ContentValues values) {
 		try{
-			return db.insert(Constant.TABLE_PAGE_CHILDREN, null, values);
-		}
+			return db.insert(table, null, values);
+		} 
 		catch(SQLiteException ex) {
 			Log.v("Insert into database exception caught", ex.getMessage());
 			return -1;
@@ -115,9 +96,10 @@ public class Db {
 		return story_from_cursor(c);
 	}
 	public Story get_story_by_id(Integer id) {
-		Cursor c = get_from_db(Constant.TABLE_STORY, Constant.PAGE_ID, id);
+		Cursor c = get_from_db(Constant.TABLE_STORY, Constant.STORY_ID, id);
 		return story_from_cursor(c).get(0);
 	}
+	
 	public ArrayList<Page> get_pages_by_title(String search_title) {
 		Cursor c = get_from_db(Constant.TABLE_PAGE, Constant.PAGE_TITLE, search_title);
 		return page_from_cursor(c);
@@ -128,11 +110,18 @@ public class Db {
 	}
 	public Page get_page_by_id(Integer id) {
 		Cursor c = get_from_db(Constant.TABLE_PAGE, Constant.PAGE_ID, id);
+		if (c.getCount() == 0) {
+			return null;
+		}
 		return page_from_cursor(c).get(0);
 	}
 	public ArrayList<Page> get_page_options(Integer id) {
 		Cursor c = get_from_db(Constant.TABLE_PAGE_CHILDREN, Constant.PAGE_ID, id);
-		return page_from_cursor(c);
+		return page_from_cursor_children(c);
+	}
+	public ArrayList<MultimediaAbstract> get_multimedia_by_page_id(Integer page_id) {
+		Cursor c = get_from_db(Constant.TABLE_MULT, Constant.PAGE_ID, page_id);
+		return multimedia_from_cursor(c);
 	}
 	
 	/**
@@ -144,8 +133,8 @@ public class Db {
 	 */
 	public Cursor get_from_db(String table, String column, String term) {
 		String select = "SELECT * FROM " + table
-				+ "WHERE " + column + " LIKE %"
-				+ term + "%";
+				+ " WHERE " + column + " LIKE '%"
+				+ term + "%'";
 		try {
 			return db.rawQuery(select, null);
 		} catch(SQLiteException ex) {
@@ -163,13 +152,33 @@ public class Db {
 	 */
 	public Cursor get_from_db(String table, String column, Integer id) {
 		String select = "SELECT * FROM " + table
-				+ "WHERE " + column + " = " + id;
+				+ " WHERE " + column + " = " + id;
+		System.out.println(select);
 		try {
 			return db.rawQuery(select, null);
 		} catch(SQLiteException ex) {
 			Log.v("Select from database exception caught", ex.getMessage());
 			return null;
 		}
+	}
+	
+	/**
+	 * Takes cursor filled with a page's children and returns 
+	 * an arraylist of pages
+	 * @param c
+	 * @return
+	 */
+	public ArrayList<Page> page_from_cursor_children(Cursor c) {
+		Integer id;
+		ArrayList<Page> pages = new ArrayList<Page>();
+		
+		while (c.moveToNext()) {
+			id = c.getInt(c.getColumnIndex(Constant.NEXT_PAGE_ID));
+			
+			Page page = get_page_by_id(id);
+			pages.add(page);
+		}
+		return pages;
 	}
 	
 	/**
@@ -184,9 +193,8 @@ public class Db {
 		String text;
 		
 		ArrayList<Page> pages = new ArrayList<Page>();
-		
-		while (c != null) {
-			c.moveToNext();
+				
+		while (c.moveToNext()) {
 			id = c.getInt(c.getColumnIndex(Constant.PAGE_ID));
 			title = c.getString(c.getColumnIndex(Constant.PAGE_TITLE));
 			author = c.getString(c.getColumnIndex(Constant.PAGE_AUTHOR));
@@ -215,13 +223,13 @@ public class Db {
 		Page root;
 		
 		ArrayList<Story> stories = new ArrayList<Story>();
-		
-		while (c != null) {
-			c.moveToNext();
+		while (c.moveToNext()) {
 			id = c.getInt(c.getColumnIndex(Constant.STORY_ID));
 			title = c.getString(c.getColumnIndex(Constant.STORY_TITLE));
 			author = c.getString(c.getColumnIndex(Constant.STORY_AUTHOR));
 			root_id = c.getInt(c.getColumnIndex(Constant.ROOT));
+			
+			System.out.println("root id: " + root_id);
 			
 			root = get_page_by_id(root_id);
 			Story story = new Story(id, title, author, root);
@@ -231,12 +239,23 @@ public class Db {
 		return stories;
 	}
 	
-	/**
-	 * Updates a story's author, title, and or root page
-	 * @param old
-	 * @param updated
-	 * @return
-	 */
+	public ArrayList<MultimediaAbstract> multimedia_from_cursor(Cursor c) {
+		Integer mult_id;
+		String file_dir;
+		
+		ArrayList<MultimediaAbstract> multimedia = 
+				new ArrayList<MultimediaAbstract>();
+		while(c.moveToNext()) {
+			mult_id = c.getInt(c.getColumnIndex(Constant.MULT_ID));
+			file_dir = c.getString(c.getColumnIndex(Constant.DIRECTORY));
+			
+			// TODO: this is dirty. Anyone know a better way to handle this?
+			MultimediaAbstract ma = new MultimediaAbstract(mult_id, file_dir){};
+			multimedia.add(ma);
+		}
+		return multimedia;
+	}
+	
 	public long update_story(Story story) {
 		ContentValues values = new ContentValues();
 		String where = Constant.STORY_ID + " = " + story.getID();
@@ -248,14 +267,6 @@ public class Db {
 	    return update(Constant.TABLE_STORY, values, where);
 	}
 	
-	/**
-	 * Updates a page's author, title, and/or text
-	 * Does NOT update the page's children
-	 * @see insert_page_option
-	 * @see delete_page_option
-	 * @param page
-	 * @return
-	 */
 	public long update_page(Page page) {
 		ContentValues values = new ContentValues();
 		String where = Constant.PAGE_ID + " = " + page.getID();
@@ -294,11 +305,6 @@ public class Db {
 		return delete(Constant.TABLE_STORY, where);
 	}
 	
-	/**
-	 * Deletes a page and its connection to its children from the db
-	 * @param page
-	 * @return
-	 */
 	public long delete_page(Page page) {
 		long result;
 		String where = Constant.PAGE_ID + " = " + page.getID();
@@ -311,12 +317,6 @@ public class Db {
 		return delete(Constant.TABLE_PAGE, where);
 	}
 	
-	/**
-	 * Deletes page, child row from page_children table
-	 * @param page
-	 * @param child
-	 * @return
-	 */
 	public long delete_page_option(Page page, Page child) {
 		String where = Constant.PAGE_ID + " = " + page.getID() + " AND "
 				       + Constant.NEXT_PAGE_ID + " = " + child.getID();

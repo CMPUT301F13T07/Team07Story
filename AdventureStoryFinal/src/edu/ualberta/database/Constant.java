@@ -2,13 +2,13 @@ package edu.ualberta.database;
 
 public class Constant {
 	public static final String DATABASE_NAME = "story_page_storage";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 3;
     
 	// table titles
 	public static final String TABLE_STORY = "Story";
 	public static final String TABLE_PAGE = "Page";
 	public static final String TABLE_PAGE_CHILDREN = "Page_Children";
-	//public static final String TABLE_MULTIMEDIA = "Multimedia";
+	public static final String TABLE_MULT = "Multimedia";
 	
 	// common column titles
 	public static final String STORY_ID = "story_id";
@@ -28,6 +28,19 @@ public class Constant {
 	
 	// story_page columns
 	public static final String NEXT_PAGE_ID = "next_page_id"; 
+	
+	// multimedia columns
+	public static final String MULT_ID = "multimedia_id";
+	public static final String DIRECTORY = "directory";
+	
+	public static final String CREATE_MULT_TABLE = "CREATE TABLE IF NOT EXISTS "
+												   + TABLE_MULT + " ("
+												   + MULT_ID + " INTEGER PRIMARY KEY, "
+												   + DIRECTORY + " TEXT, "
+												   + PAGE_ID + " INTEGER, "
+												   + "FOREIGN KEY (" + PAGE_ID
+			  									   + ") REFERENCES " + TABLE_PAGE
+			  									   + " (" + PAGE_ID + "))";
 	
 	public static final String CREATE_PAGE_TABLE = "CREATE TABLE IF NOT EXISTS "
 												    + TABLE_PAGE + " ("
@@ -50,7 +63,7 @@ public class Constant {
 														  + TABLE_PAGE_CHILDREN + "(" + PAGE_ID + " INTEGER, "
 														  + NEXT_PAGE_ID + " INTEGER, "
 														  + "PRIMARY KEY (" 
-														  + ", " + PAGE_ID + " ,"
+														  + PAGE_ID + ", "
 														  + NEXT_PAGE_ID + "), FOREIGN KEY ("
 														  + PAGE_ID
 														  + ") REFERENCES " + TABLE_PAGE

@@ -6,8 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class Picture extends MultimediaAbstract{	
-	public Picture( int id, int index, Context context){
-		super(id, index, id, context);	
+	public Picture(int id, String file_dir){
+		super(id, file_dir);	
+	}
+	public Picture(String file_dir) {
+		super(file_dir);
 	}
 	
 	@Override
@@ -20,22 +23,22 @@ public class Picture extends MultimediaAbstract{
 	@Override
 	public void setId(int id){
 		super.id = id;
-		super.pictureId = id;
+		//super.pictureId = id;
 	}
 	
-	@Override
+	/*@Override
 	public void setPictureId(int pictureId){
 		super.pictureId = pictureId;
 		super.id = pictureId;
-	}
+	}*/
 	
 	@Override
 	public Bitmap loadPhoto(){
-		if( super.pictureId == -1 ){
+		if( super.id == -1 ){
 			return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_picture);
 		}else{
-			String tempFileName = MultimediaDB.getBitmapDirectory(pictureId, context);
+			String tempFileName = MultimediaDB.getBitmapDirectory(id, context);
 			return BitmapFactory.decodeFile(tempFileName);			
 		}
 	}
