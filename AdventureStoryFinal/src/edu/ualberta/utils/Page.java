@@ -45,8 +45,9 @@ public class Page {
 	private Integer id;
     private String title;
     private String author;
-	private Content content;
-	//private ArrayList<MultimediaAbstract> multimedia;
+    private String text;
+	//private Content content;
+	private ArrayList<MultimediaAbstract> multimedia;
 	private ArrayList<Page> pages;
 	
 	//for internal use only
@@ -68,7 +69,8 @@ public class Page {
 		this.id = id;
 		this.title = title;
 		this.author = author;
-		this.content = new Content(text, null);
+		this.text = text
+		this.multimedia = null;
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
@@ -78,7 +80,7 @@ public class Page {
 		this.id = null;
 		this.title = title;
 		this.author = author;
-		this.content = new Content(text, null);
+		this.multimedia = null;
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
@@ -88,7 +90,11 @@ public class Page {
     	this.id = id;
     	this.title = title;
     	this.author = author;
-    	this.content = new Content(text, mm);
+	this.text = text;
+	if (mm == null) 
+		this.multimedia = new ArrayList<MultimediaAbstract>();
+	else 
+		this.multimedia = mm;
     	if (pages == null)
     		this.pages = new ArrayList<Page>();
     	else
@@ -98,7 +104,11 @@ public class Page {
     	this.id = null;
     	this.title = title;
     	this.author = author;
-    	this.content = new Content(text, mm);
+    	this.text = text
+	if (mm == null) 
+		this.multimedia = new ArrayList<MultimediaAbstract>();
+	else 
+		this.multimedia = mm;
     	if (pages == null)
     		this.pages = new ArrayList<Page>();
     	else
@@ -113,9 +123,8 @@ public class Page {
     public String getAuthor() {return author;}
 	public void setText(String t) {content.setParagraph(t);}
 	public String getText() {return content.getParagraph();}
-	public void addMultimedia(MultimediaAbstract ma) {content.addMultimedia(ma);}
-	public ArrayList<MultimediaAbstract> getMultimedia() {return content.getAllMultimedia();}
-	public Content getFormattedContent() {return content;}
+	public void addMultimedia(MultimediaAbstract ma) {multimedia.add(ma);}
+	public ArrayList<MultimediaAbstract> getMultimedia() {return multimedia;}
 	public void setPages(ArrayList<Page> o) {pages = o;}
 	public ArrayList<Page> getPages() {return pages;};
 	public Page getPage(Integer i) {return pages.get(i);}
