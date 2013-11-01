@@ -223,7 +223,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		
 	public void switchToOriginalLayout(){		
 		ActivityExtended ae = 
-				(ActivityExtended)((ChooseYourAdventure07)mContext.
+				(ActivityExtended)((ChooseYourAdventure)mContext.
 						getApplicationContext()).getCurrentActivity();
 		((ActivityExtended)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 		ae.switchToOriginalLayout();
@@ -231,7 +231,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 	
 	public void lockLandscape(){
 		PageViewActivity pva = 
-				(PageViewActivity)((ChooseYourAdventure07)mContext.
+				(PageViewActivity)((ChooseYourAdventure)mContext.
 						getApplicationContext()).getCurrentActivity();
 		pva.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 	}

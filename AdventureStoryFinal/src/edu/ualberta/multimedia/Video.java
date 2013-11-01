@@ -4,23 +4,23 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import edu.ualberta.adventstory.ChooseYourAdventure07;
+import edu.ualberta.adventstory.ChooseYourAdventure;
 import edu.ualberta.adventstory.R;
 
 public class Video extends MultimediaAbstract{		
-	public Video(int id, int index, int pictureId, Context context){
-		super(id, index, pictureId, context);
+	public Video(int id, int index, int pictureId){
+		super(id, index, pictureId);
 	}
 	
 	@Override
-	public void play(){
-		ChooseYourAdventure07 cya = (ChooseYourAdventure07)super.context.
+	public void play(Context context){
+		ChooseYourAdventure cya = (ChooseYourAdventure)context.
 													getApplicationContext();
 		cya.getCurrentActivity().switchToVideoViewPreview(
-				MultimediaDB.getVideoDirectory(super.id, super.context));
+				MultimediaDB.getVideoDirectory(super.id, context));
 	}
 	
-	public Bitmap loadPhoto(){
+	public Bitmap loadPhoto(Context context){
 		if( super.pictureId== -1 ){
 			return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_video);

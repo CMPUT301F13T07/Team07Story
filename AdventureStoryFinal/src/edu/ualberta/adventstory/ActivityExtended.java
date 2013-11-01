@@ -15,7 +15,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-abstract public class ActivityExtended extends Activity{
+public class ActivityExtended extends Activity{
 	protected boolean mOnVideoViewPreview = false;
 	protected String mVideoDirectory = null;
 	
@@ -35,7 +35,7 @@ abstract public class ActivityExtended extends Activity{
 						mVideoDirectory = savedInstanceState.getString("VideoDirectory");					
 				}
 			}
-		}
+		}		
 	}
 	
 	// Override these methods.
@@ -57,5 +57,10 @@ abstract public class ActivityExtended extends Activity{
 	public void onSaveInstanceState(Bundle objects){
 		objects.putBoolean("Mode", mOnVideoViewPreview);
 		objects.putString("VideoDirectory", mVideoDirectory);
+	}
+	
+	// Override this.
+	public void Update(){
+		
 	}
 }

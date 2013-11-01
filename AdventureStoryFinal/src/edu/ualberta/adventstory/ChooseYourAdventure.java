@@ -8,30 +8,41 @@ package edu.ualberta.adventstory;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.graphics.Point;
+import android.view.Display;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
 
 import edu.ualberta.multimedia.*;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 import edu.ualberta.utils.Content;
 
-public class ChooseYourAdventure07 extends Application {
+public class ChooseYourAdventure extends Application {
 	private ActivityExtended mCurrentActivity = null;
 	
 	// Test data.
 	private Story mStory;
 	private Page mCurrentPage;
 	private Stack<Page> mPageHistory;	// This might be deleted.
+	
+	public ChooseYourAdventure(){
+		super();
+	}
+	
 	public void onCreate(){
 		super.onCreate();
 		// TEST.
 		// Load the database.
-		Picture p1 = new Picture(1, 2, this);
-		Picture p2 = new Picture(2, 450, this);
-		SoundClip sc1 = new SoundClip(3, 40, -1, this);
-		Video v1 = new Video(4, 100, -1, this);
+		Picture p1 = new Picture(1, 2);
+		Picture p2 = new Picture(2, 450);
+		SoundClip sc1 = new SoundClip(3, 40, -1);
+		Video v1 = new Video(4, 100, -1);
 		
 		// NOTE: We have different id's independent of the Multimedia Type.
 		// Initialize photo index 1.
@@ -73,20 +84,14 @@ public class ChooseYourAdventure07 extends Application {
 		
 		// TODO: Temporarily Page.text is string.
 		Content se = new Content(par, medias);
-		Page test01 = new Page(1, "The rise of Trolls", "someone.", se.getParagraph(), null);
-		for( MultimediaAbstract ma : se.getAllMultimedia()){
-			test01.addMultimedia(ma);
-		}
+		Page test01 = new Page(1, "The rise of Trolls", "someone.", se, null);
+		test01.setText(par);
 		Content se2 = new Content("Told you will be disappointed.", null);
-		Page second = new Page(2, "You will be disappointed.", "someoneElse", se.getParagraph(), null);
-		for( MultimediaAbstract ma : se2.getAllMultimedia()){
-			second.addMultimedia(ma);
-		}
+		Page second = new Page(2, "You will be disappointed.", "someoneElse", se2, null);
+		second.setText("Told you will be disappointed.");
 		Content se3 = new Content("Times like these when end of civilization seems iminent.", null);
-		Page third = new Page(3, "Really?", "someoneElse", se3.getParagraph(), null);
-		for( MultimediaAbstract ma : se3.getAllMultimedia()){
-			third.addMultimedia(ma);
-		}
+		Page third = new Page(3, "Really?", "someoneElse", se3, null);
+		third.setText("Times like these when end of civilization seems iminent.");
 		ArrayList<Page> p = new ArrayList<Page>();
 		p.add(second);
 		p.add(third);

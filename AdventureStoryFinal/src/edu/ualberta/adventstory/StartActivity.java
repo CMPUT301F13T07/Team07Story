@@ -14,16 +14,17 @@ import android.widget.Button;
 
 public class StartActivity extends ActivityExtended{
 	
-	private ChooseYourAdventure07 mAdventureTime;
+	protected ChooseYourAdventure mAdventureTime;
 	private Button mkStory, publish, searchPage, searchStory, mkPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         
-        mAdventureTime = (ChooseYourAdventure07)this.getApplicationContext();
-        
         setContentView(R.layout.activity_main);
+        
+        // Application Object.
+        mAdventureTime = (ChooseYourAdventure)this.getApplicationContext();
         
         // Define Buttons
         mkStory = (Button)findViewById(R.id.newStory);

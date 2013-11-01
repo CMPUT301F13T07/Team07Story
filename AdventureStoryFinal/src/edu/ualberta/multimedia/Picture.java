@@ -6,13 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class Picture extends MultimediaAbstract{	
-	public Picture( int id, int index, Context context){
-		super(id, index, id, context);	
-	}
-	
-	@Override
-	public void play(){
-		// Enter photo effects...		
+	public Picture( int id, int index){
+		super(id, index, id);	
 	}
 	
 	// Override the following so that setting id will also set mPictureId
@@ -30,7 +25,7 @@ public class Picture extends MultimediaAbstract{
 	}
 	
 	@Override
-	public Bitmap loadPhoto(){
+	public Bitmap loadPhoto(Context context){
 		if( super.pictureId == -1 ){
 			return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_picture);

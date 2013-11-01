@@ -11,22 +11,42 @@ package edu.ualberta.utils;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
+import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnGenericMotionListener;
+import android.view.WindowManager;
+import android.view.View.OnTouchListener;
+import android.widget.ImageView;
+import android.widget.RelativeLayout.LayoutParams;
+import android.widget.Toast;
 
+import edu.ualberta.adventstory.ActivityExtended;
+import edu.ualberta.adventstory.R;
 import edu.ualberta.multimedia.MultimediaAbstract;
 
 public class Content {
 	String mParagraph;
 	ArrayList<MultimediaAbstract> mMultimedia;
+	boolean mEditMode;
+	int mSelectedMultimedia = -1; // id of selected multimedia.
 
-	public Content(String paragraph,
-			ArrayList<MultimediaAbstract> multimedia) {
+	public Content(String paragraph, ArrayList<MultimediaAbstract> multimedia) {
 		if (multimedia == null) {
 			mMultimedia = new ArrayList<MultimediaAbstract>();
 		} else {
@@ -34,6 +54,7 @@ public class Content {
 		}
 
 		mParagraph = paragraph;
+		mEditMode = false;
 	}
 
 	// Hard-Copy Constructor.
@@ -46,76 +67,45 @@ public class Content {
 				this.mMultimedia.add(m);
 			}
 		}
+		mEditMode = false;
 	}
 
 	public String getParagraph() {
 		return mParagraph;
 	}
 
+	public int getSelectedMultimedia() {
+		return mSelectedMultimedia;
+	}
+
 	public ArrayList<MultimediaAbstract> getAllMultimedia() {
 		return mMultimedia;
 	}
 
-	public SpannableStringBuilder getSpannableStringBuilder() {
-		SpannableStringBuilder stringBuilder = new SpannableStringBuilder(
-				mParagraph);
+	public void setEditModeTrue(Context context) {
+		mEditMode = true;
+	}
 
-		if (mMultimedia != null) {
-			for (MultimediaAbstract multimedia : mMultimedia) {
-				Bitmap bitmap = multimedia.loadPhoto();
-				ImageSpan is = new ImageSpan(multimedia.getContext(), bitmap);
-				stringBuilder.insert(multimedia.getIndex(), " ");
-				stringBuilder.setSpan(is, multimedia.getIndex(),
-						multimedia.getIndex() + 1,
-						Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-
-				/* 
-				 * Make Clickable
-				 * InnerClass.
-				 *  NOTE: If this is used anywhere else, then moved this outside
-				 * 		  to it's own module.
-				 */
-				class ClickableSpanEx extends ClickableSpan {
-					private MultimediaAbstract mMultimedia;
-					private Context mContext;
-
-					public ClickableSpanEx(MultimediaAbstract ma,
-							Context context) {
-						super();
-						mMultimedia = ma;
-						mContext = context;
-					}
-
-					@Override
-					public void onClick(View widget) {
-						// TODO Auto-generated method stub
-						mMultimedia.play();
-					}
-				}
-
-				ClickableSpanEx cse = new ClickableSpanEx(multimedia,
-						multimedia.getContext());
-
-				stringBuilder.setSpan(cse, multimedia.getIndex(),
-						multimedia.getIndex() + 1,
-						Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-			}
-
-		}
-		return stringBuilder;
+	public void setEditModeFalse() {
+		mEditMode = false;
 	}
 
 	public void setParagraph(String paragraph) {
 		this.mParagraph = paragraph;
 	}
 
-	public boolean addMultimedia(MultimediaAbstract ma) {return mMultimedia.add(ma);}
-	public boolean removeMultimedia(MultimediaAbstract ma){return mMultimedia.remove(ma);}
-	
-	public boolean removeMultimedia(int id){ 
+	public boolean addMultimedia(MultimediaAbstract ma) {
+		return mMultimedia.add(ma);
+	}
+
+	public boolean removeMultimedia(MultimediaAbstract ma) {
+		return mMultimedia.remove(ma);
+	}
+
+	public boolean removeMultimedia(int id) {
 		// Note: This delete the first object with following id.
-		for( MultimediaAbstract m: mMultimedia){
-			if(id == m.getId()){ 
+		for (MultimediaAbstract m : mMultimedia) {
+			if (id == m.getId()) {
 				return mMultimedia.remove(m);
 			}
 		}

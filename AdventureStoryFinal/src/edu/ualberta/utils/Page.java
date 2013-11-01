@@ -64,6 +64,18 @@ public class Page {
 	*TO-DO: multimedia: the multimedia objects on the page
 	*pages: The list of pages the user can choose to go to next
 	*/
+	
+    public Page(Integer id, String title, String author, Content content, ArrayList<Page> pages) {
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.content = content;
+		if (pages == null)
+			this.pages = new ArrayList<Page>();
+		else
+			this.pages = pages;
+	}
+	
     public Page(Integer id, String title, String author, String text, ArrayList<Page> pages) {
 		this.id = id;
 		this.title = title;

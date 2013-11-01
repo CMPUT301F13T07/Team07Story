@@ -12,13 +12,13 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name="ChooseYourAdventure" >
         <activity
             android:name="edu.ualberta.adventstory.StartActivity"
             android:label="@string/title_activity_start" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -30,11 +30,21 @@
             android:name="edu.ualberta.adventstory.CreateNewStoryActivity"
             android:label="@string/title_activity_create_new" >
         </activity>
-        <activity android:name="edu.ualberta.adventstory.PageEditActivity">
-	</activity>
+        <activity 
+            android:name="edu.ualberta.adventstory.PageEditActivity"
+            android:label="Page Edit">
+            <intent-filter>
+                <action android:name="android.intent.action.PageEditActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+		</activity>
         <activity
             android:name="edu.ualberta.adventstory.PageViewActivity"
             android:label="@string/title_activity_page_view" >
+            <intent-filter>
+                <action android:name="android.intent.action.PageViewActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 
