@@ -30,9 +30,7 @@ abstract public class ActivityExtended extends Activity{
 				}
 			}
 		}
-        // Create instance of the database
-        database = new Db(this);
-        database.open();
+     
 	}
 	
 	// Override these methods.

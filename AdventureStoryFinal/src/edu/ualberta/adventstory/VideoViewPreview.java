@@ -225,7 +225,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 						getApplicationContext()).getCurrentActivity();
 		pva.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 	}
-	
+
 	public boolean isPlaying(){
 		return mIsPlaying;
 	}

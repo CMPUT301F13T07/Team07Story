@@ -1,6 +1,8 @@
 package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
+
+import edu.ualberta.database.Db;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,11 +13,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 public class SearchActivity extends Activity implements OnItemSelectedListener{
 	
 	private EditText searchEntry = (EditText) findViewById(R.id.searchEntry);
+	private ListView listResults = (ListView) findViewById(R.id.listResults);
 	private Spinner searchBy = (Spinner) findViewById(R.id.spinnerSearchBy);
 	private Spinner searchOnline = (Spinner) findViewById(R.id.spinnerOnline);
 	
@@ -25,22 +29,27 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 	private boolean isTitle = true;
 	
 	private ArrayList<?> results;
+	private ArrayList<String> displayResults;
+	
+	// Create Adapter for results list
+	private ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, 
+			R.layout.activity_story_search, displayResults);
+	// Create an ArrayAdapter using the string array and a default spinner layout
+	private ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+			R.array.searchBy_dropdown, android.R.layout.simple_spinner_item);
 	
 	// Access the database
-	//private Db DataBase = ((AdventureStoryFinal)getApplication()).DataBase;
+	private Db DataBase = ((DataSingleton)getApplication()).database;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_story_search);
 		
-		// Create an ArrayAdapter using the string array and a default spinner layout
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-		        R.array.searchBy_dropdown, android.R.layout.simple_spinner_item);
-		// Specify the layout to use when the list of choices appears
+		// Set up adapters
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		// Apply the adapter to the spinner
 		searchBy.setAdapter(adapter);
+		listResults.setAdapter(adapter2);
 		
 		searchBy.setOnItemSelectedListener(this);
 		
@@ -58,19 +67,19 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 				// Check if the user is searching pages or stories
 				if (isStory && isTitle){
 					// Populate results with appropriate stories based on title
-					//results = DataBase.get_stories_by_author(searchEntry.getText().toString());
+					results = DataBase.get_stories_by_author(searchEntry.getText().toString());
 					
 				} else if (isStory && !isTitle){
 					// Populate results with appropriate stories based on author
-					//results = DataBase.get_stories_by_title(searchEntry.getText().toString());
+					results = DataBase.get_stories_by_title(searchEntry.getText().toString());
 					
 				} else if (!isStory && isTitle){
 					// Populate results with appropriate pages based on title
-					//results = DataBase.get_pages_by_title(searchEntry.getText().toString());
+					results = DataBase.get_pages_by_title(searchEntry.getText().toString());
 					
 				} else {
 					// Populate results with appropriate pages based on author
-					//results = DataBase.get_pages_by_author(searchEntry.getText().toString());
+					results = DataBase.get_pages_by_author(searchEntry.getText().toString());
 				}
 				
 				updateList(results);
@@ -141,6 +150,12 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 	
 	// Updates the list view with the results for the user
 	public void updateList(ArrayList<?> results){
+		// Change the array to contain the strings to display
+		for (int i = 0; i < results.size(); i++){
+			displayResults.set(i, results.get(i).toString());
+		}
+		// update view
+		adapter2.notifyDataSetChanged();
 		
 	}
 
