@@ -40,6 +40,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.BufferType;
 
 public class PageEditActivity extends ActivityExtended {
@@ -619,7 +620,16 @@ public class PageEditActivity extends ActivityExtended {
 					.getAllMultimedia();
 
 			for (MultimediaAbstract m : ma) {
-				if (m.getIsSelected()) {					
+				if (m.getIsSelected()) {
+					// Make sure no multimedia have that index.
+					for( MultimediaAbstract m2: ma){
+						if(m2 != m){
+							if( m.getIndex() == index ){
+								Toast.makeText(this, "Index is occupied, place multimedia somewhere else.", Toast.LENGTH_LONG).show();
+								return;								
+							}
+						}
+					}
 					m.setIndex(index);
 					
 					clearSelection();					

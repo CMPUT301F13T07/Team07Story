@@ -6,8 +6,8 @@ public class Responder {
 	}
 	
 	Action mAction;
-	public Responder(Action action) {
-		mAction = action;
+	public Responder() {
+		mAction = new Action();
 	}
 	
 	public void response(){
