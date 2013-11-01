@@ -42,7 +42,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView.BufferType;
-
+asdf
 public class PageEditActivity extends ActivityExtended {
 	// Not the base activity. Transfer this to the base activity then.
 	protected ChooseYourAdventure mAdventureTime;
