@@ -7,7 +7,7 @@ import android.graphics.BitmapFactory;
 
 public class Picture extends MultimediaAbstract{	
 	public Picture( int id, int index){
-		super(id, index, id);	
+		super(id, index);	
 	}
 	
 	// Override the following so that setting id will also set mPictureId
@@ -15,24 +15,12 @@ public class Picture extends MultimediaAbstract{
 	@Override
 	public void setId(int id){
 		super.id = id;
-		super.pictureId = id;
-	}
-	
-	@Override
-	public void setPictureId(int pictureId){
-		super.pictureId = pictureId;
-		super.id = pictureId;
-	}
+	}	
 	
 	@Override
 	public Bitmap loadPhoto(Context context){
-		if( super.pictureId == -1 ){
-			return BitmapFactory.decodeResource(
+		return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_picture);
-		}else{
-			String tempFileName = MultimediaDB.getBitmapDirectory(pictureId, context);
-			return BitmapFactory.decodeFile(tempFileName);			
-		}
 	}
 	
 	@Override

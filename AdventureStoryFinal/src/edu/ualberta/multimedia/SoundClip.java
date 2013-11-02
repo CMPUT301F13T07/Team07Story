@@ -14,8 +14,8 @@ import edu.ualberta.adventstory.R;
 import edu.ualberta.utils.Utility;
 
 public class SoundClip extends MultimediaAbstract{	
-	public SoundClip(int id, int index, int pictureId ){
-		super(id, index, pictureId);		
+	public SoundClip(int id, int index){
+		super(id, index);		
 	}
 	
 	@Override
@@ -57,13 +57,8 @@ public class SoundClip extends MultimediaAbstract{
 	
 	@Override
 	public Bitmap loadPhoto(Context context){
-		if( super.pictureId == -1 ){
-			return BitmapFactory.decodeResource(
+		return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_audio);
-		}else{
-			String tempFileName = MultimediaDB.getBitmapDirectory(pictureId, context);
-			return BitmapFactory.decodeFile(tempFileName);			
-		}
 	}
 	
 	@Override

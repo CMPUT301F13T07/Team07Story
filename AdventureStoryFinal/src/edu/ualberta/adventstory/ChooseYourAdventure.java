@@ -8,15 +8,7 @@ package edu.ualberta.adventstory;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
-import android.app.Activity;
-import android.content.pm.ActivityInfo;
-import android.graphics.Point;
-import android.view.Display;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
 
 import edu.ualberta.multimedia.*;
 import edu.ualberta.utils.Page;
@@ -41,8 +33,8 @@ public class ChooseYourAdventure extends Application {
 		// Load the database.
 		Picture p1 = new Picture(1, 2);
 		Picture p2 = new Picture(2, 450);
-		SoundClip sc1 = new SoundClip(3, 40, -1);
-		Video v1 = new Video(4, 100, -1);
+		SoundClip sc1 = new SoundClip(3, 40);
+		Video v1 = new Video(4, 100);
 		
 		// NOTE: We have different id's independent of the Multimedia Type.
 		// Initialize photo index 1.

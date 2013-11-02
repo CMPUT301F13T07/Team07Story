@@ -8,8 +8,8 @@ import edu.ualberta.adventstory.ChooseYourAdventure;
 import edu.ualberta.adventstory.R;
 
 public class Video extends MultimediaAbstract{		
-	public Video(int id, int index, int pictureId){
-		super(id, index, pictureId);
+	public Video(int id, int index){
+		super(id, index);
 	}
 	
 	@Override
@@ -21,13 +21,8 @@ public class Video extends MultimediaAbstract{
 	}
 	
 	public Bitmap loadPhoto(Context context){
-		if( super.pictureId== -1 ){
-			return BitmapFactory.decodeResource(
+		return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_video);
-		}else{
-			String tempFileName = MultimediaDB.getBitmapDirectory(pictureId, context);
-			return BitmapFactory.decodeFile(tempFileName);			
-		}	
 	}
 	
 	@Override

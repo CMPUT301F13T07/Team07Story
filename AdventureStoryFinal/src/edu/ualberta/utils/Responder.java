@@ -1,11 +1,13 @@
+// Responder.java
 package edu.ualberta.utils;
 
 public class Responder {
 	static public class Action{
 		public void act(){};	// Override.
-	}
+	}	
 	
-	Action mAction;
+	protected Action mAction;
+	
 	public Responder() {
 		mAction = new Action();
 	}
