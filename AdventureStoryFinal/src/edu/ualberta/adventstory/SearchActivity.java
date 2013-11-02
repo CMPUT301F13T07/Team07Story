@@ -2,7 +2,7 @@ package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
 
-import edu.ualberta.database.Db;
+import edu.ualberta.database.DbManager;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -39,7 +39,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 			R.array.searchBy_dropdown, android.R.layout.simple_spinner_item);
 	
 	// Access the database
-	private Db DataBase = ((DataSingleton)getApplication()).database;
+	private DbManager DataBase = ((DataSingleton)getApplication()).database;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

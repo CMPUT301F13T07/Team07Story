@@ -18,12 +18,12 @@ import edu.ualberta.utils.Story;
  * Performs database tasks including open, close, insert, update, and delete
  *
  */
-public class Db {
+public class DbManager implements DataManager{
 	public static SQLiteDatabase db;
 	private final Context context;
 	private final DbHelper dbhelper;
 	
-	public Db(Context c){
+	public DbManager(Context c){
 		context = c;
 		dbhelper = new DbHelper(context,Constant.DATABASE_NAME, null,
 								Constant.DATABASE_VERSION);

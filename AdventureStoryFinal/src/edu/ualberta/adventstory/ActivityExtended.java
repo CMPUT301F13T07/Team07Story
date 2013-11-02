@@ -6,12 +6,12 @@ package edu.ualberta.adventstory;
 
 import android.app.Activity;
 import android.os.Bundle;
-import edu.ualberta.database.Db;
+import edu.ualberta.database.DbManager;
 
 abstract public class ActivityExtended extends Activity{
 	protected boolean mOnVideoViewPreview = false;
 	protected String mVideoDirectory = null;
-	public Db database;
+	public DbManager database;
 	
 	public ActivityExtended() {
 		super();

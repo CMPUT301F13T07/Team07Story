@@ -7,7 +7,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import edu.ualberta.database.Db;
+import edu.ualberta.database.DbManager;
 
 public class StartActivity extends Activity {
 
