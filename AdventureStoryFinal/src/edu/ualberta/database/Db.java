@@ -73,6 +73,7 @@ public class Db {
 		ContentValues values = new ContentValues();
 		values.put(Constant.DIRECTORY, mult.getFileDir());
 		values.put(Constant.PAGE_ID, page_id);
+		values.put(Constant.INDEX, mult.getIndex());
 		return insert(Constant.TABLE_MULT, values);
 	}
 	
@@ -242,15 +243,17 @@ public class Db {
 	public ArrayList<MultimediaAbstract> multimedia_from_cursor(Cursor c) {
 		Integer mult_id;
 		String file_dir;
+		Integer index;
 		
 		ArrayList<MultimediaAbstract> multimedia = 
 				new ArrayList<MultimediaAbstract>();
 		while(c.moveToNext()) {
 			mult_id = c.getInt(c.getColumnIndex(Constant.MULT_ID));
 			file_dir = c.getString(c.getColumnIndex(Constant.DIRECTORY));
+			index = c.getInt(c.getColumnIndex(Constant.INDEX));
 			
 			// TODO: this is dirty. Anyone know a better way to handle this?
-			MultimediaAbstract ma = new MultimediaAbstract(mult_id, file_dir){};
+			MultimediaAbstract ma = new MultimediaAbstract(mult_id, index, file_dir){};
 			multimedia.add(ma);
 		}
 		return multimedia;

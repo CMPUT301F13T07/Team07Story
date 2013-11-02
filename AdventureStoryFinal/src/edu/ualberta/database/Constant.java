@@ -2,7 +2,7 @@ package edu.ualberta.database;
 
 public class Constant {
 	public static final String DATABASE_NAME = "story_page_storage";
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     
 	// table titles
 	public static final String TABLE_STORY = "Story";
@@ -32,10 +32,12 @@ public class Constant {
 	// multimedia columns
 	public static final String MULT_ID = "multimedia_id";
 	public static final String DIRECTORY = "directory";
+	public static final String INDEX = "index";
 	
 	public static final String CREATE_MULT_TABLE = "CREATE TABLE IF NOT EXISTS "
 												   + TABLE_MULT + " ("
 												   + MULT_ID + " INTEGER PRIMARY KEY, "
+												   + INDEX + " INTEGER, "
 												   + DIRECTORY + " TEXT, "
 												   + PAGE_ID + " INTEGER, "
 												   + "FOREIGN KEY (" + PAGE_ID

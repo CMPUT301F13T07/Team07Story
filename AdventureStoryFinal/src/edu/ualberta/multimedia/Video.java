@@ -8,8 +8,8 @@ import edu.ualberta.adventstory.ChooseYourAdventure07;
 import edu.ualberta.adventstory.R;
 
 public class Video extends MultimediaAbstract{		
-	public Video(int id, String file_dir){
-		super(id, file_dir);
+	public Video(int id, int index, String file_dir){
+		super(id, index, file_dir);
 	}
 	
 	@Override

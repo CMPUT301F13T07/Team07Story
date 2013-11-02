@@ -6,11 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class Picture extends MultimediaAbstract{	
-	public Picture(int id, String file_dir){
-		super(id, file_dir);	
+	public Picture(int id, int index, String file_dir){
+		super(id, index, file_dir);	
 	}
-	public Picture(String file_dir) {
-		super(file_dir);
+	public Picture(int index, String file_dir) {
+		super(index, file_dir);
 	}
 	
 	@Override
@@ -21,7 +21,7 @@ public class Picture extends MultimediaAbstract{
 	// Override the following so that setting id will also set mPictureId
 	// and vice versa.
 	@Override
-	public void setId(int id){
+	public void setID(int id){
 		super.id = id;
 		//super.pictureId = id;
 	}

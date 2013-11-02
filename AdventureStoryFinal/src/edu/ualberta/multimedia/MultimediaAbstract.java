@@ -15,10 +15,10 @@ abstract public class MultimediaAbstract {
 									// A value of -1 use the default picture.
 	protected Context context;
 	
-	public MultimediaAbstract(int id, String file_dir) {
+	public MultimediaAbstract(int id, int index, String file_dir) {
 		this.id = id;
 		this.file_dir = file_dir;
-		//this.index = index;
+		this.index = index;
 		//this.pictureId = pictureId;
 		//this.context = context;
 	}
@@ -26,19 +26,21 @@ abstract public class MultimediaAbstract {
 	/**
 	 * Overloaded constructor for when id is not yet known
 	 * @param file_dir
+	 * @param index
 	 */
-	public MultimediaAbstract(String file_dir) {
+	public MultimediaAbstract(int index, String file_dir) {
 		this.file_dir = file_dir;
+		this.index = index;
 	}
 	
 	public int getID() {return id;}
-	//public int getIndex() {return index;}
+	public int getIndex() {return index;}
 	//public int getPictureId() {return pictureId;}	
 	public String getFileDir() {return file_dir;}
 	public Context getContext() {return context;}
 	
-	public void setId(int id){this.id = id;}
-	//public void setIndex(int index){this.index = index; }
+	public void setID(int id){this.id = id;}
+	public void setIndex(int index){this.index = index; }
 	//public void setPictureId(int pictureId){this.pictureId = pictureId;}
 	public void setFileDir(String file_dir) {this.file_dir = file_dir;}
 	public void setContext(Context context){this.context = context;}

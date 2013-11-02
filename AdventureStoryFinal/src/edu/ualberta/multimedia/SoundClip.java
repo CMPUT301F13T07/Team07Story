@@ -15,11 +15,11 @@ import edu.ualberta.utils.Utility;
 
 public class SoundClip extends MultimediaAbstract {
 	
-	public SoundClip(int id, String file_dir) {
-		super(id, file_dir);		
+	public SoundClip(int id, int index, String file_dir) {
+		super(id, index, file_dir);
 	}
-	public SoundClip(String file_dir) {
-		super(file_dir);
+	public SoundClip(int index, String file_dir) {
+		super(index, file_dir);
 	}
 	
 	public void play() {
