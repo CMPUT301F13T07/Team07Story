@@ -9,7 +9,7 @@ import edu.ualberta.utils.Page;
 abstract public class MultimediaAbstract {
 	protected int id;
 	protected String file_dir;
-	//protected int index;			// Position from first character.
+	protected int index;			// Position from first character.
 	//protected int pictureId; 		// Since sounclips are represented by 
 									// picture_id represents them.
 									// A value of -1 use the default picture.
