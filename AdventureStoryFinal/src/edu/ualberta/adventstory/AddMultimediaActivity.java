@@ -3,7 +3,7 @@ package edu.ualberta.adventstory;
 import java.io.File;
 import java.util.*;
 
-import edu.ualberta.database.Db;
+import edu.ualberta.database.DbManager;
 import edu.ualberta.multimedia.*;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,7 +27,7 @@ public class AddMultimediaActivity extends Activity {
 	
 	private ArrayList<String> medialist = new ArrayList<String>();
 	private ArrayAdapter<String> adapter;
-	private Db database;
+	private DbManager database;
 	private int page_id;
 	
 	private Uri imageuri;
@@ -38,7 +38,7 @@ public class AddMultimediaActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		//database = ((ChooseYourAdventure07)this.getApplication()).database;
-		database = new Db(this);
+		database = new DbManager(this);
 		database.open();
 		
 		File folderF = new File(folder);
