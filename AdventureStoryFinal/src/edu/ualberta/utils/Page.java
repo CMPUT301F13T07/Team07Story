@@ -69,7 +69,7 @@ public class Page {
 		this.id = id;
 		this.title = title;
 		this.author = author;
-		this.text = text
+		this.text = text;
 		this.multimedia = null;
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
@@ -104,7 +104,7 @@ public class Page {
     	this.id = null;
     	this.title = title;
     	this.author = author;
-    	this.text = text
+    	this.text = text;
 	if (mm == null) 
 		this.multimedia = new ArrayList<MultimediaAbstract>();
 	else 
@@ -121,8 +121,8 @@ public class Page {
     public String getTitle() {return title;}
     public void setAuthor(String a) {author = a;}
     public String getAuthor() {return author;}
-	public void setText(String t) {content.setParagraph(t);}
-	public String getText() {return content.getParagraph();}
+	public void setText(String t) {text = t;}
+	public String getText() {return text;}
 	public void addMultimedia(MultimediaAbstract ma) {multimedia.add(ma);}
 	public ArrayList<MultimediaAbstract> getMultimedia() {return multimedia;}
 	public void setPages(ArrayList<Page> o) {pages = o;}
@@ -141,7 +141,7 @@ public class Page {
 	*If you want to get an entire branch of the tree, se cloneAllChildren below
 	*/
 	public Page clone() {
-		return new Page(this.id, this.title, this.author, this.content.getParagraph(), this.content.getAllMultimedia(), null);
+		return new Page(this.id, this.title, this.author, this.text, this.multimedia, null);
 	}
 	
 	/*Clones the caller and all Pages below it in the tree. 
