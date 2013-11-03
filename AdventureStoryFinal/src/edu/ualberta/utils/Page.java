@@ -236,4 +236,9 @@ public class Page implements Serializable{
 			res.addAll(ops.get(i).searchByID(id));
 		return res;
 	}
+	
+	@Override
+	public String toString(){
+		return "Title: " + this.getTitle() + "\n" + "Author: " + this.getAuthor();
+	}
 }
