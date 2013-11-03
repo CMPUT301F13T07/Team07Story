@@ -89,7 +89,7 @@ public class AddMultimediaActivity extends Activity {
 	
 	private void saveToDB(int id) {
 		String entry = folder + medialist.get(id);
-		Picture pic = new Picture(entry);
+		Picture pic = new Picture(0, entry);
 		database.insert_multimedia(pic, page_id);
 	}
 	
