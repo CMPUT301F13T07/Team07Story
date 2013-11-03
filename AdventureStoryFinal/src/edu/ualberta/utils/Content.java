@@ -115,7 +115,7 @@ public class Content {
 	public boolean removeMultimedia(int id){ 
 		// Note: This delete the first object with following id.
 		for( MultimediaAbstract m: mMultimedia){
-			if(id == m.getId()){ 
+			if(id == m.getID()){ 
 				return mMultimedia.remove(m);
 			}
 		}

@@ -70,7 +70,7 @@ public class StartActivity extends Activity {
     
 	/* Called when the user clicks the Make a New Story button */
 	private void newStory(){
-		// Bring up Option Edit Activity
+		// Bring up CreateNewStoryActivity
 		Intent logViewIntent = new Intent(this, CreateNewStoryActivity.class);
 		startActivity(logViewIntent);
 	}

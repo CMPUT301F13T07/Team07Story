@@ -68,7 +68,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		iv.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				switchToOriginalLayout();
+				//switchToOriginalLayout();
 			}
 		});		
 		
@@ -82,7 +82,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		ivExitButton.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				switchToOriginalLayout();
+				//switchToOriginalLayout();
 			}
 		});		
 		ivExitButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_exit));
@@ -161,7 +161,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		// Exit when exit.
 		mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
 			public void onCompletion(MediaPlayer mp){
-				switchToOriginalLayout();				
+				//switchToOriginalLayout();				
 			}
 		});
 		
@@ -210,7 +210,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		return mMediaPlayer;
 	}
 	
-		
+	/*	
 	public void switchToOriginalLayout(){		
 		ActivityExtended ae = 
 				(ActivityExtended)((ChooseYourAdventure07)mContext.
@@ -224,7 +224,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 				(PageViewActivity)((ChooseYourAdventure07)mContext.
 						getApplicationContext()).getCurrentActivity();
 		pva.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-	}
+	}*/
 
 	public boolean isPlaying(){
 		return mIsPlaying;
@@ -275,7 +275,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 	            float newY = Y - deltaY;
 	            _xOld = X;
 	            _xOld = Y;
-	            if(this.getY() > (p.y-200)) this.switchToOriginalLayout();
+	            //if(this.getY() > (p.y-200)) this.switchToOriginalLayout();
 	            this.setY(newY);	            
 	            break;
 	    }

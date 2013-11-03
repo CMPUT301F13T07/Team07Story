@@ -31,7 +31,7 @@ import edu.ualberta.utils.Story;
 
 public class PageViewActivity extends ActivityExtended{
 	// Not the base activity. Transfer this to the base activity then.
-	protected ChooseYourAdventure07 mAdventureTime;
+	//protected ChooseYourAdventure07 mAdventureTime;
 	
 	private TextView mStoryTitleTextView;			// Story Title TextView.
 	private TextView mPageTitleTextView;			// Page Title TextView.
@@ -75,11 +75,11 @@ public class PageViewActivity extends ActivityExtended{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		mAdventureTime = (ChooseYourAdventure07)this.getApplicationContext();
+		//mAdventureTime = (ChooseYourAdventure07)this.getApplicationContext();
 				
 		//**MOCK DATA**
-		mPage = mAdventureTime.getCurrentPage();
-		mStory = mAdventureTime.getCurrentStory();
+		//mPage = mAdventureTime.getCurrentPage();
+		//mStory = mAdventureTime.getCurrentStory();
 		//**END OF MOCK DATA**.
 		
 		// Layout for mOuterLayout.
@@ -149,7 +149,7 @@ public class PageViewActivity extends ActivityExtended{
 	@Override
 	protected void onResume(){
 		super.onResume();
-		mAdventureTime.setCurrentActivity(this);
+		//mAdventureTime.setCurrentActivity(this);
 	}
 	
 	@Override
@@ -201,8 +201,8 @@ public class PageViewActivity extends ActivityExtended{
 				@Override
 				public void onClick(View view){
 					// Go to the next page.
-					mAdventureTime.setCurrentPage(p);
-					mAdventureTime.getCurrentActivity().recreate();
+					//mAdventureTime.setCurrentPage(p);
+					//mAdventureTime.getCurrentActivity().recreate();
 				}
 			});
 			mOuterLayout.addView(btn);
@@ -261,6 +261,7 @@ public class PageViewActivity extends ActivityExtended{
 	}
 	
 	// TODO: Make sure to link to last activity when no oldPage.
+	/*
 	@SuppressLint("NewApi")
 	@Override
 	public void onBackPressed(){
@@ -270,5 +271,5 @@ public class PageViewActivity extends ActivityExtended{
 			mAdventureTime.revertPage();
 			this.recreate();
 		}
-	}
+	}*/
 }

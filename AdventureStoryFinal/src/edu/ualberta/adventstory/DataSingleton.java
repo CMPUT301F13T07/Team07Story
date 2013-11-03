@@ -1,12 +1,17 @@
 package edu.ualberta.adventstory;
 
-import edu.ualberta.database.DbManager;
 import android.app.Application;
+import edu.ualberta.database.DbManager;
 
 public class DataSingleton extends Application{
-	public DbManager database = new DbManager(this);
+	public static DbManager database;
 	
-	public DataSingleton(){
+	@Override
+	public void onCreate() {
+		System.out.println("Database created in DataSingleton");
+		super.onCreate();
+		database = new DbManager(this);
 		database.open();
 	}
+
 }

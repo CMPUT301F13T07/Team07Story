@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import edu.ualberta.adventstory.ChooseYourAdventure07;
+//import edu.ualberta.adventstory.ChooseYourAdventure07;
 import edu.ualberta.adventstory.R;
 
 public class Video extends MultimediaAbstract{		
@@ -12,13 +12,14 @@ public class Video extends MultimediaAbstract{
 		super(id, index, file_dir);
 	}
 	
+	/*
 	@Override
 	public void play(){
 		ChooseYourAdventure07 cya = (ChooseYourAdventure07)super.context.
 													getApplicationContext();
 		cya.getCurrentActivity().switchToVideoViewPreview(
 				MultimediaDB.getVideoDirectory(super.id, super.context));
-	}
+	}*/
 	
 	public Bitmap loadPhoto(){
 		if( super.id == -1 ){

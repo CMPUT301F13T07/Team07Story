@@ -37,11 +37,13 @@ package edu.ualberta.utils;
  * ArrayList<Page> searchByID(Integer) : return a list of pages whose ID matches argument. ID can be null
  */
 
-import java.util.*;
-import edu.ualberta.multimedia.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+
+import edu.ualberta.multimedia.MultimediaAbstract;
 
 //TO-DO Update attributes and constructors when have multimedia class of some kind.
-public class Page {
+public class Page implements Serializable{
 	private Integer id;
     private String title;
     private String author;
