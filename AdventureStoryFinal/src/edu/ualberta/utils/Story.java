@@ -57,4 +57,9 @@ public class Story {
 	public ArrayList<Page> getAllPages() {
 		return root.getAllPages();
 	}
+	
+	@Override
+	public String toString(){
+		return "Title: " + this.getTitle() + "\n" + "Author: " + this.getAuthor();
+	}
 }

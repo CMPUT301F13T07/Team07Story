@@ -234,4 +234,9 @@ public class Page {
 			res.addAll(ops.get(i).searchByID(id));
 		return res;
 	}
+	
+	@Override
+	public String toString(){
+		return "Title: " + this.getTitle() + "\n" + "Author: " + this.getAuthor();
+	}
 }
