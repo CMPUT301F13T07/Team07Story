@@ -37,7 +37,7 @@ public class CreateNewStoryActivity extends Activity {
 	
 	private void new_root() {
 		// add new page to db
-		Page root = new Page("asdf", "joeshmoe", "test", null);
+		Page root = new Page("", "", "", null);
 		int root_id = (int)
 		database.insert_page(root);
 		root.setID(root_id);

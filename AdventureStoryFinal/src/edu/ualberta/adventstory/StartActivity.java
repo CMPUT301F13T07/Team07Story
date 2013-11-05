@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import edu.ualberta.database.DbManager;
+import edu.ualberta.utils.Page;
 
 public class StartActivity extends Activity {
 
@@ -49,6 +50,10 @@ public class StartActivity extends Activity {
     	mkPage.setOnClickListener(new OnClickListener(){
     		public void onClick(View v){
     			// Call code for publishing a page
+    			Page newPage = new Page("", "", "", null);
+    			DataSingleton ds = (DataSingleton)getApplicationContext();
+    			// TODO: HANDLE SITUATION WHEN JUST EDITING A PAGE. NOTE: Story will be null.
+    			ds.setCurrentPage(newPage);
     			Intent pageEditIntent = new Intent(getBaseContext(), PageEditActivity.class);
     			startActivity(pageEditIntent);
     		}

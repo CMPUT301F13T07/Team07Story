@@ -120,7 +120,10 @@ public class PageEditActivity extends ActivityExtended {
 
 	// Map a menuitem to a resonder.
 	private HashMap<MenuItem, Responder> mMenuMap = new HashMap<MenuItem, Responder>();
-
+	
+	// Set to true when editing a page only, independent of the story.
+	private boolean mEditPageOnly = false;
+	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@SuppressLint("NewApi")
 	@Override
@@ -142,8 +145,13 @@ public class PageEditActivity extends ActivityExtended {
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
 		
-		// Exit if mPage or mStory is null.
-		if( mPage == null || mStory == null ){
+		if( mStory == null){ mEditPageOnly = true; }
+		
+		// Determine if the mStory is null if we are just creating a page independent
+		// of the Story.
+		
+		// Exit if mPage is null.
+		if( mPage == null){
 			Toast.makeText(this, "Error occured, mPage or mStory is null.", Toast.LENGTH_LONG).show();
 			try {
 				this.finalize();
@@ -180,10 +188,12 @@ public class PageEditActivity extends ActivityExtended {
 		mScrollView.addView(mOuterLayout, mOuterLayoutParam);
 
 		// Initialize the Story EditText and its parameters.
-		mStoryTitleEditTextView = new EditText(this);
-		mStoryTitleEditTextView.setLayoutParams(mOuterComponentParam);
-		mOuterLayout.addView(mStoryTitleEditTextView);
-		setStoryTitle(mStory.getTitle(), 26);
+		if( mEditPageOnly == false ){
+			mStoryTitleEditTextView = new EditText(this);
+			mStoryTitleEditTextView.setLayoutParams(mOuterComponentParam);
+			mOuterLayout.addView(mStoryTitleEditTextView);
+			setStoryTitle(mStory.getTitle(), 26);
+		}
 
 		// Initialize the Page Title EditText and its parameters.
 		mPageTitleEditTextView = new EditText(this);
@@ -706,10 +716,30 @@ public class PageEditActivity extends ActivityExtended {
 	}
 
 	void cancel() {
+		if( mEditPageOnly == true ){
+			// Don't save anything.
+			try {
+				this.finalize();
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		// Just make a page with title: untitled.		
+		mPage.setTitle("Untitle Page");
+		mPage.setText("");
+		mDataSingleton.database.insert_page(mPage);
+		try {
+			this.finalize();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	// For adding page.
 	void addPage() {
-
+		// Open the activity for this.
 	}
 }
