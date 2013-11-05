@@ -12,8 +12,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name="edu.ualberta.adventstory.DataSingleton" >
+        android:theme="@style/AppTheme" android:name="DataSingleton">
         <activity
             android:name="edu.ualberta.adventstory.StartActivity"
             android:label="@string/title_activity_start" >
@@ -37,6 +36,7 @@
             android:name="edu.ualberta.adventstory.PageViewActivity"
             android:label="@string/title_activity_page_view" >
         </activity>
+        <activity android:name="AddMultimediaActivity"></activity>
     </application>
 
 

@@ -20,18 +20,6 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_picture" />
 
-   
-    <Button
-        android:id="@+id/regallery"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="57dp"
-        android:text="Gallery" />
-
     <Button
         android:id="@+id/refinish"
         style="?android:attr/buttonStyleSmall"
@@ -45,7 +33,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/regallery"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/photo"
@@ -55,7 +42,7 @@
         <ListView
             android:id="@+id/retakelist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="267dp" >
         </ListView>
 
     </LinearLayout>
