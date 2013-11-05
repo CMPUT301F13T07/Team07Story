@@ -14,7 +14,7 @@ public class Picture extends MultimediaAbstract{
 	}
 	
 	@Override
-	public void play(){
+	public void play(Context context){
 		// Enter photo effects...		
 	}
 	
@@ -33,7 +33,7 @@ public class Picture extends MultimediaAbstract{
 	}*/
 	
 	@Override
-	public Bitmap loadPhoto(){
+	public Bitmap loadPhoto(Context context){
 		if( super.id == -1 ){
 			return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_picture);

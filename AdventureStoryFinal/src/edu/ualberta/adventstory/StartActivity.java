@@ -48,7 +48,9 @@ public class StartActivity extends Activity {
     	
     	mkPage.setOnClickListener(new OnClickListener(){
     		public void onClick(View v){
-    			// Call code for publishing a story
+    			// Call code for publishing a page
+    			Intent pageEditIntent = new Intent(getBaseContext(), PageEditActivity.class);
+    			startActivity(pageEditIntent);
     		}
     	});
     	
