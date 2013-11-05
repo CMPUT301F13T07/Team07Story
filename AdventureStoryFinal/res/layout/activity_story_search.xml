@@ -52,13 +52,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/searchEntry"
         android:text="@string/labelResults" />
-    
-    <ListView
-        android:id = "@+id/listResults"
-        android:layout_width="fill_parent" 
-        android:dividerHeight="1dp"
-        android:layout_below="@+id/labelResults"
-        android:layout_height = "fill_parent" >
-    </ListView> 
+
+    <ScrollView>
+
+        <ListView
+            android:id="@+id/listResults"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/labelResults"
+            android:dividerHeight="1dp" >
+        </ListView>
+    </ScrollView>
 
 </LinearLayout>
