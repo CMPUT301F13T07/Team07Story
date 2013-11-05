@@ -21,7 +21,10 @@
     <string name="labelSearchBy">Search By: </string>
     <string name="labelSearch">Search: </string>
     <string name="labelResults">Results: </string>
-
+	<string name="searchpreview">Page Preview</string>
+	<string name="buttonSelect">Select</string>
+	<string name="buttonReturn">Return</string>
+    
     <string-array name="first_page_array">
         <item>Existing Page</item>
         <item>New Page</item>
