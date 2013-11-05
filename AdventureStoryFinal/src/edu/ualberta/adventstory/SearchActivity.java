@@ -54,7 +54,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 		searchBy.setOnItemSelectedListener(this);
 		
 		// Checks to see if the user has input text into the search box
-		searchText();	
+//		searchText();	
 		
 	}
 	
