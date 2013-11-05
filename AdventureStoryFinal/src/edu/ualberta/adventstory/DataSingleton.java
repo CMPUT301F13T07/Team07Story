@@ -17,6 +17,9 @@ public class DataSingleton extends Application{
 		super.onCreate();
 		database = new DbManager(this);
 		database.open();
+		
+		// Test.
+		mPageHistory = new Stack<Page>();
 	}
 
 	// Tests- ask Team which to integrate. 

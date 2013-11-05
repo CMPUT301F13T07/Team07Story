@@ -9,6 +9,7 @@ import edu.ualberta.utils.Story;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -128,8 +129,29 @@ public class PageEditActivity extends ActivityExtended {
 
 		mDataSingleton = (DataSingleton)getApplicationContext();
 		
+		Intent intent = getIntent();	// Get intent that started this Activity.
+		if( intent == null){
+			// Unknown state.
+			try {
+				this.finalize();
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}	// End before errors occur.
+		}
+	
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
+		
+		// Exit if mPage or mStory is null.
+		if( mPage == null || mStory == null ){
+			Toast.makeText(this, "Error occured, mPage or mStory is null.", Toast.LENGTH_LONG).show();
+			try {
+				this.finalize();
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 		// Layout for mOuterLayout.
 		mOuterLayoutParam = new LinearLayout.LayoutParams(
@@ -180,6 +202,7 @@ public class PageEditActivity extends ActivityExtended {
 
 		// Add Inner Layout components.
 		// EditTextView.
+		
 		mStoryEditTextView = new EditTextEx(this);
 		mStoryEditTextView.setLayoutParams(mInnerComponentParam);
 		// TextView. - We start off with these.

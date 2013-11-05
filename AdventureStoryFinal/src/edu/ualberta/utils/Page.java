@@ -82,6 +82,9 @@ public class Page implements Serializable{
 		this.id = null;
 		this.title = title;
 		this.author = author;
+		
+		this.text = text;	// Edit.
+		
 		this.multimedia = null;
 		if (pages == null)
 			this.pages = new ArrayList<Page>();

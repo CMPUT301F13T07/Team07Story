@@ -37,8 +37,8 @@ public class CreateNewStoryActivity extends Activity {
 	
 	private void new_root() {
 		// add new page to db
-		Page root = new Page("", "", "", null);
-		int root_id = (int) 
+		Page root = new Page("asdf", "joeshmoe", "test", null);
+		int root_id = (int)
 		database.insert_page(root);
 		root.setID(root_id);
 		
@@ -51,7 +51,7 @@ public class CreateNewStoryActivity extends Activity {
 		
 		// go to PageEditView
 		if (root_id != 0 && story_id != 0) {
-			pageEdit(root);
+			pageEdit(root, story);
 		}
 		else {
 			System.out.println("Database error. ID from insert == null.");
@@ -60,9 +60,12 @@ public class CreateNewStoryActivity extends Activity {
 	/*
 	 * This method creates an intent for the PageEdit Activity
 	 */
-	private void pageEdit(Page page) {
+	private void pageEdit(Page page, Story story) {
 		Intent intent = new Intent(this, PageEditActivity.class);
-		intent.putExtra("utils.Page", page);
+		//intent.putExtra("utils.Page", page);
+		// Test send data via singleton.
+		((DataSingleton)getApplicationContext()).setCurrentPage(page);
+		((DataSingleton)getApplicationContext()).setCurrentStory(story);
 		startActivity(intent);
 	}
 
