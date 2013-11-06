@@ -10,10 +10,11 @@ import edu.ualberta.utils.Story;
 
 public class DataSingleton extends Application{
 	public static DbManager database;
-	// Tests- ask Team which to integrate. 
-	Activity mCurrentActivity;			// Reference of current Activity.
+	
+	Activity mCurrentActivity;
+	private Story mCurrentStory;
 	private Page mCurrentPage;
-	private Stack<Page> mPageHistory;	
+	private Stack<Page> mPageHistory;
 	
 	@Override
 	public void onCreate() {
@@ -22,13 +23,17 @@ public class DataSingleton extends Application{
 		database = new DbManager(this);
 		database.open();
 		
-		// Test.
 		mPageHistory = new Stack<Page>();
+		mCurrentStory = null;
+		mCurrentPage = null;
 	}
 
 	public Activity getCurrentActivity(){return mCurrentActivity;}
 	public void setCurrentActivity(ActivityExtended currentActivity){mCurrentActivity = currentActivity;}
+	public Story getCurrentStory(){ return mCurrentStory; }
+	public void setCurrentStory(Story story){ mCurrentStory = story; }
 	
+	// Returns the last page viewed.
 	public Page getOldPage(){ 
 		if(mPageHistory.empty() == false)
 			return mPageHistory.peek();
