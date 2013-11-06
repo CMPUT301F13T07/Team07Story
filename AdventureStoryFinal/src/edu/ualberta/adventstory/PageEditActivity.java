@@ -697,7 +697,10 @@ public class PageEditActivity extends ActivityExtended {
 		String pageName = this.mPageTitleEditTextView.getText().toString();
 		String pageAuthor = this.mPageAuthorEditTextView.getText().toString();
 		String pageStory = this.mPageTitleEditTextView.getText().toString();
-
+		mPage.setTitle(pageName);
+		mPage.setAuthor(pageAuthor);
+		mPage.setText(pageStory);
+		
 		if (pageName.length() <= 0 || pageAuthor.length() <= 0
 				|| pageStory.length() <= 0) {
 			// Things to do if one of the inputs are empty.
