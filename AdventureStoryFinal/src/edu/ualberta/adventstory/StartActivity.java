@@ -51,9 +51,6 @@ public class StartActivity extends Activity {
     		public void onClick(View v){
     			// Call code for publishing a page
     			Page newPage = new Page("", "", "", null);
-    			DataSingleton ds = (DataSingleton)getApplicationContext();
-    			// TODO: HANDLE SITUATION WHEN JUST EDITING A PAGE. NOTE: Story will be null.
-    			ds.setCurrentPage(newPage);
     			Intent pageEditIntent = new Intent(getBaseContext(), PageEditActivity.class);
     			Bundle info = new Bundle();
     			info.putSerializable("page", newPage);

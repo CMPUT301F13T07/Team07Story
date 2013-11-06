@@ -325,7 +325,7 @@ public class PageViewActivity extends ActivityExtended{
 	@Override
 	public void onBackPressed(){
 		if( mDataSingleton.getOldPage() == null ){
-			// Do nothing.
+			super.onBackPressed();
 		}else{
 			mDataSingleton.revertPage();
 			this.recreate();

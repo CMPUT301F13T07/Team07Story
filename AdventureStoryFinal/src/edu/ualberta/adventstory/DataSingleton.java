@@ -23,8 +23,7 @@ public class DataSingleton extends Application{
 	}
 
 	// Tests- ask Team which to integrate. 
-	Activity mCurrentActivity;
-	private Story mStory;
+	Activity mCurrentActivity;			// Reference of current Activity.
 	private Page mCurrentPage;
 	private Stack<Page> mPageHistory;	// This might be deleted.
 	public Activity getCurrentActivity(){return mCurrentActivity;}
@@ -37,10 +36,8 @@ public class DataSingleton extends Application{
 			return null;
 	}
 	
-	public Story getCurrentStory(){return mStory;}
-	public Page getCurrentPage(){return mCurrentPage;}
-	
-	public void setCurrentStory(Story story){ mStory = story; }
+	// To allow to revert back to past pages when reading a story.
+	public Page getCurrentPage(){return mCurrentPage;}	
 	
 	public void revertPage(){
 		if(mPageHistory.empty() == false){
