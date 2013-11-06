@@ -66,7 +66,12 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 		listResults.setAdapter(adapter2);
 		
 		// Populate with all results
-		results = database.get_stories_by_author(searchEntry.getText().toString());
+		if (isStory){
+			results = database.get_stories_by_author(searchEntry.getText().toString());
+		} else {
+			results = database.get_pages_by_author(searchEntry.getText().toString());
+		}
+		
 		updateList(results);
 		
 		searchBy.setOnItemSelectedListener(this);
