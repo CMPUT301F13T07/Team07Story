@@ -23,7 +23,7 @@ public class SoundClip extends MultimediaAbstract {
 	}
 	
 	public void play(Context context) {
-		File file = new File(MultimediaDB.getSoundDirectory(super.id, context));
+		File file = new File(file_dir);
 		byte[] byteArray;
 		
 	    try {
@@ -58,13 +58,8 @@ public class SoundClip extends MultimediaAbstract {
 	
 	@Override
 	public Bitmap loadPhoto(Context context) {
-		if(super.id == -1){
-			return BitmapFactory.decodeResource(
-					context.getResources(), R.drawable.ic_audio);
-		}else{
-			String tempFileName = MultimediaDB.getBitmapDirectory(id, context);
-			return BitmapFactory.decodeFile(tempFileName);
-		}
+		return BitmapFactory.decodeResource(
+				context.getResources(), R.drawable.ic_audio);
 	}
 	
 	@Override

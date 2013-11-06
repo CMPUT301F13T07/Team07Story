@@ -34,12 +34,11 @@ public class Picture extends MultimediaAbstract{
 	
 	@Override
 	public Bitmap loadPhoto(Context context){
-		if( super.id == -1 ){
+		if( super.id == -1 || file_dir == null){
 			return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_picture);
 		}else{
-			String tempFileName = MultimediaDB.getBitmapDirectory(id, context);
-			return BitmapFactory.decodeFile(tempFileName);			
+			return BitmapFactory.decodeFile(file_dir);			
 		}
 	}
 	

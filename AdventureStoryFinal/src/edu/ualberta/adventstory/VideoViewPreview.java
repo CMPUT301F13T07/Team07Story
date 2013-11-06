@@ -40,8 +40,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.SystemClock;
 
-
-import edu.ualberta.multimedia.MultimediaDB;
 import edu.ualberta.utils.Utility;
 
 import edu.ualberta.adventstory.R;
@@ -148,23 +146,17 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		
 		try {
 			byte[] byteArray = Utility.load(file, mContext);
-			MultimediaDB mdb = new MultimediaDB(mContext);
-			mdb.open();
-			mdb.close();
 			
 			File tempMp4 = File.createTempFile("temp", "mp4", mContext.getCacheDir());
 			tempMp4.deleteOnExit();
 			FileOutputStream fos = new FileOutputStream(tempMp4);
-			mdb.open();
 	        fos.write(byteArray);
 	        fos.close();
-	        mdb.close();
 			
 			FileInputStream fis = new FileInputStream(tempMp4);
 			mMediaPlayer.setDataSource(fis.getFD());	
 			mMediaPlayer.prepare();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 	
 		

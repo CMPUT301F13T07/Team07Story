@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import edu.ualberta.adventstory.ActivityExtended;
+import edu.ualberta.adventstory.DataSingleton;
 //import edu.ualberta.adventstory.ChooseYourAdventure07;
 import edu.ualberta.adventstory.R;
 
@@ -12,23 +14,16 @@ public class Video extends MultimediaAbstract{
 		super(id, index, file_dir);
 	}
 	
-	/*
+	
 	@Override
-	public void play(){
-		ChooseYourAdventure07 cya = (ChooseYourAdventure07)super.context.
-													getApplicationContext();
-		cya.getCurrentActivity().switchToVideoViewPreview(
-				MultimediaDB.getVideoDirectory(super.id, super.context));
-	}*/
+	public void play(Context context){
+		DataSingleton ds = (DataSingleton)context.getApplicationContext();
+		((ActivityExtended) ds.getCurrentActivity()).switchToVideoViewPreview(file_dir);
+	}
 	
 	public Bitmap loadPhoto(Context context){
-		if( super.id == -1 ){
-			return BitmapFactory.decodeResource(
+		return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_video);
-		}else{
-			String tempFileName = MultimediaDB.getBitmapDirectory(id, context);
-			return BitmapFactory.decodeFile(tempFileName);			
-		}	
 	}
 	
 	@Override
