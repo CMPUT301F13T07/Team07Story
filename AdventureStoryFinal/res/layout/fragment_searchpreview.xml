@@ -35,7 +35,7 @@
                 android:id="@+id/pagepreview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Preview" />
+                android:text="Preview Text" />
 
             <LinearLayout
                 android:id="@+id/PageList"
