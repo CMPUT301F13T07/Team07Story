@@ -79,7 +79,6 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 	private void searchText() {
 		searchEntry.addTextChangedListener(new TextWatcher(){
 			public void afterTextChanged(Editable s) {	
-				System.out.println("Entering Search");
 				// Check if the user is searching pages or stories
 				if (isStory && isTitle){
 					// Populate results with appropriate stories based on title
@@ -87,9 +86,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 					
 				} else if (isStory && !isTitle){
 					// Populate results with appropriate stories based on author
-					System.out.println("The string is: " + searchEntry.getText().toString() + ".");
 					results = database.get_stories_by_author(searchEntry.getText().toString());
-					System.out.println("Resuslts size = " + results.size());
 					
 				} else if (!isStory && isTitle){
 					// Populate results with appropriate pages based on title
@@ -115,19 +112,6 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 	    }); 
 		
 	}
-
-	/* Called when the search field is blank. Returns all pages/stories
-	protected void emptySearch(boolean isStory){
-		if (isStory){
-			// Populate results list with all stories
-			results = new ArrayList<Story>();
-		} else if (!isStory){
-			// Populate results list with all pages
-			results = new ArrayList<Page>();
-		}
-		
-		updateList(results);
-	}*/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
