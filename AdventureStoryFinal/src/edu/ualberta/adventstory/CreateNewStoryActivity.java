@@ -34,8 +34,18 @@ public class CreateNewStoryActivity extends Activity {
 		if (selection == 1) {
 			new_root();
 		}
+		else {
+			existing_root();
+		}
 	}
 	
+	private void existing_root() {
+		Intent intent = new Intent(this, SearchActivity.class);
+		Bundle info = new Bundle();
+		info.putBoolean("BOOL_IS_STORY", false);
+		intent.putExtra("android.intent.extra.INTENT", info);
+		startActivity(intent);
+	}
 	
 	private void new_root() {
 		// add new page to db
@@ -59,6 +69,7 @@ public class CreateNewStoryActivity extends Activity {
 			System.out.println("Database error. ID from insert == null.");
 		}
 	}
+	
 	/*
 	 * This method creates an intent for the PageEdit Activity
 	 */
