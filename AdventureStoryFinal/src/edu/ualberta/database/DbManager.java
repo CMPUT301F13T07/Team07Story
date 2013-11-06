@@ -154,7 +154,6 @@ public class DbManager implements DataManager{
 	public Cursor get_from_db(String table, String column, Integer id) {
 		String select = "SELECT * FROM " + table
 				+ " WHERE " + column + " = " + id;
-		System.out.println(select);
 		try {
 			return db.rawQuery(select, null);
 		} catch(SQLiteException ex) {
@@ -229,8 +228,6 @@ public class DbManager implements DataManager{
 			title = c.getString(c.getColumnIndex(Constant.STORY_TITLE));
 			author = c.getString(c.getColumnIndex(Constant.STORY_AUTHOR));
 			root_id = c.getInt(c.getColumnIndex(Constant.ROOT));
-			
-			System.out.println("root id: " + root_id);
 			
 			root = get_page_by_id(root_id);
 			Story story = new Story(id, title, author, root);
