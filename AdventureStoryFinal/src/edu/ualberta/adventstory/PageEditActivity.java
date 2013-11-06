@@ -97,7 +97,7 @@ public class PageEditActivity extends ActivityExtended {
 	private RelativeLayout.LayoutParams mInnerComponentParam;
 	private LinearLayout.LayoutParams mOuterComponentParam;
 
-	private String mStoryTitle; // Story being viewed.
+	private Story mStory; // Story being viewed.
 	private Page mPage; // Current page.
 
 	// Set to true when something is selected.
@@ -143,13 +143,12 @@ public class PageEditActivity extends ActivityExtended {
 		}
 	
 		Bundle info = intent.getExtras();
-		mPage = (Page)info.getSerializable("page");
-		mStoryTitle = (String) info.getString("storyTitle");
-		
-		if( mStoryTitle == null){ mEditPageOnly = true; }
+		mPage = mDataSingleton.getCurrentPage();
+		mStory = mDataSingleton.getCurrentStory();
 		
 		// Determine if the mStory is null if we are just creating a page independent
 		// of the Story.
+		if( mStory == null){ mEditPageOnly = true; }
 		
 		// Exit if mPage is null.
 		if( mPage == null){
@@ -188,7 +187,7 @@ public class PageEditActivity extends ActivityExtended {
 			mStoryTitleEditTextView = new EditText(this);
 			mStoryTitleEditTextView.setLayoutParams(mOuterComponentParam);
 			mOuterLayout.addView(mStoryTitleEditTextView);
-			setStoryTitle(mStoryTitle, 26);
+			setStoryTitle(mStory.getTitle(), 26);
 		}
 
 		// Initialize the Page Title EditText and its parameters.
@@ -201,7 +200,15 @@ public class PageEditActivity extends ActivityExtended {
 		mPageAuthorEditTextView = new EditText(this);
 		mPageAuthorEditTextView.setLayoutParams(mOuterComponentParam);
 		mOuterLayout.addView(mPageAuthorEditTextView);
-		setPageAuthor(mPage.getAuthor(), 20);
+		if( mEditPageOnly == false && 
+				(mPage.getAuthor() == null || mPage.getAuthor() == "")){
+			setPageAuthor(mStory.getAuthor(), 20);
+		}else{
+			// TODO: ANTICIPATE THE GLITCH THAT WILL COME WHEN eixisting page
+			// is editable.
+			setPageAuthor("", 20);
+			mPageAuthorEditTextView.setHint("Enter Page Author Name");
+		}
 
 		// The Inner Layout.
 		mInnerLayout = new RelativeLayout(this);

@@ -63,11 +63,9 @@ public class CreateNewStoryActivity extends Activity {
 	 * This method creates an intent for the PageEdit Activity
 	 */
 	private void pageEdit(Page page, Story story) {
-		Intent intent = new Intent(this, PageEditActivity.class);
-		Bundle info = new Bundle();
-		info.putString("storyTitle", story.getTitle());
-		info.putSerializable("page", (Serializable) page);
-		intent.putExtras(info);
+		Intent intent = new Intent(this, PageEditActivity.class);		
+		((DataSingleton)getApplicationContext()).setCurrentPage(page);
+		((DataSingleton)getApplicationContext()).setCurrentStory(story);
 		startActivity(intent);
 	}
 

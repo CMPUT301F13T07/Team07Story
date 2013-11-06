@@ -49,13 +49,8 @@ public class StartActivity extends Activity {
     	
     	mkPage.setOnClickListener(new OnClickListener(){
     		public void onClick(View v){
-    			// Call code for publishing a page
-    			Page newPage = new Page("", "", "", null);
-    			Intent pageEditIntent = new Intent(getBaseContext(), PageEditActivity.class);
-    			Bundle info = new Bundle();
-    			info.putSerializable("page", newPage);
-    			pageEditIntent.putExtras(info);
-    			startActivity(pageEditIntent);
+    			// Bring up PageEditActivity.
+    			newPage();
     		}
     	});
     	
@@ -91,6 +86,14 @@ public class StartActivity extends Activity {
 		Intent searchIntent = new Intent(this, SearchActivity.class);
 		searchIntent.putExtra("android.intent.extra.INTENT", bundle);
 		startActivity(searchIntent);
-	}	
+	}
+	
+	/* Called when the user clicks new page button */
+	private void newPage(){
+		Page newPage = new Page("", "", "", null);
+		((DataSingleton)getApplicationContext()).setCurrentPage(newPage);
+		((DataSingleton)getApplicationContext()).setCurrentStory(null);
+		startActivity(new Intent(getBaseContext(), PageEditActivity.class));
+	}
 }
 

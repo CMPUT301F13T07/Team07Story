@@ -175,15 +175,12 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		
-		Intent pageViewIntent = new Intent(this, PageViewActivity.class);
-		Bundle info = new Bundle();
+		Intent pageViewIntent = new Intent(this, PageViewActivity.class);		
 		/* I don't really know how to extract Story from this activity,
 		 * so as for now I have this duct tape solution of string spliting.
 		 */
 		String split[] = displayResults.get(arg2).split("\n");
 		String title = split[0].split(": ")[1];		
-		
-		info.putString("storyTitle", title);
 		
 		/*
 		 * A side note:
@@ -194,8 +191,11 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		 */
 		ArrayList<Story> temp = ((DataSingleton)getApplicationContext()).
 						database.get_stories_by_title(title);
-		info.putSerializable("page", temp.get(0).getRoot());
-		pageViewIntent.putExtras(info);
+		
+		((DataSingleton)getApplicationContext()).setCurrentStory(((DataSingleton)getApplicationContext()).
+				database.get_stories_by_title(title).get(0));
+		((DataSingleton)getApplicationContext()).setCurrentPage(((DataSingleton)getApplicationContext()).
+				database.get_stories_by_title(title).get(0).getRoot());				
 		startActivity(pageViewIntent);
 	}
 }

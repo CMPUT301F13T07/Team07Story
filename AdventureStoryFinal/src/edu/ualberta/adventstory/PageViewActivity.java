@@ -80,8 +80,10 @@ public class PageViewActivity extends ActivityExtended{
 	private RelativeLayout.LayoutParams mInnerComponentParam;
 	private LinearLayout.LayoutParams mOuterComponentParam;
 	
-	private String mStoryTitle;						// Story being viewed.
-	private Page mPage;								// Current page.
+	private Story mStory;					// Story being viewed.
+	private Page mPage;						// Current page.
+	
+	private boolean mViewPageOnly = false; 	// True if we are viewing a page independent of story.
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +98,10 @@ public class PageViewActivity extends ActivityExtended{
 		}
 	
 		Bundle info = intent.getExtras();
-		mPage = (Page)info.getSerializable("page");
-		mStoryTitle = (String) info.getString("storyTitle");
+		mPage = mDataSingleton.getCurrentPage();
+		mStory = mDataSingleton.getCurrentStory();
+		
+		if( mStory == null ){ mViewPageOnly = true; }
 		
 		// Layout for mOuterLayout.
 		mOuterLayoutParam = new LinearLayout.LayoutParams(
@@ -126,10 +130,12 @@ public class PageViewActivity extends ActivityExtended{
 		mScrollView.addView(mOuterLayout, mOuterLayoutParam);
 		
 		// Initialize the Story TextView and its parameters.
-		mStoryTitleTextView = new TextView(this);
-		mStoryTitleTextView.setLayoutParams(mOuterComponentParam);
-		mOuterLayout.addView(mStoryTitleTextView);
-		setStoryTitle(mStoryTitle, 26);
+		if( mViewPageOnly == false ){
+			mStoryTitleTextView = new TextView(this);
+			mStoryTitleTextView.setLayoutParams(mOuterComponentParam);
+			mOuterLayout.addView(mStoryTitleTextView);
+			setStoryTitle(mStory.getTitle(), 26);
+		}
 
 		//Initialize the Page Title TextView and its parameters.
 		mPageTitleTextView = new TextView(this);
