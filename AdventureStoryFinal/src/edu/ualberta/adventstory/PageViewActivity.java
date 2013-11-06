@@ -4,10 +4,14 @@ package edu.ualberta.adventstory;
 //TODO: Record the last scroll index.
 //TODO: Handle backbutton to display back story. Ask team if adding an explicit button
 //		 is better.
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,18 +24,25 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView.BufferType;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ImageSpan;
 import android.widget.TextView;
 import android.media.MediaPlayer;
 
 import edu.ualberta.adventstory.R;
-import edu.ualberta.utils.Content;
+import edu.ualberta.adventstory.PageEditActivity.ClickableDeleteSpanEx;
+import edu.ualberta.adventstory.PageEditActivity.ClickableMultimediaSpanEx;
+import edu.ualberta.adventstory.PageEditActivity.PaddingableImageSpan;
+import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
 public class PageViewActivity extends ActivityExtended{
 	// Not the base activity. Transfer this to the base activity then.
-	//protected ChooseYourAdventure07 mAdventureTime;
+	protected DataSingleton mDataSingleton;			// Application instance.
 	
 	private TextView mStoryTitleTextView;			// Story Title TextView.
 	private TextView mPageTitleTextView;			// Page Title TextView.
@@ -68,19 +79,16 @@ public class PageViewActivity extends ActivityExtended{
 	private RelativeLayout.LayoutParams mInnerComponentParam;
 	private LinearLayout.LayoutParams mOuterComponentParam;
 	
-	private Story mStory;							// Story being viewed.
+	private String mStoryTitle;						// Story being viewed.
 	private Page mPage;								// Current page.
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//mAdventureTime = (ChooseYourAdventure07)this.getApplicationContext();
+		mDataSingleton = (DataSingleton)this.getApplicationContext();
 				
-		//**MOCK DATA**
-		//mPage = mAdventureTime.getCurrentPage();
-		//mStory = mAdventureTime.getCurrentStory();
-		//**END OF MOCK DATA**.
+		
 		
 		// Layout for mOuterLayout.
 		mOuterLayoutParam = new LinearLayout.LayoutParams(
@@ -112,7 +120,7 @@ public class PageViewActivity extends ActivityExtended{
 		mStoryTitleTextView = new TextView(this);
 		mStoryTitleTextView.setLayoutParams(mOuterComponentParam);
 		mOuterLayout.addView(mStoryTitleTextView);
-		setStoryTitle(mStory.getTitle(), 26);
+		setStoryTitle(mStoryTitle, 26);
 
 		//Initialize the Page Title TextView and its parameters.
 		mPageTitleTextView = new TextView(this);
@@ -127,7 +135,7 @@ public class PageViewActivity extends ActivityExtended{
 		mStoryTextView = new TextView(this);
 		mStoryTextView.setLayoutParams(mInnerComponentParam);
 		mInnerLayout.addView(mStoryTextView);
-		//setStoryText(mPage.getText(), 18);
+		setStoryText(18);
 		
 		// Place the inner layout inside the outer layout.
 		mOuterLayout.addView(mInnerLayout, mInnerLayoutParam);
@@ -149,7 +157,7 @@ public class PageViewActivity extends ActivityExtended{
 	@Override
 	protected void onResume(){
 		super.onResume();
-		//mAdventureTime.setCurrentActivity(this);
+		mDataSingleton.setCurrentActivity(this);
 	}
 	
 	@Override
@@ -201,8 +209,8 @@ public class PageViewActivity extends ActivityExtended{
 				@Override
 				public void onClick(View view){
 					// Go to the next page.
-					//mAdventureTime.setCurrentPage(p);
-					//mAdventureTime.getCurrentActivity().recreate();
+					mDataSingleton.setCurrentPage(p);
+					mDataSingleton.getCurrentActivity().recreate();
 				}
 			});
 			mOuterLayout.addView(btn);
@@ -225,15 +233,67 @@ public class PageViewActivity extends ActivityExtended{
 		mPageTitleTextView.setTextSize(textSize);
 	}
 
-	void setStoryText( Content storyText, float textSize){
-		mStoryTextView.setMovementMethod(LinkMovementMethod.getInstance());		
-		String s = "\n\n" + storyText.getParagraph(); // Add some space.
-		// Create a new StringExtended to not replace the old one.
-		Content se = new Content(s, storyText.getAllMultimedia());
-		se.setParagraph(s);
-		
-		mStoryTextView.setText(se.getSpannableStringBuilder(), BufferType.SPANNABLE);
+	void setStoryText( float textSize){
+		mStoryTextView.setMovementMethod(LinkMovementMethod.getInstance());						
+		mStoryTextView.setText(getSpannableStringBuilder(), BufferType.SPANNABLE);
 		mStoryTextView.setTextSize(textSize);
+	}
+	
+	// ClickableSpan for Multimedia.
+	// - A developer might notice that this ClickableMultimediaSpanEx 
+	//   also exist in PageEditActivity and that these should merit their
+	//   own module. On the contrary, that is simply not possible. These
+	//   have to be inner classes because they rely on attributes of the
+	//   class their nesting in.
+	class ClickableMultimediaSpanEx extends ClickableSpan {
+		private MultimediaAbstract mMultimedia;
+		private ImageSpan mImageSpan;
+
+		public ClickableMultimediaSpanEx(MultimediaAbstract ma,
+				ImageSpan multimediaImageSpan) {
+			super();
+			mMultimedia = ma;
+			mImageSpan = multimediaImageSpan;
+		}
+
+		@SuppressLint("NewApi")
+		@Override
+		public void onClick(final View widget) {
+			// Set all multimedia mIsSelected to false.
+			mMultimedia.play(getBaseContext());
+		}
+	}
+	
+	public SpannableStringBuilder getSpannableStringBuilder() {
+		ArrayList<MultimediaAbstract> ma = mPage.getMultimedia();
+
+		SpannableStringBuilder stringBuilder = new SpannableStringBuilder(mPage.getText());
+
+		// Return to caller if ma is null to avoid trivial errors.
+		if( ma == null ){
+			return stringBuilder;
+		}
+		
+		for (MultimediaAbstract multimedia : ma) {
+			// Load the multimedia Picture representation.
+			Bitmap multimediaBitmap = multimedia.loadPhoto(this);
+			ImageSpan multimediaImageSpan = new ImageSpan(this, multimediaBitmap, 20);
+			
+			
+			stringBuilder.insert(multimedia.getIndex(), " ");		// Allocate space for multimediaImageSpan.
+			
+			stringBuilder.setSpan(multimediaImageSpan, multimedia.getIndex(),
+					multimedia.getIndex() + 1,
+					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+
+			ClickableMultimediaSpanEx multimediaClickableSpan = 
+					new ClickableMultimediaSpanEx(multimedia, multimediaImageSpan);
+
+			stringBuilder.setSpan(multimediaClickableSpan, multimedia.getIndex(),
+					multimedia.getIndex() + 1,
+					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);			
+		}
+		return stringBuilder;
 	}
 	
 	@Override
@@ -261,15 +321,14 @@ public class PageViewActivity extends ActivityExtended{
 	}
 	
 	// TODO: Make sure to link to last activity when no oldPage.
-	/*
 	@SuppressLint("NewApi")
 	@Override
 	public void onBackPressed(){
-		if( mAdventureTime.getOldPage() == null ){
+		if( mDataSingleton.getOldPage() == null ){
 			// Do nothing.
 		}else{
-			mAdventureTime.revertPage();
+			mDataSingleton.revertPage();
 			this.recreate();
 		}
-	}*/
+	}
 }

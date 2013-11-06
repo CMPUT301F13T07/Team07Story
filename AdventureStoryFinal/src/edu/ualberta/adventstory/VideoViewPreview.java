@@ -1,3 +1,13 @@
+/*
+ * VideoViewPreview.java
+ * - This module is responsible for playing video. Playing video is easy, call constructor
+ *   with Video directory and current context and it will all be automatically played.
+ *   
+ *   There are a couple of ways to interact. 
+ *   	-To play/pause simply click the middle of the screen.
+ *   	-To Exit, swipe down or click the (x) button at the side.
+ *   	-The developer can setVideoDirectory, playing the video in the directory sent.
+ */
 package edu.ualberta.adventstory;
 
 import java.io.File;
@@ -68,7 +78,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		iv.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				//switchToOriginalLayout();
+				switchToOriginalLayout();
 			}
 		});		
 		
@@ -82,7 +92,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		ivExitButton.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				//switchToOriginalLayout();
+				switchToOriginalLayout();
 			}
 		});		
 		ivExitButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_exit));
@@ -128,14 +138,14 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		((ActivityExtended)mContext).addContentView(rL, rLP); 
 		((ActivityExtended)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		this.setOnTouchListener(this);
+		
+		// Create a media player.
+		mMediaPlayer = new MediaPlayer();		
 	}
 	
-	
-		
 	void loadVideo(){
-		mMediaPlayer = new MediaPlayer();
-		
 		File file = new File(mDirectory);
+		
 		try {
 			byte[] byteArray = Utility.load(file, mContext);
 			MultimediaDB mdb = new MultimediaDB(mContext);
@@ -158,14 +168,16 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 			e.printStackTrace();
 		} 	
 		
-		// Exit when exit.
+		// Exit when done playing video.
 		mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
 			public void onCompletion(MediaPlayer mp){
-				//switchToOriginalLayout();				
+				switchToOriginalLayout();				
 			}
 		});
 		
-		final SurfaceView sv = this;
+		mMediaPlayer.setDisplay(mSurfaceHolder);
+		mMediaPlayer.start();
+		mIsPlaying = true;
 	}
 			
 	public void onPlayPause(){
@@ -177,6 +189,12 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 			mIsPlaying = true;
 		}	
 	}
+	
+	public String getVideoDirectory(){return mDirectory;}
+	public void setVideoDirectory(String directory){ 
+		mDirectory = directory;
+		loadVideo();
+	}	
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -189,16 +207,8 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		// TODO Auto-generated method stub
 		//lockLandscape();
 		loadVideo();
-		mMediaPlayer.setDisplay(mSurfaceHolder);
-		mMediaPlayer.start();
-		mIsPlaying = true;
-		
-		Animation fadeIn = new AlphaAnimation(0, 1);
-		fadeIn.setInterpolator(new DecelerateInterpolator()); //add this
-		fadeIn.setDuration(1000);
-		this.startAnimation(fadeIn);
 	}
-
+	
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
@@ -210,10 +220,10 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 		return mMediaPlayer;
 	}
 	
-	/*	
+		
 	public void switchToOriginalLayout(){		
 		ActivityExtended ae = 
-				(ActivityExtended)((ChooseYourAdventure07)mContext.
+				(ActivityExtended)((DataSingleton)mContext.
 						getApplicationContext()).getCurrentActivity();
 		((ActivityExtended)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 		ae.switchToOriginalLayout();
@@ -221,10 +231,10 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 	
 	public void lockLandscape(){
 		PageViewActivity pva = 
-				(PageViewActivity)((ChooseYourAdventure07)mContext.
+				(PageViewActivity)((DataSingleton)mContext.
 						getApplicationContext()).getCurrentActivity();
 		pva.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-	}*/
+	}
 
 	public boolean isPlaying(){
 		return mIsPlaying;
@@ -275,7 +285,7 @@ public class VideoViewPreview extends SurfaceView implements SurfaceHolder.Callb
 	            float newY = Y - deltaY;
 	            _xOld = X;
 	            _xOld = Y;
-	            //if(this.getY() > (p.y-200)) this.switchToOriginalLayout();
+	            if(this.getY() > (p.y-200)) this.switchToOriginalLayout();
 	            this.setY(newY);	            
 	            break;
 	    }

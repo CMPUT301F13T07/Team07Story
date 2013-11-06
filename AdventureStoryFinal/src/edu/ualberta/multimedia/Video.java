@@ -21,7 +21,7 @@ public class Video extends MultimediaAbstract{
 				MultimediaDB.getVideoDirectory(super.id, super.context));
 	}*/
 	
-	public Bitmap loadPhoto(){
+	public Bitmap loadPhoto(Context context){
 		if( super.id == -1 ){
 			return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_video);
