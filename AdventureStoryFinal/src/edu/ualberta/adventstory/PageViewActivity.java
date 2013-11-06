@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -88,7 +89,15 @@ public class PageViewActivity extends ActivityExtended{
 		
 		mDataSingleton = (DataSingleton)this.getApplicationContext();
 				
-		
+		Intent intent = getIntent();	// Get intent that started this Activity.
+		if( intent == null){
+			// Unknown state.
+			exit();
+		}
+	
+		Bundle info = intent.getExtras();
+		mPage = (Page)info.getSerializable("page");
+		mStoryTitle = (String) info.getString("storyTitle");
 		
 		// Layout for mOuterLayout.
 		mOuterLayoutParam = new LinearLayout.LayoutParams(
@@ -147,6 +156,10 @@ public class PageViewActivity extends ActivityExtended{
 		}else{
 			this.setContentView(mScrollView, mOuterLayoutParam);
 		}
+	}
+
+	private void exit() {
+		finish();
 	}
 
 	@Override

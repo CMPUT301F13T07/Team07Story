@@ -2,20 +2,24 @@ package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
 import edu.ualberta.database.DbManager;
+import edu.ualberta.utils.Story;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-public class SearchActivity extends Activity implements OnItemSelectedListener{
+public class SearchActivity extends Activity implements OnItemSelectedListener,
+														OnItemClickListener{
 	
 	private EditText searchEntry;
 	private ListView listResults;
@@ -68,6 +72,10 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 		// Populate with all results
 		results = database.get_stories_by_author(searchEntry.getText().toString());
 		updateList(results);
+		
+		// This is to test PageViewActivity -- Feel free to delete this.
+		listResults.setClickable(true);
+		listResults.setOnItemClickListener(this);
 		
 		searchBy.setOnItemSelectedListener(this);
 		
@@ -163,4 +171,31 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 		
 	}
 
+	// Test for PageViewActivity -- feel free to delete.
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		
+		Intent pageViewIntent = new Intent(this, PageViewActivity.class);
+		Bundle info = new Bundle();
+		/* I don't really know how to extract Story from this activity,
+		 * so as for now I have this duct tape solution of string spliting.
+		 */
+		String split[] = displayResults.get(arg2).split("\n");
+		String title = split[0].split(": ")[1];		
+		
+		info.putString("storyTitle", title);
+		
+		/*
+		 * A side note:
+		 * - having just a story title for adapter2 would be hard when
+		 *   there are duplicate story title. A paired story id would help story
+		 *   selection. For now this is just selecting the first occurence of 
+		 *   story title.
+		 */
+		ArrayList<Story> temp = ((DataSingleton)getApplicationContext()).
+						database.get_stories_by_title(title);
+		info.putSerializable("page", temp.get(0).getRoot());
+		pageViewIntent.putExtras(info);
+		startActivity(pageViewIntent);
+	}
 }

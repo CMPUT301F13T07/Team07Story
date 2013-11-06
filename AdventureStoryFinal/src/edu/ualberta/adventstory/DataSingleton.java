@@ -10,6 +10,10 @@ import edu.ualberta.utils.Story;
 
 public class DataSingleton extends Application{
 	public static DbManager database;
+	// Tests- ask Team which to integrate. 
+	Activity mCurrentActivity;			// Reference of current Activity.
+	private Page mCurrentPage;
+	private Stack<Page> mPageHistory;	
 	
 	@Override
 	public void onCreate() {
@@ -22,10 +26,6 @@ public class DataSingleton extends Application{
 		mPageHistory = new Stack<Page>();
 	}
 
-	// Tests- ask Team which to integrate. 
-	Activity mCurrentActivity;			// Reference of current Activity.
-	private Page mCurrentPage;
-	private Stack<Page> mPageHistory;	// This might be deleted.
 	public Activity getCurrentActivity(){return mCurrentActivity;}
 	public void setCurrentActivity(ActivityExtended currentActivity){mCurrentActivity = currentActivity;}
 	

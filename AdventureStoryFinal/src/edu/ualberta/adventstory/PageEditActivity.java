@@ -154,12 +154,7 @@ public class PageEditActivity extends ActivityExtended {
 		// Exit if mPage is null.
 		if( mPage == null){
 			Toast.makeText(this, "Error occured, mPage or mStory is null.", Toast.LENGTH_LONG).show();
-			try {
-				this.finalize();
-			} catch (Throwable e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			exit();
 		}
 
 		// Layout for mOuterLayout.
@@ -714,6 +709,7 @@ public class PageEditActivity extends ActivityExtended {
 		// Things to do if the inputs are valid.
 		DataSingleton ds = (DataSingleton)getApplicationContext();
 		ds.database.update_page(mPage);
+		exit();
 	}
 
 	void cancel() {
@@ -731,16 +727,16 @@ public class PageEditActivity extends ActivityExtended {
 		mPage.setTitle("Untitle Page");
 		mPage.setText("");
 		mDataSingleton.database.insert_page(mPage);
-		try {
-			this.finalize();
-		} catch (Throwable e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		exit();
 	}
 
 	// For adding page.
 	void addPage() {
 		// Open the activity for this.
+	}
+	
+	void exit(){
+		Intent startActivityIntent = new Intent(this, StartActivity.class);
+		startActivity(startActivityIntent);
 	}
 }
