@@ -30,8 +30,8 @@
         <item>New Page</item>
     </string-array>
     <string-array name="online_toggle">
-        <item>Yes</item>
         <item>No</item>
+        <item>Yes</item>
     </string-array>
     <string-array name="searchBy_dropdown">
         <item>Title</item>
