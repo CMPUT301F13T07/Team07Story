@@ -97,7 +97,6 @@ public class PageViewActivity extends ActivityExtended{
 			exit();
 		}
 	
-		Bundle info = intent.getExtras();
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
 		
