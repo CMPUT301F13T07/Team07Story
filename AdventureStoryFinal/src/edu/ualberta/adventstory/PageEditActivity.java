@@ -204,8 +204,6 @@ public class PageEditActivity extends ActivityExtended {
 				(mPage.getAuthor() == null || mPage.getAuthor() == "")){
 			setPageAuthor(mStory.getAuthor(), 20);
 		}else{
-			// TODO: ANTICIPATE THE GLITCH THAT WILL COME WHEN eixisting page
-			// is editable.
 			setPageAuthor("", 20);
 			mPageAuthorEditTextView.setHint("Enter Page Author Name");
 		}
