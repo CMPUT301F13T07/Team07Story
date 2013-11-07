@@ -1,3 +1,6 @@
+XMLIZE branch: 
+- This branch is where PageEditActivity and PageViewActivity's views are converted to XML as opposed to originally programatically generating everything.
+
 Team07Story
 ===========
 
