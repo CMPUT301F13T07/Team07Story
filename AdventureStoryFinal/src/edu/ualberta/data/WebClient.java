@@ -145,4 +145,10 @@ public class WebClient implements DataManager{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public long delete_mult(MultimediaAbstract mult, Page page) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

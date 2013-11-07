@@ -97,4 +97,12 @@ public interface DataManager {
 	 * @return
 	 */
 	public abstract long delete_page_option(Page page, Page child);
+	
+	/**
+	 * Deletes a multimedia object from a page
+	 * @param mult
+	 * @param page
+	 * @return
+	 */
+	public abstract long delete_mult(MultimediaAbstract mult, Page page);
 }
