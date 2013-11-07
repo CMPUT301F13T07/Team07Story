@@ -206,10 +206,6 @@ public class PageEditActivity extends ActivityExtended {
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
 		
-		for(MultimediaAbstract m : mDataSingleton.database.get_multimedia_by_page_id(mPage.getID())){
-			mPage.addMultimedia(m);
-		}
-		
 		setStoryText(18);
 		
 		mDataSingleton.setCurrentActivity(this);
@@ -682,8 +678,6 @@ public class PageEditActivity extends ActivityExtended {
 		for( MultimediaAbstract m : mDataSingleton.database.get_multimedia_by_page_id(mPage.getID())){
 			mDataSingleton.database.update_multimedia(m, mPage.getID());
 		}
-		
-		mPage.getMultimedia().clear();
 	}
 
 	private void cancel() {
