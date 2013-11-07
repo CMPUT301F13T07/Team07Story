@@ -79,6 +79,9 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		
 		searchBy.setOnItemSelectedListener(this);
 		
+		// Always empty Page Stack.
+		((DataSingleton)getApplicationContext()).clearPageStack();
+		
 		// Checks to see if the user has input text into the search box
 		searchText();	
 		

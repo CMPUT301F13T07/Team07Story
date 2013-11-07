@@ -54,4 +54,10 @@ public class DataSingleton extends Application{
 		mPageHistory.push(mCurrentPage);
 		mCurrentPage = page;
 	}
+	
+	// Clear page stack.
+	public void clearPageStack(){
+		mPageHistory.clear();
+		mCurrentPage = null;
+	}
 }

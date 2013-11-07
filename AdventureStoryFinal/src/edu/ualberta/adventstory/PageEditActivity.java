@@ -45,7 +45,7 @@ public class PageEditActivity extends ActivityExtended {
 	// Not the base activity. Transfer this to the base activity then.
 	protected DataSingleton mDataSingleton;
 
-	private TextView mStoryTitleEditTextView; // Story Title TextView
+	private TextView mStoryTitleTextView; // Story Title TextView
 	private EditText mPageTitleEditTextView; // Page Title EditText.
 	private EditText mPageAuthorEditTextView; // Page Title EditText.
 
@@ -115,7 +115,6 @@ public class PageEditActivity extends ActivityExtended {
 		public Responder() {mAction = new Action();}
 		public void response() {mAction.act();}
 		public void setResponse(Action action) {mAction = action;}
-
 	}
 
 	// Map a menuitem to a resonder.
@@ -141,8 +140,7 @@ public class PageEditActivity extends ActivityExtended {
 				e.printStackTrace();
 			}	// End before errors occur.
 		}
-	
-		Bundle info = intent.getExtras();
+			
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
 		
@@ -184,9 +182,9 @@ public class PageEditActivity extends ActivityExtended {
 
 		// Initialize the Story EditText and its parameters.
 		if( mEditPageOnly == false ){
-			mStoryTitleEditTextView = new EditText(this);
-			mStoryTitleEditTextView.setLayoutParams(mOuterComponentParam);
-			mOuterLayout.addView(mStoryTitleEditTextView);
+			mStoryTitleTextView = new EditText(this);
+			mStoryTitleTextView.setLayoutParams(mOuterComponentParam);
+			mOuterLayout.addView(mStoryTitleTextView);
 			setStoryTitle(mStory.getTitle(), 26);
 		}
 
@@ -200,9 +198,8 @@ public class PageEditActivity extends ActivityExtended {
 		mPageAuthorEditTextView = new EditText(this);
 		mPageAuthorEditTextView.setLayoutParams(mOuterComponentParam);
 		mOuterLayout.addView(mPageAuthorEditTextView);
-		if( mEditPageOnly == false && 
-				(mPage.getAuthor() == null || mPage.getAuthor() == "")){
-			setPageAuthor(mStory.getAuthor(), 20);
+		if( mEditPageOnly == false ){
+			setPageAuthor(mPage.getAuthor(), 20);
 		}else{
 			setPageAuthor("", 20);
 			mPageAuthorEditTextView.setHint("Enter Page Author Name");
@@ -276,6 +273,11 @@ public class PageEditActivity extends ActivityExtended {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		mPage = mDataSingleton.getCurrentPage();
+		mStory = mDataSingleton.getCurrentStory();
+		setStoryText(18);
+		
 		mDataSingleton.setCurrentActivity(this);
 	}
 
@@ -377,9 +379,9 @@ public class PageEditActivity extends ActivityExtended {
 	}
 
 	void setStoryTitle(String storyTitle, float textSize) {
-		mStoryTitleEditTextView.setSingleLine(true);
-		mStoryTitleEditTextView.setText(storyTitle);
-		mStoryTitleEditTextView.setTextSize(textSize);
+		mStoryTitleTextView.setSingleLine(true);
+		mStoryTitleTextView.setText(storyTitle);
+		mStoryTitleTextView.setTextSize(textSize);
 	}
 
 	void setPageTitle(String pageTitle, float textSize) {
@@ -390,8 +392,8 @@ public class PageEditActivity extends ActivityExtended {
 
 	void setPageAuthor(String pageAuthor, float textSize) {
 		mPageAuthorEditTextView.setSingleLine(true);
-		mPageTitleEditTextView.setText(pageAuthor);
-		mPageTitleEditTextView.setTextSize(textSize);
+		mPageAuthorEditTextView.setText(pageAuthor);
+		mPageAuthorEditTextView.setTextSize(textSize);
 	}
 
 	// TODO: remove content argument.
@@ -713,13 +715,24 @@ public class PageEditActivity extends ActivityExtended {
 
 	// Implement when addMultimedia class is implemented.
 	void addMultimedia() {
-		startActivity(new Intent(this, AddMultimediaActivity.class));
+		save();
+		// Load arguments.
+		// TODO: Request to just have a singleton that will start Activities in the DataSingleton.
+		Bundle info = new Bundle();
+		info.putInt("page_id", mPage.getID());
+		
+		int index = mStoryEditTextView.getSelectionStart() == -1 ? 
+						0 : mStoryEditTextView.getSelectionStart();
+		info.putInt("index", index);
+		Intent addMultimediaIntent = new Intent(this, AddMultimediaActivity.class);
+		addMultimediaIntent.putExtras(info);
+		startActivity(addMultimediaIntent);
 	}
 
 	private void save() {
 		String pageName = this.mPageTitleEditTextView.getText().toString();
 		String pageAuthor = this.mPageAuthorEditTextView.getText().toString();
-		String pageStory = this.mPageTitleEditTextView.getText().toString();
+		String pageStory = this.mStoryEditTextView.getText().toString();
 		mPage.setTitle(pageName);
 		mPage.setAuthor(pageAuthor);
 		mPage.setText(pageStory);
@@ -733,9 +746,14 @@ public class PageEditActivity extends ActivityExtended {
 			return;
 		}
 
-		// Things to do if the inputs are valid.
-		DataSingleton ds = (DataSingleton)getApplicationContext();
-		ds.database.update_page(mPage);
+		// Check if page already exist.
+		if( mDataSingleton.database.get_page_by_id(mPage.getID()) == null ){
+			// It doesn't exist yet.
+			mDataSingleton.database.insert_page(mPage);
+		}else{
+			// It already exist.
+			mDataSingleton.database.update_page(mPage);
+		}
 	}
 
 	private void cancel() {
@@ -749,10 +767,7 @@ public class PageEditActivity extends ActivityExtended {
 			}
 		}
 		
-		// Just make a page with title: untitled.		
-		mPage.setTitle("Untitle Page");
-		mPage.setText("");
-		mDataSingleton.database.insert_page(mPage);
+		save();
 		exit();
 	}
 
@@ -765,5 +780,10 @@ public class PageEditActivity extends ActivityExtended {
 		save();
 		Intent startActivityIntent = new Intent(this, StartActivity.class);
 		startActivity(startActivityIntent);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		mPage = mDataSingleton.getCurrentPage();
 	}
 }

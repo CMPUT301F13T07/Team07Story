@@ -47,7 +47,7 @@ public class AddMultimediaActivity extends Activity {
 	/*
 	 * The folder where the pictures are stored on the sdcard
 	 */
-	private String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures";
+	private String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/";
 	
 	/*
 	 * The names of the media items in the directory. 
@@ -155,6 +155,11 @@ public class AddMultimediaActivity extends Activity {
 		Picture pic = new Picture(page_id, index, dir);
 		currpage.addMultimedia(pic);
 		database.insert_multimedia(pic, page_id);
+		
+		// Reset the Current page stack.
+		((DataSingleton)this.getApplication()).clearPageStack();
+		((DataSingleton)this.getApplication()).setCurrentPage(currpage);
+		database.update_page(currpage);
 	}
 	
 	/*

@@ -72,7 +72,7 @@ public class Page implements Serializable{
 		this.title = title;
 		this.author = author;
 		this.text = text;
-		this.multimedia = null;
+		this.multimedia = new ArrayList<MultimediaAbstract>();
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
@@ -83,7 +83,7 @@ public class Page implements Serializable{
 		this.title = title;
 		this.author = author;
 		this.text = text;
-		this.multimedia = null;
+		this.multimedia = new ArrayList<MultimediaAbstract>();
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
