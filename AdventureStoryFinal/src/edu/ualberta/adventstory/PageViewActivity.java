@@ -199,7 +199,7 @@ public class PageViewActivity extends ActivityExtended{
 	private boolean MenuChoice(MenuItem item){
 		switch(item.getItemId()){
 		case 0:
-			//startActivity(new Intent("com.example.proto01.OptionEditActivity"));
+			startActivity(new Intent(this, PageEditActivity.class));
 			return true;
 		}
 		return false;
@@ -207,14 +207,11 @@ public class PageViewActivity extends ActivityExtended{
 	
 	@SuppressLint("NewApi")
 	void CreateMenu(Menu menu){
-		MenuItem mnu1 = menu.add(0, 0, 0, "Edit Option");
+		MenuItem mnu1 = menu.add(0, 0, 0, "Edit Page");
 		{
-			mnu1.setIcon(R.drawable.ic_launcher);
-			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);  // This is subject to change.
-		}
-		
-		// I reserve to implement the others in case we decide to automate 
-		// caching.
+			mnu1.setIcon(R.drawable.ic_edit_page);
+			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);  // This is subject to change.
+		}		
 	}
 	
 	void AddButtons(){
