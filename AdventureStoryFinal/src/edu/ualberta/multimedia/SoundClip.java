@@ -22,17 +22,17 @@ public class SoundClip extends MultimediaAbstract {
 		super(index, file_dir);
 	}
 	
-	public void play() {
-		File file = new File(MultimediaDB.getSoundDirectory(super.id, super.context));
+	public void play(Context context) {
+		File file = new File(file_dir);
 		byte[] byteArray;
 		
 	    try {
 	    	// Load byte Array.
-	    	byteArray = Utility.load(file, super.context);
+	    	byteArray = Utility.load(file, context);
 	    	
 	        // create temp file that will hold byte array
 	    	File tempMp3 = File.createTempFile("kurchina", "mp3", 
-	    										super.context.getCacheDir());
+	    										context.getCacheDir());
 	        tempMp3.deleteOnExit();
 	        FileOutputStream fos = new FileOutputStream(tempMp3);
 	        fos.write(byteArray);
@@ -57,14 +57,9 @@ public class SoundClip extends MultimediaAbstract {
 	}
 	
 	@Override
-	public Bitmap loadPhoto() {
-		if(super.id == -1){
-			return BitmapFactory.decodeResource(
-					context.getResources(), R.drawable.ic_audio);
-		}else{
-			String tempFileName = MultimediaDB.getBitmapDirectory(id, context);
-			return BitmapFactory.decodeFile(tempFileName);
-		}
+	public Bitmap loadPhoto(Context context) {
+		return BitmapFactory.decodeResource(
+				context.getResources(), R.drawable.ic_audio);
 	}
 	
 	@Override

@@ -6,6 +6,7 @@ import java.util.*;
  * This class represents the "book cover" of the story for the most part, and as such, most of the functionality
  * in this class is actually just wrappers around functions in Page.java. 
  * Refer to that for further information. 
+ * @author: Lyle Rolleman (except toString, that was Kelsey Gaboriau)
  */
 
 public class Story {
@@ -59,6 +60,12 @@ public class Story {
 	}
 	
 	@Override
+	/*
+	 * Creates a string representation of a story
+	 * @return: The string version of story
+	 * @author: Kelsey Gaboriau 
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString(){
 		return "Title: " + this.getTitle() + "\n" + "Author: " + this.getAuthor();
 	}

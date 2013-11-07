@@ -35,6 +35,7 @@ package edu.ualberta.utils;
  * ArrayList<Page> searchByTitle(String) : return a list of pages whose title matches the passed string. Currently case sensitive
  * ArrayList<Page> searchByAuthor(Sting) : return a list of pages whose author field matches argument. Currently case sensitive
  * ArrayList<Page> searchByID(Integer) : return a list of pages whose ID matches argument. ID can be null
+ * @author: Lyle Rolleman, Kelsey Gaboriau (see classes for specifics)
  */
 
 import java.io.Serializable;
@@ -42,13 +43,12 @@ import java.util.ArrayList;
 
 import edu.ualberta.multimedia.MultimediaAbstract;
 
-//TO-DO Update attributes and constructors when have multimedia class of some kind.
+
 public class Page implements Serializable{
 	private Integer id;
     private String title;
     private String author;
     private String text;
-	//private Content content;
 	private ArrayList<MultimediaAbstract> multimedia;
 	private ArrayList<Page> pages;
 	
@@ -64,7 +64,7 @@ public class Page implements Serializable{
 	*title: the name of the page
 	*author: the author of the page
 	*text; the text of the page
-	*TO-DO: multimedia: the multimedia objects on the page
+	*multimedia: the list of MultimediaAbstract objects
 	*pages: The list of pages the user can choose to go to next
 	*/
     public Page(Integer id, String title, String author, String text, ArrayList<Page> pages) {
@@ -72,7 +72,7 @@ public class Page implements Serializable{
 		this.title = title;
 		this.author = author;
 		this.text = text;
-		this.multimedia = null;
+		this.multimedia = new ArrayList<MultimediaAbstract>();
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
@@ -83,7 +83,7 @@ public class Page implements Serializable{
 		this.title = title;
 		this.author = author;
 		this.text = text;
-		this.multimedia = null;
+		this.multimedia = new ArrayList<MultimediaAbstract>();
 		if (pages == null)
 			this.pages = new ArrayList<Page>();
 		else
@@ -98,10 +98,10 @@ public class Page implements Serializable{
 		this.multimedia = new ArrayList<MultimediaAbstract>();
 	else 
 		this.multimedia = mm;
-    	if (pages == null)
-    		this.pages = new ArrayList<Page>();
-    	else
-    		this.pages = pages;
+    if (pages == null)
+    	this.pages = new ArrayList<Page>();
+    else
+    	this.pages = pages;
     }
     public Page(String title, String author, String text, ArrayList<MultimediaAbstract> mm, ArrayList<Page> pages) {
     	this.id = null;
@@ -112,10 +112,10 @@ public class Page implements Serializable{
 		this.multimedia = new ArrayList<MultimediaAbstract>();
 	else 
 		this.multimedia = mm;
-    	if (pages == null)
-    		this.pages = new ArrayList<Page>();
-    	else
-    		this.pages = pages;
+    if (pages == null)
+    	this.pages = new ArrayList<Page>();
+    else
+    	this.pages = pages;
     }
 	
 	public void setID(Integer i) {id = i;}
@@ -140,8 +140,9 @@ public class Page implements Serializable{
 	public void deletePage(Integer i) {pages.remove(i);}
 	
 	/*
-	*Overridden to avoid casting and exemption garbage, and it was already here for previous design branch not taken
-	*If you want to get an entire branch of the tree, se cloneAllChildren below
+	*Overridden to avoid casting and exception garbage, and it was already here for previous design branch not taken
+	*If you want to get an entire branch of the tree, see cloneAllChildren below
+	*@author: Lyle Rolleman
 	*/
 	public Page clone() {
 		return new Page(this.id, this.title, this.author, this.text, this.multimedia, null);
@@ -152,6 +153,7 @@ public class Page implements Serializable{
 	 * clones the current page, then gets the list of children from the ORIGINAL page
 	 * iterates through those pages, performing a recursive call on them. The return value is the clone
 	 * of the current page, which will be added to the children of the clone
+	 * @author: Lyle Rolleman
 	 */
 	public Page cloneAllChildren() {
 		Page root = this.clone();
@@ -172,6 +174,8 @@ public class Page implements Serializable{
 	 * then calls the recursive half of the function, which sifts between the levels of the tree, adding them
 	 * to their corresponding arraylist in the arraylist. 
 	 * When it returns, the populated arraylist of arraylists are combined and returned
+	 * @author: Lyle Rolleman
+	 * @return: The list of all pages in the tree
 	*/
 	public ArrayList<Page> getAllPages() {
 		ArrayList<Page> ret = new ArrayList<Page>();
@@ -183,7 +187,12 @@ public class Page implements Serializable{
 		return ret;
 	}
 	
-	//internal use
+	/*
+	 * For internal use
+	 * @author: Lyle Rolleman
+	 * @param: o the current page in the tree
+	 * @param: the current "height" in the tree
+	 */
 	private void getAllPages(Page o, int level) {
 		if (level >= levellist.size()) 
 			levellist.add(new ArrayList<Page>());
@@ -200,6 +209,9 @@ public class Page implements Serializable{
 	 * string/Integer, adding it to the list if it does. Changes the caller by recursively running through the children
 	 * of each, and so on and so forth. each return combines the arraylists of the individual calls providing a list
 	 * of all matches. Will return an empty arraylist if there are no matches. 
+	 * @author: Lyle Rolleman
+	 * @param: t, the title to search for
+	 * @return: All the pages which match that title
 	 */
 	public ArrayList<Page> searchByTitle(String t) {
 		ArrayList<Page> res = new ArrayList<Page>();
@@ -212,6 +224,11 @@ public class Page implements Serializable{
 		return res;
 	}
 	
+	/*
+	 * @param: the desired author key
+	 * @author: Lyle Rolleman
+	 * @return: The list of pages which match the key
+	 */
 	public ArrayList<Page> searchByAuthor(String a) {
 		ArrayList<Page> res = new ArrayList<Page>();
 		
@@ -223,6 +240,11 @@ public class Page implements Serializable{
 		return res;
 	}
 	
+	/*
+	 * @param: the desired id to search for
+	 * @author: Lyle Rolleman
+	 * @return: The list matching the key
+	 */
 	public ArrayList<Page> searchByID(Integer id) {
 		ArrayList<Page> res = new ArrayList<Page>();
 		
@@ -239,6 +261,11 @@ public class Page implements Serializable{
 	}
 	
 	@Override
+	/*
+	 * @return: A string representation of the Page
+	 * @author: Kelsey Gaboriau 
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString(){
 		return "Title: " + this.getTitle() + "\n" + "Author: " + this.getAuthor();
 	}

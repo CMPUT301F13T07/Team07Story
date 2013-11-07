@@ -1,8 +1,8 @@
-package edu.ualberta.database;
+package edu.ualberta.data;
 
 public class Constant {
 	public static final String DATABASE_NAME = "story_page_storage";
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 7;
     
 	// table titles
 	public static final String TABLE_STORY = "Story";
@@ -33,6 +33,7 @@ public class Constant {
 	public static final String MULT_ID = "multimedia_id";
 	public static final String DIRECTORY = "directory";
 	public static final String INDEX = "multimedia_index";
+	public static final String MULT_TYPE = "multimedia_type";
 	
 	public static final String CREATE_MULT_TABLE = "CREATE TABLE IF NOT EXISTS "
 												   + TABLE_MULT + " ("
@@ -40,6 +41,10 @@ public class Constant {
 												   + INDEX + " INTEGER, "
 												   + DIRECTORY + " TEXT, "
 												   + PAGE_ID + " INTEGER, "
+												   + MULT_TYPE + " TEXT CHECK ("
+												   + MULT_TYPE + " = 'Picture' OR "
+												   + MULT_TYPE + " = 'Video' OR "
+												   + MULT_TYPE + " = 'SoundClip'), "
 												   + "FOREIGN KEY (" + PAGE_ID
 			  									   + ") REFERENCES " + TABLE_PAGE
 			  									   + " (" + PAGE_ID + "))";

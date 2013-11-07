@@ -1,9 +1,13 @@
 package edu.ualberta.multimedia;
 
 import edu.ualberta.adventstory.R;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.view.Display;
+import android.view.WindowManager;
 
 public class Picture extends MultimediaAbstract{	
 	public Picture(int id, int index, String file_dir){
@@ -14,7 +18,7 @@ public class Picture extends MultimediaAbstract{
 	}
 	
 	@Override
-	public void play(){
+	public void play(Context context){
 		// Enter photo effects...		
 	}
 	
@@ -26,22 +30,42 @@ public class Picture extends MultimediaAbstract{
 		//super.pictureId = id;
 	}
 	
-	/*@Override
-	public void setPictureId(int pictureId){
-		super.pictureId = pictureId;
-		super.id = pictureId;
-	}*/
-	
 	@Override
-	public Bitmap loadPhoto(){
-		if( super.id == -1 ){
+	public Bitmap loadPhoto(Context context){
+		if( super.id == -1 || file_dir == null){
 			return BitmapFactory.decodeResource(
 					context.getResources(), R.drawable.ic_picture);
 		}else{
-			String tempFileName = MultimediaDB.getBitmapDirectory(id, context);
-			return BitmapFactory.decodeFile(tempFileName);			
+			WindowManager wm = ((Activity)context).getWindowManager();
+			Display d = wm.getDefaultDisplay();
+			Bitmap bm = BitmapFactory.decodeFile(file_dir);
+			// Force width and height to be within 1/2 screen's limit.			
+			if( bm.getWidth() > d.getWidth()/2 ){
+				bm = getResizedBitmap(bm, bm.getHeight(), d.getWidth()/2);
+			}
+			if( bm.getHeight() > d.getHeight()/2){
+				bm=getResizedBitmap(bm, d.getHeight()/2, bm.getWidth());
+			}
+			return bm;
 		}
 	}
+	
+	private Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
+	    int width = bm.getWidth();
+	    int height = bm.getHeight();
+	    float scaleWidth = ((float) newWidth) / width;
+	    float scaleHeight = ((float) newHeight) / height;
+	    // CREATE A MATRIX FOR THE MANIPULATION
+	    Matrix matrix = new Matrix();
+	    // RESIZE THE BIT MAP
+	    matrix.postScale(scaleWidth, scaleHeight);
+
+	    // "RECREATE" THE NEW BITMAP
+	    Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+	    return resizedBitmap;
+	}
+
+
 	
 	@Override
 	public boolean equals( Object obj ){

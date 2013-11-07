@@ -1,4 +1,4 @@
-package edu.ualberta.database;
+package edu.ualberta.data;
 
 import java.util.ArrayList;
 
@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 import edu.ualberta.multimedia.MultimediaAbstract;
+import edu.ualberta.multimedia.Picture;
+import edu.ualberta.multimedia.SoundClip;
+import edu.ualberta.multimedia.Video;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
@@ -51,7 +54,8 @@ public class DbManager implements DataManager{
 		ContentValues values = new ContentValues();
 	    values.put(Constant.STORY_TITLE, story.getTitle());
 	    values.put(Constant.STORY_AUTHOR, story.getAuthor());
-	    values.put(Constant.ROOT, story.getRoot().getID());
+	    if (story.getRoot() != null)
+	    	values.put(Constant.ROOT, story.getRoot().getID());
 	    return insert(Constant.TABLE_STORY, values);
 	}
 	
@@ -74,6 +78,7 @@ public class DbManager implements DataManager{
 		values.put(Constant.DIRECTORY, mult.getFileDir());
 		values.put(Constant.PAGE_ID, page_id);
 		values.put(Constant.INDEX, mult.getIndex());
+		values.put(Constant.MULT_TYPE, mult.getClass().getSimpleName());		
 		return insert(Constant.TABLE_MULT, values);
 	}
 	
@@ -154,7 +159,6 @@ public class DbManager implements DataManager{
 	public Cursor get_from_db(String table, String column, Integer id) {
 		String select = "SELECT * FROM " + table
 				+ " WHERE " + column + " = " + id;
-		System.out.println(select);
 		try {
 			return db.rawQuery(select, null);
 		} catch(SQLiteException ex) {
@@ -230,8 +234,6 @@ public class DbManager implements DataManager{
 			author = c.getString(c.getColumnIndex(Constant.STORY_AUTHOR));
 			root_id = c.getInt(c.getColumnIndex(Constant.ROOT));
 			
-			System.out.println("root id: " + root_id);
-			
 			root = get_page_by_id(root_id);
 			Story story = new Story(id, title, author, root);
 			
@@ -243,6 +245,7 @@ public class DbManager implements DataManager{
 	public ArrayList<MultimediaAbstract> multimedia_from_cursor(Cursor c) {
 		Integer mult_id;
 		String file_dir;
+		String type;
 		Integer index;
 		
 		ArrayList<MultimediaAbstract> multimedia = 
@@ -251,10 +254,17 @@ public class DbManager implements DataManager{
 			mult_id = c.getInt(c.getColumnIndex(Constant.MULT_ID));
 			file_dir = c.getString(c.getColumnIndex(Constant.DIRECTORY));
 			index = c.getInt(c.getColumnIndex(Constant.INDEX));
+			type = c.getString(c.getColumnIndex(Constant.MULT_TYPE));
 			
-			// TODO: this is dirty. Anyone know a better way to handle this?
-			MultimediaAbstract ma = new MultimediaAbstract(mult_id, index, file_dir){};
-			multimedia.add(ma);
+			if( type.compareTo("Picture") == 0 ){
+			      multimedia.add( new Picture(mult_id, index, file_dir));
+			}else if( type.compareTo("SoundClip") == 0){
+			      multimedia.add( new SoundClip(mult_id, index, file_dir));
+			}else if( type.compareTo("VideoClip") == 0){
+			      multimedia.add( new Video(mult_id, index, file_dir));
+			}else{
+			      multimedia.add(new MultimediaAbstract(mult_id, index, file_dir){});
+			}
 		}
 		return multimedia;
 	}
@@ -326,6 +336,12 @@ public class DbManager implements DataManager{
 		return delete(Constant.TABLE_PAGE_CHILDREN, where);
 	}
 	
+	public long delete_mult(MultimediaAbstract mult, Page page) {
+		String where = Constant.PAGE_ID + " = " + page.getID() + " AND "
+					   + Constant.MULT_ID + " = " + mult.getID();
+		return delete(Constant.TABLE_MULT, where);
+	}
+	
 	/**
 	 * 
 	 * @param table
@@ -342,4 +358,17 @@ public class DbManager implements DataManager{
 			return -1;
 		}
 	}
+	
+	/* MOCK SECTION */ 
+	public long update_multimedia(MultimediaAbstract mult, long page_id) {
+		ContentValues values = new ContentValues();
+		String where = Constant.MULT_ID + "=" + mult.getID();
+		
+		values.put(Constant.DIRECTORY, mult.getFileDir());
+		values.put(Constant.INDEX, mult.getIndex());
+		values.put(Constant.PAGE_ID, page_id);
+		values.put(Constant.MULT_TYPE, mult.getClass().getSimpleName());		
+		return update(Constant.TABLE_MULT, values, where);
+	}
+	
 }

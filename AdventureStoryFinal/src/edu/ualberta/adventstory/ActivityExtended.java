@@ -6,12 +6,11 @@ package edu.ualberta.adventstory;
 
 import android.app.Activity;
 import android.os.Bundle;
-import edu.ualberta.database.DbManager;
 
-abstract public class ActivityExtended extends Activity{
+public class ActivityExtended extends Activity{
 	protected boolean mOnVideoViewPreview = false;
 	protected String mVideoDirectory = null;
-	public DbManager database;
+	//public Db database;
 	
 	public ActivityExtended() {
 		super();
@@ -30,7 +29,6 @@ abstract public class ActivityExtended extends Activity{
 				}
 			}
 		}
-     
 	}
 	
 	// Override these methods.
@@ -52,5 +50,10 @@ abstract public class ActivityExtended extends Activity{
 	public void onSaveInstanceState(Bundle objects){
 		objects.putBoolean("Mode", mOnVideoViewPreview);
 		objects.putString("VideoDirectory", mVideoDirectory);
+	}
+	
+	// Override this.
+	public void Update(){
+		
 	}
 }
