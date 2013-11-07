@@ -1,3 +1,14 @@
+/**
+ * Purpose: This class is used to handle searching for stories and pages. The user can enter a
+ * String that is either partly or entirely matching the author or title (after selecting either 
+ * author or title). If the user has a blank search it will return all pages or stories.
+ * 
+ * Outstanding Issue: If the user selects from author or title then enters search by text they are
+ * given the appropriate search result, however, if they then change the author/title selection
+ * the results are not updated until the search by text is modified.
+ * 
+ * Author: Kelsey Gaboriau
+ */
 package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
@@ -142,6 +153,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener{
 				isTitle = false;
 			}
 		}
+		// To be implemented with online functionality
 		/*if(searchOnline.getId() == R.id.spinnerOnline){
 			if (selected == 0){
 				

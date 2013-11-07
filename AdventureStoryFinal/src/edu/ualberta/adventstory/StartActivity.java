@@ -1,3 +1,12 @@
+/**
+ * Purpose: This is the main screen that the user sees when the application starts. 
+ * From here the user can navigate to the various functionalities of the application.
+ * 
+ * Outstanding Issues: N/A
+ * 
+ * Author: Kelsey Gaboriau wrote the set up for this class then each respective programmer
+ * filled in necessary components in the buttons they are using.
+ */
 package edu.ualberta.adventstory;
 
 import android.app.Activity;
@@ -68,6 +77,9 @@ public class StartActivity extends Activity {
         return true;
     }
     
+    /**
+     * Author: Michelle Naylor
+     */
 	/* Called when the user clicks the Make a New Story button */
 	private void newStory(){
 		// Bring up CreateNewStoryActivity
@@ -75,6 +87,11 @@ public class StartActivity extends Activity {
 		startActivity(logViewIntent);
 	}
 	
+	/**
+	 * Author: Kelsey Gaboriau
+	 * 
+	 * @param isStory
+	 */
 	/* Called when the user clicks a find button */
 	private void search(boolean isStory){
 		// Bring up  Activity and pass boolean telling it if we are finding a story or page
