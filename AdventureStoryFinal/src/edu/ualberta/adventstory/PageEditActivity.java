@@ -675,7 +675,7 @@ public class PageEditActivity extends ActivityExtended {
 		/*
 		 * Multimedia's are only updated as opposed to modified.
 		 */
-		for( MultimediaAbstract m : mDataSingleton.database.get_multimedia_by_page_id(mPage.getID())){
+		for( MultimediaAbstract m : mPage.getMultimedia()){
 			mDataSingleton.database.update_multimedia(m, mPage.getID());
 		}
 	}
