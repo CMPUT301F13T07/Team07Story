@@ -323,6 +323,12 @@ public class DbManager implements DataManager{
 		return delete(Constant.TABLE_PAGE_CHILDREN, where);
 	}
 	
+	public long delete_mult(MultimediaAbstract mult, Page page) {
+		String where = Constant.PAGE_ID + " = " + page.getID() + " AND "
+					   + Constant.MULT_ID + " = " + mult.getID();
+		return delete(Constant.TABLE_MULT, where);
+	}
+	
 	/**
 	 * 
 	 * @param table
