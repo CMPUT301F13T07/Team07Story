@@ -22,6 +22,8 @@ public class CreateNewStoryActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_newstory);
 		database = DataSingleton.database;
+		mTitle = (EditText) findViewById(R.id.activity_newstory_edittitle);
+		mAuthor = (EditText) findViewById(R.id.activity_newstory_editauthor);
 	}
 	
 	/**
@@ -52,11 +54,12 @@ public class CreateNewStoryActivity extends Activity {
 	 * Calls SearchActivity to find an existing page to set as root
 	 */
 	private void existing_root() {
-		Story story = new Story(mTitle.getText().toString(), 
-				mAuthor.getText().toString(), null);
+		Story story;
+		story = new Story(mTitle.getText().toString(), 
+						  mAuthor.getText().toString(), null);
+		story.setID((int) database.insert_story(story));
 		((DataSingleton)getApplicationContext()).setCurrentStory(story);
-		database.insert_story(story);
-		
+
 		Intent intent = new Intent(this, SearchActivity.class);
 		Bundle info = new Bundle();
 		info.putBoolean("BOOL_IS_STORY", false);
@@ -76,8 +79,6 @@ public class CreateNewStoryActivity extends Activity {
 		root.setID(root_id);
 		
 		// add new story to db with new page as root
-		mTitle = (EditText) findViewById(R.id.activity_newstory_edittitle);
-		mAuthor = (EditText) findViewById(R.id.activity_newstory_editauthor);
 		Story story = new Story(mTitle.getText().toString(), 
 								mAuthor.getText().toString(), root);
 		int story_id = (int) database.insert_story(story);

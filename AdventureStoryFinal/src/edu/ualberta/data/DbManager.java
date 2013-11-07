@@ -1,6 +1,5 @@
 package edu.ualberta.data;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import android.content.ContentValues;
@@ -55,7 +54,8 @@ public class DbManager implements DataManager{
 		ContentValues values = new ContentValues();
 	    values.put(Constant.STORY_TITLE, story.getTitle());
 	    values.put(Constant.STORY_AUTHOR, story.getAuthor());
-	    values.put(Constant.ROOT, story.getRoot().getID());
+	    if (story.getRoot() != null)
+	    	values.put(Constant.ROOT, story.getRoot().getID());
 	    return insert(Constant.TABLE_STORY, values);
 	}
 	
