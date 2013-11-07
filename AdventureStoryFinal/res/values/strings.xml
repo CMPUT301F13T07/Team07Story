@@ -24,7 +24,7 @@
 	<string name="searchpreview">Page Preview</string>
 	<string name="buttonSelect">Select</string>
 	<string name="buttonReturn">Return</string>
-    
+    <string name="listofpages">Select a page to begin your adventure: </string>
     <string-array name="first_page_array">
         <item>Existing Page</item>
         <item>New Page</item>

@@ -20,7 +20,8 @@ public class SearchPreviewFragment extends Fragment {
 	
 	private TextView pageTitle;
 	private TextView pageText;
-	
+	private String title;
+	private String text;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -38,31 +39,33 @@ public class SearchPreviewFragment extends Fragment {
 		pageTitle = (TextView) getActivity().findViewById(R.id.searchpreviewtitle);
 		pageText = (TextView) getActivity().findViewById(R.id.pagepreview);
 		
-		Button mSelect = (Button) this.getActivity().findViewById(R.id.buttonselect);
 		Button mReturn = (Button) this.getActivity().findViewById(R.id.buttonreturn);
+		Button mSelect = (Button) this.getActivity().findViewById(R.id.buttonselect);
+
 		
-		String title = "";
-		String text = "";
+		title = getArguments().getString("title");
+		text = getArguments().getString("text");
 		// Set the page texts, not quite sure how to pull from database by id yet.
 		pageTitle.setText(title);
 		pageText.setText(text);
 		
 		// Sets the button usage
-    	mSelect.setOnClickListener(new OnClickListener(){
-    		public void onClick(View v){
-    			// Selects the selected page and goes to PageView Activity
-    			// Need to add that it passes through the id
-    			displayPage();
-    		}
-    	});
-    	
     	mReturn.setOnClickListener(new OnClickListener(){
     		public void onClick(View v){
     			// End's fragment and goes back to activity
     			getActivity().getFragmentManager().popBackStack();	
     		}
     	});
+	
+    	mSelect.setOnClickListener(new OnClickListener(){
+    		public void onClick(View v){
+    			// Selects the selected page and goes to PageView Activity
+    			// Need to add that it passes through the id
+    			displayPage();
+    		}
+    	});	
 	}
+	
 	/*
 	 * This method changes to the PageView activity
 	 */
