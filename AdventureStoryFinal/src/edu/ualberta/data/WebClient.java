@@ -30,22 +30,6 @@ public class WebClient implements DataManager{
 	public void downloadStory(String storyname) {
 		
 	}
-	
-	//search the webserver for stories and return a story object, without saving to DB
-	public Story storySearch(String storyname) {
-	
-		return new Story(null, null, null);
-	}
-
-	//Will search for story with same name/other identifier (TBD) and replace it with argument
-	public void updateStory(Story story) {
-		
-	}
-	
-	//Deletes story based on name/identifier
-	public void deleteStory(String storyname) {
-		
-	}
 
 	@Override
 	public long insert_story(Story story) {
@@ -148,5 +132,17 @@ public class WebClient implements DataManager{
 	public long delete_page_option(Page page, Page child) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public void open() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		
 	}
 }

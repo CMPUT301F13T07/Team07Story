@@ -7,17 +7,20 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import edu.ualberta.data.DbManager;
+import edu.ualberta.data.DataManager;
 import edu.ualberta.utils.Page;
 
 public class StartActivity extends Activity {
 
 	private Button mkStory, publish, searchPage, searchStory, mkPage;
+	public DataManager database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        database = DataSingleton.database;
         
         // Define Buttons
         mkStory = (Button)findViewById(R.id.newStory);
@@ -91,6 +94,8 @@ public class StartActivity extends Activity {
 	/* Called when the user clicks new page button */
 	private void newPage(){
 		Page newPage = new Page("", "", "", null);
+		int id = (int) database.insert_page(newPage);
+		newPage.setID(id);
 		((DataSingleton)getApplicationContext()).setCurrentPage(newPage);
 		((DataSingleton)getApplicationContext()).setCurrentStory(null);
 		startActivity(new Intent(getBaseContext(), PageEditActivity.class));
