@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import edu.ualberta.utils.Story;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
@@ -20,15 +21,17 @@ public class SearchPreviewFragment extends Fragment {
 	
 	private TextView pageTitle;
 	private TextView pageText;
+
 	private String title;
 	private String text;
+
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
 		
-			// Inflate the layout for this fragment
-			return inflater.inflate(
+		// Inflate the layout for this fragment
+		return inflater.inflate(
 					R.layout.fragment_searchpreview, container, false);
 	}
 	

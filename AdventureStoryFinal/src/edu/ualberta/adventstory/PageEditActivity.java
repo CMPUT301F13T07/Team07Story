@@ -415,6 +415,7 @@ public class PageEditActivity extends ActivityExtended {
 				int extraPadding, int width, int height) {
 			super(context, bitmap);
 			mBitmap = bitmap;
+			
 			this.mExtraPadding = extraPadding;
 			this.mWidth = width;
 			this.mHeight = height;
