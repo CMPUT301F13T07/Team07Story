@@ -52,6 +52,11 @@ public class CreateNewStoryActivity extends Activity {
 	 * Calls SearchActivity to find an existing page to set as root
 	 */
 	private void existing_root() {
+		Story story = new Story(mTitle.getText().toString(), 
+				mAuthor.getText().toString(), null);
+		((DataSingleton)getApplicationContext()).setCurrentStory(story);
+		database.insert_story(story);
+		
 		Intent intent = new Intent(this, SearchActivity.class);
 		Bundle info = new Bundle();
 		info.putBoolean("BOOL_IS_STORY", false);
