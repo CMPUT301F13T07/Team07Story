@@ -21,13 +21,10 @@ public class SearchPreviewFragment extends Fragment {
 	
 	private TextView pageTitle;
 	private TextView pageText;
-	private String parentActivity;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
-		
-		parentActivity = getArguments().getString("PARENT_ACTIVITY");
 		
 		// Inflate the layout for this fragment
 		return inflater.inflate(

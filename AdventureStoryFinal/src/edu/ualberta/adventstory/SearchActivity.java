@@ -229,7 +229,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.commit();
 			
-			if (parentActivity.compareTo("CreateNewStoryActivity") == 0) {
+			if (parentActivity != null && parentActivity.compareTo("CreateNewStoryActivity") == 0) {
 				story = ((DataSingleton)getApplicationContext()).getCurrentStory();
 				story.setRoot(page);
 				database.update_story(story);
