@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -23,7 +24,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import edu.ualberta.data.DbManager;
 import edu.ualberta.utils.Page;
-import edu.ualberta.database.DbManager;
 import edu.ualberta.utils.Story;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
