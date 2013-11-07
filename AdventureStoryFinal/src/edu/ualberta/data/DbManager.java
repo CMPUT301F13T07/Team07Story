@@ -1,4 +1,4 @@
-package edu.ualberta.database;
+package edu.ualberta.data;
 
 import java.util.ArrayList;
 

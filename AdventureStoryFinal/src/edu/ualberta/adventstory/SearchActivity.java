@@ -1,7 +1,8 @@
 package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
-import edu.ualberta.database.DbManager;
+
+import edu.ualberta.data.DbManager;
 import edu.ualberta.utils.Story;
 import android.app.Activity;
 import android.content.Intent;
@@ -32,6 +33,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	private Bundle bundle;
 	private boolean isStory;
 	private boolean isTitle;
+	private String parentActivity;
 	
 	private ArrayList<?> results;
 	private ArrayList<String> displayResults;
@@ -50,6 +52,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		isTitle = true;
 		bundle = getIntent().getBundleExtra("android.intent.extra.INTENT");
 		isStory = bundle.getBoolean("BOOL_IS_STORY");
+		parentActivity = bundle.getString("PARENT_ACTIVITY");
 		results = new ArrayList<String>();
 		displayResults = new ArrayList<String>();
 		database = DataSingleton.database;
@@ -186,7 +189,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		 * A side note:
 		 * - having just a story title for adapter2 would be hard when
 		 *   there are duplicate story title. A paired story id would help story
-		 *   selection. For now this is just selecting the first occurence of 
+		 *   selection. For now this is just selecting the first occurengit ce of 
 		 *   story title.
 		 */
 		ArrayList<Story> temp = ((DataSingleton)getApplicationContext()).

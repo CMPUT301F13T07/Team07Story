@@ -1,4 +1,4 @@
-package edu.ualberta.database;
+package edu.ualberta.data;
 
 public class Constant {
 	public static final String DATABASE_NAME = "story_page_storage";

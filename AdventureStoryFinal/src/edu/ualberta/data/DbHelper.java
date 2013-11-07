@@ -1,4 +1,4 @@
-package edu.ualberta.database;
+package edu.ualberta.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
