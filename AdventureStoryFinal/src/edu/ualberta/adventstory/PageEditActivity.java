@@ -64,38 +64,16 @@ public class PageEditActivity extends ActivityExtended {
 	}
 
 	private EditTextEx mStoryEditTextView; // StoryText TextView.
-
-	/*
-	 * The structure of this Activity is the following: -An outer layout
-	 * contains the stationary components such as title and buttons for next
-	 * Page(s). A ScrollView and LinearLayout is used to achieve this. The
-	 * existence of ScrollView will be discussed next.
-	 * 
-	 * -Inner Layout on the other hand contains non-stationary objects. This
-	 * allows room for movable multimedia objects. Although the text segment of
-	 * the story is stationary it is placed in the inner layout since it does
-	 * expand vertically. Since multimedia(s) are movable and text segment
-	 * expands, we used a ScrollView to make sure that when the inner layout
-	 * does expands beyond the limit of the screensize the user will still have
-	 * pleasant experience.
-	 */
-	// Layout.
-	private RelativeLayout mInnerLayout; // Inner RelativeLayout.
+	
+	private LinearLayout mInnerLayout; // Inner RelativeLayout.
 	private LinearLayout mOuterLayout; // Outer LinearLayout.
 	private ScrollView mScrollView; // Encapsulate mOuterLayout.
 	private LinearLayout mButtonLayout; // Encapsulate the buttons.
 
 	private Button mButtonAddPage; // Button for adding page.
-	/*
-	 * Params: - mInnerLayoutParam: For the mInnerLayout. - mOuterLayoutParam:
-	 * For the mOuterLayout. - mInnerComponentParam: Param for the views inside
-	 * mInnerLayout. - mOuterLayoutParam: Param for the views in the
-	 * mOuterLayout excluding mInnerLayout.
-	 */
-	private RelativeLayout.LayoutParams mInnerLayoutParam;
+	
 	private LinearLayout.LayoutParams mOuterLayoutParam;
-	private RelativeLayout.LayoutParams mInnerComponentParam;
-	private LinearLayout.LayoutParams mOuterComponentParam;
+	private LinearLayout.LayoutParams mInnerComponentParam;	
 
 	private Story mStory; // Story being viewed.
 	private Page mPage; // Current page.
@@ -121,13 +99,16 @@ public class PageEditActivity extends ActivityExtended {
 	
 	// Set to true when editing a page only, independent of the story.
 	private boolean mEditPageOnly = false;
+
+	private Button mButtonAddMultimedia;
 	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		setContentView(R.layout.activity_pageedit);
+		
 		mDataSingleton = (DataSingleton)getApplicationContext();
 		
 		Intent intent = getIntent();	// Get intent that started this Activity.
@@ -153,89 +134,51 @@ public class PageEditActivity extends ActivityExtended {
 			exit();
 		}
 
-		// Layout for mOuterLayout.
-		mOuterLayoutParam = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-
-		// Layout for mInnerLayout.
-		mInnerLayoutParam = new RelativeLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-
-		// Layout for Option Body Views.
-		mInnerComponentParam = new RelativeLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-
-		// Layout for mOuterLayout Components.
-		mOuterComponentParam = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-
 		// ScrollView.
-		mScrollView = new ScrollView(this);
+		mScrollView = (ScrollView)findViewById(R.id.scrollView);
 
 		// Outer Layout.
-		mOuterLayout = new LinearLayout(this);
-		// Imperative else will display in awkward horizontal order.
-		mOuterLayout.setOrientation(LinearLayout.VERTICAL);
-		// Encapsulate with scrollView.
-		mScrollView.addView(mOuterLayout, mOuterLayoutParam);
+		mOuterLayout = (LinearLayout)findViewById(R.id.outerLayout);
 
 		// Initialize the Story EditText and its parameters.
+		mStoryTitleTextView = (TextView)findViewById(R.id.storyTitle);
 		if( mEditPageOnly == false ){
-			mStoryTitleTextView = new EditText(this);
-			mStoryTitleTextView.setLayoutParams(mOuterComponentParam);
-			mOuterLayout.addView(mStoryTitleTextView);
 			setStoryTitle(mStory.getTitle(), 26);
 		}
 
 		// Initialize the Page Title EditText and its parameters.
-		mPageTitleEditTextView = new EditText(this);
-		mPageTitleEditTextView.setLayoutParams(mOuterComponentParam);
-		mOuterLayout.addView(mPageTitleEditTextView);
+		mPageTitleEditTextView = (EditText)findViewById(R.id.pageTitle);
 		setPageTitle(mPage.getTitle(), 22);
 
 		// Initialize the Page Author EditText.
-		mPageAuthorEditTextView = new EditText(this);
-		mPageAuthorEditTextView.setLayoutParams(mOuterComponentParam);
-		mOuterLayout.addView(mPageAuthorEditTextView);
+		mPageAuthorEditTextView = (EditText)findViewById(R.id.pageAuthor);
 		if( mEditPageOnly == false ){
 			setPageAuthor(mPage.getAuthor(), 20);
-		}else{
-			setPageAuthor("", 20);
-			mPageAuthorEditTextView.setHint("Enter Page Author Name");
 		}
 
-		// The Inner Layout.
-		mInnerLayout = new RelativeLayout(this);
+		mInnerLayout = (LinearLayout)findViewById(R.id.innerLayout);
 
 		// Add Inner Layout components.
 		// EditTextView.
 		
 		mStoryEditTextView = new EditTextEx(this);
+		mInnerComponentParam = new LinearLayout.LayoutParams(
+				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		mStoryEditTextView.setLayoutParams(mInnerComponentParam);
 		// TextView. - We start off with these.
 		mInnerLayout.addView(mStoryEditTextView);
 		setStoryText(18);
 
-		// Place the inner layout inside the outer layout.
-		mOuterLayout.addView(mInnerLayout, mInnerLayoutParam);
-		
-		// Add an 'Add Multimedia' Button.
-		Button mButtonAddMultimedia = new Button(this);
-		mButtonAddMultimedia.setText("Add Multimedia");
+		mButtonAddMultimedia = (Button)findViewById(R.id.addMultimedia);
 		mButtonAddMultimedia.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
 				addMultimedia();
 			}			
-		});
-		mOuterLayout.addView(mButtonAddMultimedia, mInnerLayoutParam);
+		});		
 		
 		// Add an 'Add Page' Button to the outerlayout.
-		mButtonAddPage = new Button(this);
-		mButtonAddPage.setText("Add Page");
-		// Most significant byte is alpha.
-		// TODO: Place all preference in one place.
-		mButtonAddPage.setBackgroundColor(0xFFD74B4B);
+		mButtonAddPage = (Button)findViewById(R.id.addPage);
 		mButtonAddPage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -245,23 +188,10 @@ public class PageEditActivity extends ActivityExtended {
 			}
 		});
 
-		mOuterLayout.addView(mButtonAddPage, mInnerLayoutParam);
-
 		// Initialize the mButtonLayout.
-		mButtonLayout = new LinearLayout(this);
-		mButtonLayout.setOrientation(LinearLayout.VERTICAL);
-		mOuterLayout.addView(mButtonLayout, mOuterLayoutParam);
+		mButtonLayout = (LinearLayout)findViewById(R.id.buttonLayout);				
 		// Add the buttons.
 		AddButtons();
-
-		// Determine what was the last state
-		// If the last state was watching video, then make sure
-		// this Activity opens with VideoViewPreview.
-		if (mOnVideoViewPreview) {
-			this.switchToVideoViewPreview(mVideoDirectory);
-		} else {
-			this.setContentView(mScrollView, mOuterLayoutParam);
-		}
 	}
 
 	@Override
