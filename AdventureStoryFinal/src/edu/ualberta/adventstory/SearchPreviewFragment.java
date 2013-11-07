@@ -60,8 +60,6 @@ public class SearchPreviewFragment extends Fragment {
     		public void onClick(View v){
     			// End's fragment and goes back to activity
     			getActivity().getFragmentManager().popBackStack();	
-    			// Maybe want to remove this
-    			getActivity().finish();
     		}
     	});
 	}

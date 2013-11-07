@@ -210,25 +210,32 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	
 	
 	// Test for PageViewActivity -- feel free to delete.
-
+	
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+
+
+		
 		if(!isStory){
-			//Intent pageViewIntent = new Intent(this, PageViewActivity.class);
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 			SearchPreviewFragment preview = new SearchPreviewFragment();
 			fragmentTransaction.replace(android.R.id.content, preview);
+			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.commit();
+		} else {
+
+			Intent pageViewIntent = new Intent(this, PageViewActivity.class);
+			startActivity(pageViewIntent);
 		}
-		
-		
 		/* I don't really know how to extract Story from this activity,
 		 * so as for now I have this duct tape solution of string spliting.
 		 */
 		
 		String split[] = displayResults.get(arg2).split("\n");
 		String title = split[0].split(": ")[1];		
+		int id;
+		
 		/*
 		 * A side note:
 		 * - having just a story title for adapter2 would be hard when
@@ -238,15 +245,14 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		 */
 		
 		ArrayList<Story> temp = ((DataSingleton)getApplicationContext()).
-						database.get_stories_by_title(title);
+				database.get_stories_by_title(title);
 		
 		((DataSingleton)getApplicationContext()).setCurrentStory(((DataSingleton)getApplicationContext()).
 				database.get_stories_by_title(title).get(0));
 		((DataSingleton)getApplicationContext()).setCurrentPage(((DataSingleton)getApplicationContext()).
 				database.get_stories_by_title(title).get(0).getRoot());	
-		
-				
-		//startActivity(pageViewIntent);
+
+
 		
 		
 		
