@@ -2,8 +2,12 @@ package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +26,7 @@ import edu.ualberta.data.DbManager;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SearchActivity extends Activity implements OnItemSelectedListener,
 														OnItemClickListener{
 	
@@ -46,6 +51,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	// Create an ArrayAdapter using the string array and a default spinner layout
 	private ArrayAdapter<CharSequence> adapter;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,12 +65,15 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		results = new ArrayList<String>();
 		displayResults = new ArrayList<String>();
 		database = DataSingleton.database;
+
 		
 		// Initialize view variables
 		//searchOnline = (Spinner) findViewById(R.id.spinnerOnline);
 		searchBy = (Spinner) findViewById(R.id.spinnerSearchBy);
 		listResults = (ListView) findViewById(R.id.listResults);
 		searchEntry = (EditText) findViewById(R.id.searchEntry);
+		
+		
 		
 		// Initialize adapters
 		adapter = ArrayAdapter.createFromResource(this, R.array.searchBy_dropdown, android.R.layout.simple_spinner_item);
@@ -197,17 +206,35 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		adapter2.notifyDataSetChanged();
 		
 	}
-
+	
+	
+	
 	// Test for PageViewActivity -- feel free to delete.
+	
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+
+
 		
-		Intent pageViewIntent = new Intent(this, PageViewActivity.class);		
+		if(!isStory){
+			FragmentManager fragmentManager = getFragmentManager();
+			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+			SearchPreviewFragment preview = new SearchPreviewFragment();
+			fragmentTransaction.replace(android.R.id.content, preview);
+			fragmentTransaction.addToBackStack(null);
+			fragmentTransaction.commit();
+		} else {
+
+			Intent pageViewIntent = new Intent(this, PageViewActivity.class);
+			startActivity(pageViewIntent);
+		}
 		/* I don't really know how to extract Story from this activity,
 		 * so as for now I have this duct tape solution of string spliting.
 		 */
+		
 		String split[] = displayResults.get(arg2).split("\n");
 		String title = split[0].split(": ")[1];		
+		int id;
 		
 		/*
 		 * A side note:
@@ -216,13 +243,20 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		 *   selection. For now this is just selecting the first occurengit ce of 
 		 *   story title.
 		 */
+		
 		ArrayList<Story> temp = ((DataSingleton)getApplicationContext()).
-						database.get_stories_by_title(title);
+				database.get_stories_by_title(title);
 		
 		((DataSingleton)getApplicationContext()).setCurrentStory(((DataSingleton)getApplicationContext()).
 				database.get_stories_by_title(title).get(0));
 		((DataSingleton)getApplicationContext()).setCurrentPage(((DataSingleton)getApplicationContext()).
-				database.get_stories_by_title(title).get(0).getRoot());				
-		startActivity(pageViewIntent);
+				database.get_stories_by_title(title).get(0).getRoot());	
+
+
+		
+		
+		
 	}
+
+
 }
