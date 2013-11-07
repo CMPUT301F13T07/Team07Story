@@ -33,7 +33,14 @@
             />
         <!-- mStoryEditTextView can't be xml since it will
         	be overloaded in PageEditActivity.java -->		
-        
+                <!-- mInnerLayout -->
+        <LinearLayout 
+            android:id="@+id/innerLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">            
+            <!-- buttonLayout: For next page buttons.-->
+        </LinearLayout>
         <!-- Add Multimedia button -->
         <Button
             android:id="@+id/addMultimedia"
@@ -48,19 +55,11 @@
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
             />
-        <!-- mInnerLayout -->
-        <RelativeLayout 
-            android:id="@+id/innerLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">            
-            <!-- buttonLayout: For next page buttons.-->
-            <LinearLayout
-                android:id="@+id/buttonLayout"
-        		android:layout_width="fill_parent"
-        		android:layout_height="fill_parent"
-        		android:orientation="vertical">        		
-                
-            </LinearLayout>
-        </RelativeLayout>
+		<LinearLayout
+			android:id="@+id/buttonLayout"
+        	android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"
+        	android:orientation="vertical">        		                
+		</LinearLayout>        
     </LinearLayout>
 </ScrollView>
