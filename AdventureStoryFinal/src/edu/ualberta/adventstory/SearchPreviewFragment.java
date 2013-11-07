@@ -1,17 +1,22 @@
 package edu.ualberta.adventstory;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.Fragment;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+@SuppressLint("NewApi")
 public class SearchPreviewFragment extends Fragment {
+	protected DataSingleton mDataSingleton;
 	
 	private TextView pageTitle;
 	private TextView pageText;
@@ -20,39 +25,49 @@ public class SearchPreviewFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
-	
-			LinearLayout mLinearLayout = (LinearLayout) inflater.inflate(
-					R.layout.fragment_searchpreview, container, false);
 		
-			
-			
-			Button mSelect = (Button) mLinearLayout.findViewById(R.id.buttonselect);
-			Button mReturn = (Button) mLinearLayout.findViewById(R.id.buttonreturn);
-			
-			
-			// Sets the button usage
-	    	mSelect.setOnClickListener(new OnClickListener(){
-	    		public void onClick(View v){
-	    			// Selects the selected page and goes to PageView Activity
-	    			// Need to add that it passes through the id
-	    			displayPage();
-	    		}
-	    	});
-	    	
-	    	mReturn.setOnClickListener(new OnClickListener(){
-	    		public void onClick(View v){
-	    			// End's fragment and goes back to activity
-	    			getActivity().getSupportFragmentManager().popBackStack();
-	    		}
-	    	});
-	    	
 			// Inflate the layout for this fragment
-			return mLinearLayout;
-		
+			return inflater.inflate(
+					R.layout.fragment_searchpreview, container, false);
 	}
 	
-	
-	
+	@Override
+	public void onStart(){
+		super.onStart();
+		// Initialization
+		pageTitle = (TextView) getActivity().findViewById(R.id.searchpreviewtitle);
+		pageText = (TextView) getActivity().findViewById(R.id.pagepreview);
+		
+		Button mSelect = (Button) this.getActivity().findViewById(R.id.buttonselect);
+		Button mReturn = (Button) this.getActivity().findViewById(R.id.buttonreturn);
+		
+		String title = "";
+		String text = "";
+		// Set the page texts, not quite sure how to pull from database by id yet.
+		pageTitle.setText(title);
+		pageText.setText(text);
+		
+		// Sets the button usage
+    	mSelect.setOnClickListener(new OnClickListener(){
+    		public void onClick(View v){
+    			// Selects the selected page and goes to PageView Activity
+    			// Need to add that it passes through the id
+    			displayPage();
+    		}
+    	});
+    	
+    	mReturn.setOnClickListener(new OnClickListener(){
+    		public void onClick(View v){
+    			// End's fragment and goes back to activity
+    			getActivity().getFragmentManager().popBackStack();	
+    			// Maybe want to remove this
+    			getActivity().finish();
+    		}
+    	});
+	}
+	/*
+	 * This method changes to the PageView activity
+	 */
 	private void displayPage() {
 		Intent i = new Intent(getActivity(), PageViewActivity.class);
 		startActivityForResult(i, 0);
