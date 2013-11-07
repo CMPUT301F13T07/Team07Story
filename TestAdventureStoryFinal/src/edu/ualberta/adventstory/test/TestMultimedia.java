@@ -4,6 +4,8 @@
  */
 package edu.ualberta.adventstory.test;
 
+import java.util.ArrayList;
+
 import edu.ualberta.adventstory.R;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.multimedia.Picture;
@@ -14,6 +16,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.test.AndroidTestCase;
+import android.util.Log;
 
 public class TestMultimedia extends AndroidTestCase {
 	Picture mPictureNullDirectory;
@@ -37,6 +40,24 @@ public class TestMultimedia extends AndroidTestCase {
 		mPictureValidDirectory = new Picture(ID2, INDEX2, "/sdcard/Pictures/troll.jpg");
 		mSound = new SoundClip(ID3, INDEX3, "/sdcard/Music/pewpew.mp3");
 		mVideo = new Video(ID4, INDEX4, "/sdcard/Movies/chtr.mp4");
+		
+		ArrayList<MultimediaAbstract> list = new ArrayList<MultimediaAbstract>();
+		list.add(this.mPictureNullDirectory);
+		list.add(this.mPictureValidDirectory);
+		list.add(this.mSound);
+		list.add(this.mVideo);
+		
+		for( MultimediaAbstract m : list ){
+			if( m.getClass() == Picture.class){
+				Log.d("MultimediaTest", "pic");
+			}else if( m.getClass() == SoundClip.class){
+				Log.d("MultimediaTest", "sound");
+			}else if( m.getClass() == Video.class){
+				Log.d("MultimediaTest", "video");
+			}else{
+				Log.d("MultimediaTest", "unknown");
+			}
+		}
 	}
 	
 	public void testgetID(){
