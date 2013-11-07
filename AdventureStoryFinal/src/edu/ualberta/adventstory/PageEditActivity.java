@@ -144,6 +144,10 @@ public class PageEditActivity extends ActivityExtended {
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
 		
+		for(MultimediaAbstract m : mDataSingleton.database.get_multimedia_by_page_id(mPage.getID())){
+			mPage.addMultimedia(m);
+		}
+		
 		// Determine if the mStory is null if we are just creating a page independent
 		// of the Story.
 		if( mStory == null){ mEditPageOnly = true; }
@@ -750,9 +754,17 @@ public class PageEditActivity extends ActivityExtended {
 		if( mDataSingleton.database.get_page_by_id(mPage.getID()) == null ){
 			// It doesn't exist yet.
 			mDataSingleton.database.insert_page(mPage);
+			
+			for( MultimediaAbstract m : mPage.getMultimedia()){
+				mDataSingleton.database.insert_multimedia(m, mPage.getID());
+			}
 		}else{
 			// It already exist.
 			mDataSingleton.database.update_page(mPage);
+			
+			for( MultimediaAbstract m : mPage.getMultimedia()){
+				mDataSingleton.database.insert_multimedia(m, mPage.getID());
+			}
 		}
 	}
 
@@ -762,7 +774,6 @@ public class PageEditActivity extends ActivityExtended {
 			try {
 				this.finalize();
 			} catch (Throwable e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

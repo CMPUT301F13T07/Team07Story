@@ -160,6 +160,7 @@ public class AddMultimediaActivity extends Activity {
 		((DataSingleton)this.getApplication()).clearPageStack();
 		((DataSingleton)this.getApplication()).setCurrentPage(currpage);
 		database.update_page(currpage);
+		database.insert_multimedia(pic, currpage.getID());
 	}
 	
 	/*
