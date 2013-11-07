@@ -105,7 +105,6 @@ public class PageEditActivity extends ActivityExtended {
 	// Set to true when something is just selected.
 	private boolean mIsJustSelected = false;
 
-	// TODO: Request permission to move this to controller.
 	static public class Responder {
 		static public class Action {
 			public void act() {
@@ -127,7 +126,7 @@ public class PageEditActivity extends ActivityExtended {
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);		
+		super.onCreate(savedInstanceState);
 
 		mDataSingleton = (DataSingleton)getApplicationContext();
 		
@@ -143,10 +142,6 @@ public class PageEditActivity extends ActivityExtended {
 			
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
-		
-		for(MultimediaAbstract m : mDataSingleton.database.get_multimedia_by_page_id(mPage.getID())){
-			mPage.addMultimedia(m);
-		}
 		
 		// Determine if the mStory is null if we are just creating a page independent
 		// of the Story.
@@ -280,6 +275,11 @@ public class PageEditActivity extends ActivityExtended {
 		
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
+		
+		for(MultimediaAbstract m : mDataSingleton.database.get_multimedia_by_page_id(mPage.getID())){
+			mPage.addMultimedia(m);
+		}
+		
 		setStoryText(18);
 		
 		mDataSingleton.setCurrentActivity(this);
@@ -299,7 +299,7 @@ public class PageEditActivity extends ActivityExtended {
 	}
 	
 	@Override
-	public void onDestroy() {
+	public void onDestroy() {		
 		super.onDestroy();
 	}
 
@@ -458,6 +458,7 @@ public class PageEditActivity extends ActivityExtended {
 			for (MultimediaAbstract m : ma) {
 				if (m == mMultimedia) {
 					ma.remove(m);
+					mDataSingleton.database.delete_mult(m, mPage);
 					break;
 				}
 			}
@@ -558,13 +559,14 @@ public class PageEditActivity extends ActivityExtended {
 	}
 
 	// Build Spannable String.
+	private String mStoryText;  
 	public SpannableStringBuilder getSpannableStringBuilder() {
 		ArrayList<MultimediaAbstract> ma = mPage.getMultimedia();
-
+		
 		SpannableStringBuilder stringBuilder = new SpannableStringBuilder(
 				mPage.getText());
 
-		// Return to caller if ma is null to avoid trivial erros.
+		// Return to caller if ma is null to avoid trivial errors.
 		if (ma == null) {
 			return stringBuilder;
 		}
@@ -583,13 +585,6 @@ public class PageEditActivity extends ActivityExtended {
 
 			if (multimedia.getIsSelected())
 				multimediaImageSpan.enablePadding();
-
-			stringBuilder.insert(multimedia.getIndex(), " "); // Allocate space
-																// for
-																// multimediaImageSpan.
-			stringBuilder.insert(multimedia.getIndex() + 1, " "); // Allocate
-																	// space for
-																	// deleteImageSpan.
 
 			stringBuilder.setSpan(multimediaImageSpan, multimedia.getIndex(),
 					multimedia.getIndex() + 1,
@@ -750,22 +745,15 @@ public class PageEditActivity extends ActivityExtended {
 			return;
 		}
 
-		// Check if page already exist.
-		if( mDataSingleton.database.get_page_by_id(mPage.getID()) == null ){
-			// It doesn't exist yet.
-			mDataSingleton.database.insert_page(mPage);
-			
-			for( MultimediaAbstract m : mPage.getMultimedia()){
-				mDataSingleton.database.insert_multimedia(m, mPage.getID());
-			}
-		}else{
-			// It already exist.
-			mDataSingleton.database.update_page(mPage);
-			
-			for( MultimediaAbstract m : mPage.getMultimedia()){
-				mDataSingleton.database.insert_multimedia(m, mPage.getID());
-			}
+		mDataSingleton.database.update_page(mPage);
+		/*
+		 * Multimedia's are only updated as opposed to modified.
+		 */
+		for( MultimediaAbstract m : mDataSingleton.database.get_multimedia_by_page_id(mPage.getID())){
+			mDataSingleton.database.update_multimedia(m, mPage.getID());
 		}
+		
+		mPage.getMultimedia().clear();
 	}
 
 	private void cancel() {
@@ -777,8 +765,6 @@ public class PageEditActivity extends ActivityExtended {
 				e.printStackTrace();
 			}
 		}
-		
-		save();
 		exit();
 	}
 

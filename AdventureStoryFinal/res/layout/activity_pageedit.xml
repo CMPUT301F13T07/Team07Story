@@ -1,85 +1,66 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
+<ScrollView 
+    android:id="@+id/scrollView"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:ignore="HardcodedText" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- mOuterLayout -->
+    <LinearLayout 
+        android:id="@+id/outerLayout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Story Title"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:ignore="HardcodedText" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
-        android:text="Page Name"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        tools:ignore="HardcodedText" />
-
-    <RadioGroup
-        android:id="@+id/radioGroup1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/quickContactBadge1"
-        android:layout_marginLeft="19dp"
-        android:layout_toRightOf="@+id/textView3" >
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/button2"
-        android:text="Next Adventure: " />
-
-    <Button
-        android:id="@+id/button2"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/radioGroup1"
-        android:text="Add Multimedia" />
-
-    <Button
-        android:id="@+id/button1"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:text="Add Page" />
-
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView2"
-        android:ems="10"
-        android:hint="This is the text that the page holds. It will be wrappable and will expand to fit all text"
-        android:inputType="textMultiLine"
-        tools:ignore="HardcodedText" >
-
-        <requestFocus />
-    </EditText>
-
-    <QuickContactBadge
-        android:id="@+id/quickContactBadge1"
-        android:layout_width="match_parent"
-        android:layout_height="166dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText1" />
-
-</RelativeLayout>
+        android:orientation="vertical"> 
+        
+        <!-- First 4 Text/Edit TextView -->
+        <TextView
+            android:id="@+id/storyTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+			android:text="Story Title"
+			/>                    
+        <EditText
+            android:id="@+id/pageTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Page Title"
+            android:singleLine="true"
+            />
+		<EditText
+            android:id="@+id/pageAuthor"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Author Name"
+            android:singleLine="true"
+            />
+        <!-- mStoryEditTextView can't be xml since it will
+        	be overloaded in PageEditActivity.java -->		
+        
+        <!-- Add Multimedia button -->
+        <Button
+            android:id="@+id/addMultimedia"
+            android:text="Add Multimedia"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            />
+        <!-- Add page button. -->
+		<Button 
+		    android:id="@+id/addPage"
+		    android:text="Add Next Page"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+            />
+        <!-- mInnerLayout -->
+        <RelativeLayout 
+            android:id="@+id/innerLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">            
+            <!-- buttonLayout: For next page buttons.-->
+            <LinearLayout
+                android:id="@+id/buttonLayout"
+        		android:layout_width="fill_parent"
+        		android:layout_height="fill_parent"
+        		android:orientation="vertical">        		
+                
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

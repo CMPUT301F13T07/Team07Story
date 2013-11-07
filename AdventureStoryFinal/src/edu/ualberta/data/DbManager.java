@@ -78,7 +78,7 @@ public class DbManager implements DataManager{
 		values.put(Constant.DIRECTORY, mult.getFileDir());
 		values.put(Constant.PAGE_ID, page_id);
 		values.put(Constant.INDEX, mult.getIndex());
-		values.put(Constant.MULT_TYPE, mult.getClass().getSimpleName());
+		values.put(Constant.MULT_TYPE, mult.getClass().getSimpleName());		
 		return insert(Constant.TABLE_MULT, values);
 	}
 	
@@ -256,11 +256,11 @@ public class DbManager implements DataManager{
 			index = c.getInt(c.getColumnIndex(Constant.INDEX));
 			type = c.getString(c.getColumnIndex(Constant.MULT_TYPE));
 			
-			if( type == "Picture" ){
+			if( type.compareTo("Picture") == 0 ){
 			      multimedia.add( new Picture(mult_id, index, file_dir));
-			}else if( type == "SoundClip"){
+			}else if( type.compareTo("SoundClip") == 0){
 			      multimedia.add( new SoundClip(mult_id, index, file_dir));
-			}else if( type == "VideoClip"){
+			}else if( type.compareTo("VideoClip") == 0){
 			      multimedia.add( new Video(mult_id, index, file_dir));
 			}else{
 			      multimedia.add(new MultimediaAbstract(mult_id, index, file_dir){});
@@ -358,4 +358,17 @@ public class DbManager implements DataManager{
 			return -1;
 		}
 	}
+	
+	/* MOCK SECTION */ 
+	public long update_multimedia(MultimediaAbstract mult, long page_id) {
+		ContentValues values = new ContentValues();
+		String where = Constant.MULT_ID + "=" + mult.getID();
+		
+		values.put(Constant.DIRECTORY, mult.getFileDir());
+		values.put(Constant.INDEX, mult.getIndex());
+		values.put(Constant.PAGE_ID, page_id);
+		values.put(Constant.MULT_TYPE, mult.getClass().getSimpleName());		
+		return update(Constant.TABLE_MULT, values, where);
+	}
+	
 }

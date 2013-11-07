@@ -100,6 +100,10 @@ public class PageViewActivity extends ActivityExtended{
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
 		
+		for(MultimediaAbstract m : mDataSingleton.database.get_multimedia_by_page_id(mPage.getID())){
+			mPage.addMultimedia(m);
+		}
+		
 		if( mStory == null ){ mViewPageOnly = true; }
 		
 		// Layout for mOuterLayout.
@@ -164,6 +168,7 @@ public class PageViewActivity extends ActivityExtended{
 	}
 
 	private void exit() {
+		mPage.getMultimedia().clear();
 		finish();
 	}
 
@@ -188,6 +193,7 @@ public class PageViewActivity extends ActivityExtended{
 	
 	@Override
 	public void onDestroy(){
+		mPage.getMultimedia().clear();
 		super.onDestroy();
 	}
 	

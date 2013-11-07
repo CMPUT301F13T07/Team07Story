@@ -153,14 +153,13 @@ public class AddMultimediaActivity extends Activity {
 	private void savePictureToDB() {
 		String dir = folder + medialist.get(currid);
 		Picture pic = new Picture(page_id, index, dir);
-		currpage.addMultimedia(pic);
-		database.insert_multimedia(pic, page_id);
+				
+		database.insert_multimedia(pic, currpage.getID());
+		currpage.getMultimedia().clear();
 		
 		// Reset the Current page stack.
 		((DataSingleton)this.getApplication()).clearPageStack();
-		((DataSingleton)this.getApplication()).setCurrentPage(currpage);
-		database.update_page(currpage);
-		database.insert_multimedia(pic, currpage.getID());
+		((DataSingleton)this.getApplication()).setCurrentPage(currpage);		
 	}
 	
 	/*
