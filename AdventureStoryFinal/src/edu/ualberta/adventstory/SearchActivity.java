@@ -212,51 +212,30 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	// Test for PageViewActivity -- feel free to delete.
 	
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-
-
-		
-		if(!isStory){
+	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+		Story story;
+		Page page;
+		if (isStory) {
+			story = (Story) results.get(position);
+			((DataSingleton)getApplicationContext()).setCurrentStory(story);
+		} else {
+			page = (Page) results.get(position);
+			((DataSingleton)getApplicationContext()).setCurrentPage(page);
+			
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 			SearchPreviewFragment preview = new SearchPreviewFragment();
 			fragmentTransaction.replace(android.R.id.content, preview);
 			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.commit();
-		} else {
-
-			Intent pageViewIntent = new Intent(this, PageViewActivity.class);
-			startActivity(pageViewIntent);
+			
+			/*
+			if (parentActivity.compareTo("CreateNewStoryActivity") == 0) {
+				story = ((DataSingleton)getApplicationContext()).getCurrentStory();
+				// update story in db
+				story.setRoot(page);
+				database.update_story(story);
+			}*/
 		}
-		/* I don't really know how to extract Story from this activity,
-		 * so as for now I have this duct tape solution of string spliting.
-		 */
-		
-		String split[] = displayResults.get(arg2).split("\n");
-		String title = split[0].split(": ")[1];		
-		int id;
-		
-		/*
-		 * A side note:
-		 * - having just a story title for adapter2 would be hard when
-		 *   there are duplicate story title. A paired story id would help story
-		 *   selection. For now this is just selecting the first occurengit ce of 
-		 *   story title.
-		 */
-		
-		ArrayList<Story> temp = ((DataSingleton)getApplicationContext()).
-				database.get_stories_by_title(title);
-		
-		((DataSingleton)getApplicationContext()).setCurrentStory(((DataSingleton)getApplicationContext()).
-				database.get_stories_by_title(title).get(0));
-		((DataSingleton)getApplicationContext()).setCurrentPage(((DataSingleton)getApplicationContext()).
-				database.get_stories_by_title(title).get(0).getRoot());	
-
-
-		
-		
-		
 	}
-
-
 }
