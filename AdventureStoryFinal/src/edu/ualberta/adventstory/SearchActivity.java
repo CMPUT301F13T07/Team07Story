@@ -85,7 +85,11 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		listResults.setAdapter(adapter2);
 		
 		// Populate with all results
-		results = database.get_stories_by_author(searchEntry.getText().toString());
+		if (isStory) {
+			results = database.get_stories_by_author(searchEntry.getText().toString());
+		} else {
+			results = database.get_pages_by_author(searchEntry.getText().toString());
+		}
 		updateList(results);
 		
 		// This is to test PageViewActivity -- Feel free to delete this.
@@ -252,6 +256,9 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		((DataSingleton)getApplicationContext()).setCurrentPage(((DataSingleton)getApplicationContext()).
 				database.get_stories_by_title(title).get(0).getRoot());	
 
+		ArrayList<Page> temp1 = ((DataSingleton)getApplicationContext()).
+				database.get_pages_by_title(title);
+		
 
 		
 		
