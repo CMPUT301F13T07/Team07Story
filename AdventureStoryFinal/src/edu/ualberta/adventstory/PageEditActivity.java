@@ -204,8 +204,6 @@ public class PageEditActivity extends ActivityExtended {
 				(mPage.getAuthor() == null || mPage.getAuthor() == "")){
 			setPageAuthor(mStory.getAuthor(), 20);
 		}else{
-			// TODO: ANTICIPATE THE GLITCH THAT WILL COME WHEN eixisting page
-			// is editable.
 			setPageAuthor("", 20);
 			mPageAuthorEditTextView.setHint("Enter Page Author Name");
 		}
@@ -224,7 +222,18 @@ public class PageEditActivity extends ActivityExtended {
 
 		// Place the inner layout inside the outer layout.
 		mOuterLayout.addView(mInnerLayout, mInnerLayoutParam);
-
+		
+		// Add an 'Add Multimedia' Button.
+		Button mButtonAddMultimedia = new Button(this);
+		mButtonAddMultimedia.setText("Add Multimedia");
+		mButtonAddMultimedia.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				addMultimedia();
+			}			
+		});
+		mOuterLayout.addView(mButtonAddMultimedia, mInnerLayoutParam);
+		
 		// Add an 'Add Page' Button to the outerlayout.
 		mButtonAddPage = new Button(this);
 		mButtonAddPage.setText("Add Page");
@@ -278,6 +287,11 @@ public class PageEditActivity extends ActivityExtended {
 		return true;
 	}
 
+	public void onPause(){
+		save();
+		super.onPause();
+	}
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -320,6 +334,7 @@ public class PageEditActivity extends ActivityExtended {
 			@Override
 			public void act() {
 				save();
+				exit();
 			}
 		});
 		mMenuMap.put(mnu2, saveResponder);
@@ -698,9 +713,10 @@ public class PageEditActivity extends ActivityExtended {
 
 	// Implement when addMultimedia class is implemented.
 	void addMultimedia() {
+		startActivity(new Intent(this, AddMultimediaActivity.class));
 	}
 
-	void save() {
+	private void save() {
 		String pageName = this.mPageTitleEditTextView.getText().toString();
 		String pageAuthor = this.mPageAuthorEditTextView.getText().toString();
 		String pageStory = this.mPageTitleEditTextView.getText().toString();
@@ -714,15 +730,15 @@ public class PageEditActivity extends ActivityExtended {
 			
 			Toast.makeText(this, "One of the text inputs are invalid.", 
 												Toast.LENGTH_LONG).show();
+			return;
 		}
 
 		// Things to do if the inputs are valid.
 		DataSingleton ds = (DataSingleton)getApplicationContext();
 		ds.database.update_page(mPage);
-		exit();
 	}
 
-	void cancel() {
+	private void cancel() {
 		if( mEditPageOnly == true ){
 			// Don't save anything.
 			try {
@@ -740,12 +756,13 @@ public class PageEditActivity extends ActivityExtended {
 		exit();
 	}
 
-	// For adding page.
+	// TODO: Implement when SearchActivity is finish for pages.
 	void addPage() {
 		// Open the activity for this.
 	}
 	
 	void exit(){
+		save();
 		Intent startActivityIntent = new Intent(this, StartActivity.class);
 		startActivity(startActivityIntent);
 	}

@@ -80,7 +80,10 @@ public class TestMultimedia extends AndroidTestCase {
 	}
 	
 	public void testsetIndex(){
-		
+		assertTrue(mPictureNullDirectory.getIndex()==INDEX1);
+		assertTrue(mPictureValidDirectory.getIndex()==INDEX2);
+		assertTrue(mSound.getIndex()==INDEX3);
+		assertTrue(mVideo.getIndex()==INDEX4);
 	}
 	
 	// Compare Bitmaps pixel by pixel.
@@ -123,4 +126,5 @@ public class TestMultimedia extends AndroidTestCase {
 				getContext().getResources(), R.drawable.ic_video);
 		assertTrue( compareBitmap(bmVideo, bmFromResource));
 	}
+	
 }

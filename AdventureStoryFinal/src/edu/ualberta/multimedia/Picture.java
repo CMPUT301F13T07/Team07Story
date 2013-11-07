@@ -26,12 +26,6 @@ public class Picture extends MultimediaAbstract{
 		//super.pictureId = id;
 	}
 	
-	/*@Override
-	public void setPictureId(int pictureId){
-		super.pictureId = pictureId;
-		super.id = pictureId;
-	}*/
-	
 	@Override
 	public Bitmap loadPhoto(Context context){
 		if( super.id == -1 || file_dir == null){
