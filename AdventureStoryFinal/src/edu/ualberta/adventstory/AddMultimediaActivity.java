@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 
 
-import edu.ualberta.database.DbManager;
+import edu.ualberta.data.DbManager;
 import edu.ualberta.multimedia.*;
 import edu.ualberta.utils.Page;
 import android.app.Activity;

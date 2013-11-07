@@ -4,7 +4,7 @@ import java.util.Stack;
 
 import android.app.Activity;
 import android.app.Application;
-import edu.ualberta.database.DbManager;
+import edu.ualberta.data.DbManager;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 

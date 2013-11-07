@@ -1,4 +1,4 @@
-package edu.ualberta.database;
+package edu.ualberta.data;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,16 @@ import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
 public interface DataManager {
+	
+	/**
+	 * Opens a connection
+	 */
+	public abstract void open();
+	
+	/**
+	 * Closes a connection
+	 */
+	public abstract void close();
 	
 	/**
 	 * Inserts a story into the Story table

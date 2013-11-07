@@ -1,14 +1,15 @@
 package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
-import edu.ualberta.database.DbManager;
-import edu.ualberta.utils.Story;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -17,6 +18,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import edu.ualberta.data.DbManager;
+import edu.ualberta.utils.Page;
+import edu.ualberta.utils.Story;
 
 public class SearchActivity extends Activity implements OnItemSelectedListener,
 														OnItemClickListener{
@@ -32,6 +36,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	private Bundle bundle;
 	private boolean isStory;
 	private boolean isTitle;
+	private String parentActivity;
 	
 	private ArrayList<?> results;
 	private ArrayList<String> displayResults;
@@ -50,6 +55,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		isTitle = true;
 		bundle = getIntent().getBundleExtra("android.intent.extra.INTENT");
 		isStory = bundle.getBoolean("BOOL_IS_STORY");
+		parentActivity = bundle.getString("PARENT_ACTIVITY");
 		results = new ArrayList<String>();
 		displayResults = new ArrayList<String>();
 		database = DataSingleton.database;
@@ -87,6 +93,31 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		
 	}
 	
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.new_page:
+            		// TODO: add page to database if it is a part of a story
+            		Page newPage = new Page("", "", "", null);
+            		int id = (int) database.insert_page(newPage);
+            		newPage.setID(id);
+            		((DataSingleton)getApplicationContext()).setCurrentPage(newPage);
+            		((DataSingleton)getApplicationContext()).setCurrentStory(null);
+            		startActivity(new Intent(getBaseContext(), PageEditActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 	private void searchText() {
 		searchEntry.addTextChangedListener(new TextWatcher(){
 			public void afterTextChanged(Editable s) {	
@@ -122,13 +153,6 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	        
 	    }); 
 		
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.search, menu);
-		return true;
 	}
 
 	@Override
@@ -189,7 +213,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		 * A side note:
 		 * - having just a story title for adapter2 would be hard when
 		 *   there are duplicate story title. A paired story id would help story
-		 *   selection. For now this is just selecting the first occurence of 
+		 *   selection. For now this is just selecting the first occurengit ce of 
 		 *   story title.
 		 */
 		ArrayList<Story> temp = ((DataSingleton)getApplicationContext()).

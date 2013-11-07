@@ -98,10 +98,10 @@ public class Page implements Serializable{
 		this.multimedia = new ArrayList<MultimediaAbstract>();
 	else 
 		this.multimedia = mm;
-    	if (pages == null)
-    		this.pages = new ArrayList<Page>();
-    	else
-    		this.pages = pages;
+    if (pages == null)
+    	this.pages = new ArrayList<Page>();
+    else
+    	this.pages = pages;
     }
     public Page(String title, String author, String text, ArrayList<MultimediaAbstract> mm, ArrayList<Page> pages) {
     	this.id = null;
@@ -112,10 +112,10 @@ public class Page implements Serializable{
 		this.multimedia = new ArrayList<MultimediaAbstract>();
 	else 
 		this.multimedia = mm;
-    	if (pages == null)
-    		this.pages = new ArrayList<Page>();
-    	else
-    		this.pages = pages;
+    if (pages == null)
+    	this.pages = new ArrayList<Page>();
+    else
+    	this.pages = pages;
     }
 	
 	public void setID(Integer i) {id = i;}

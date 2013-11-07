@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
-import edu.ualberta.database.DbManager;
+import edu.ualberta.data.DbManager;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
@@ -24,10 +24,19 @@ public class CreateNewStoryActivity extends Activity {
 		database = DataSingleton.database;
 	}
 	
+	/**
+	 * Returns user to startActivity
+	 * @param view
+	 */
 	public void cancel(View view) {
 		finish();
 	}
 	
+	/**
+	 * Creates a story either with a new page as root, or calls SearchActivity
+	 * to find an existing page to set as root page.
+	 * @param view
+	 */
 	public void submit(View view) {
 		Spinner spin = (Spinner) findViewById(R.id.activity_newstory_pagespinner);
 		long selection = spin.getSelectedItemId();
@@ -39,14 +48,21 @@ public class CreateNewStoryActivity extends Activity {
 		}
 	}
 	
+	/**
+	 * Calls SearchActivity to find an existing page to set as root
+	 */
 	private void existing_root() {
 		Intent intent = new Intent(this, SearchActivity.class);
 		Bundle info = new Bundle();
 		info.putBoolean("BOOL_IS_STORY", false);
+		info.putString("PARENT_ACTIVITY", "CreateNewStoryActivity");
 		intent.putExtra("android.intent.extra.INTENT", info);
 		startActivity(intent);
 	}
 	
+	/**
+	 * Adds story and new page as root to database
+	 */
 	private void new_root() {
 		// add new page to db
 		Page root = new Page("", "", "", null);
@@ -70,8 +86,8 @@ public class CreateNewStoryActivity extends Activity {
 		}
 	}
 	
-	/*
-	 * This method creates an intent for the PageEdit Activity
+	/**
+	 * Creates an intent for the PageEdit Activity
 	 */
 	private void pageEdit(Page page, Story story) {
 		Intent intent = new Intent(this, PageEditActivity.class);		
