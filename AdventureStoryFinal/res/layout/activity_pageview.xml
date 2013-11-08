@@ -11,17 +11,18 @@
         android:orientation="vertical"> 
         
         <!-- First 4 Text/Edit TextView -->
+
         <TextView
             android:id="@+id/storyTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-			android:text="Story Title"
-			/>                    
+            android:text="Story:" />
+                    
         <TextView
             android:id="@+id/pageTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Page Title"
+            android:text="Page:"
             android:singleLine="true"
             />
 
@@ -29,7 +30,7 @@
             android:id="@+id/pageText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Page Text or Story Text"            
+            android:text="Contents"            
             />	
                 <!-- mInnerLayout -->
         <LinearLayout 

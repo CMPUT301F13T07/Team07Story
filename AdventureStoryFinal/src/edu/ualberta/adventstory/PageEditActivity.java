@@ -153,10 +153,8 @@ public class PageEditActivity extends ActivityExtended {
 		setPageTitle(mPage.getTitle(), 22);
 
 		// Initialize the Page Author EditText.
-		mPageAuthorEditTextView = (EditText)findViewById(R.id.pageAuthor);
-		if( mEditPageOnly == false ){
-			setPageAuthor(mPage.getAuthor(), 20);
-		}
+		mPageAuthorEditTextView = (EditText)findViewById(R.id.pageAuthor);		
+		setPageAuthor(mPage.getAuthor(), 20);
 
 		mInnerLayout = (LinearLayout)findViewById(R.id.innerLayout);
 
@@ -306,23 +304,22 @@ public class PageEditActivity extends ActivityExtended {
 		}
 	}
 
-	void setPage(Page page) {
-		mPage = page;
-	}
-
 	void setStoryTitle(String storyTitle, float textSize) {
+		storyTitle = "Story: " + storyTitle;
 		mStoryTitleTextView.setSingleLine(true);
 		mStoryTitleTextView.setText(storyTitle);
 		mStoryTitleTextView.setTextSize(textSize);
 	}
 
 	void setPageTitle(String pageTitle, float textSize) {
+		pageTitle = "Page: " + pageTitle;
 		mPageTitleEditTextView.setSingleLine(true);
 		mPageTitleEditTextView.setText(pageTitle);
 		mPageTitleEditTextView.setTextSize(textSize);
 	}
 
 	void setPageAuthor(String pageAuthor, float textSize) {
+		pageAuthor = "by: " + pageAuthor;
 		mPageAuthorEditTextView.setSingleLine(true);
 		mPageAuthorEditTextView.setText(pageAuthor);
 		mPageAuthorEditTextView.setTextSize(textSize);
@@ -334,7 +331,7 @@ public class PageEditActivity extends ActivityExtended {
 		mStoryEditTextView.setText(getSpannableStringBuilder(),
 				BufferType.SPANNABLE);
 		mStoryEditTextView.setTextSize(textSize);
-		mInnerLayout.removeAllViews();
+		mInnerLayout.removeAllViews();	/*ImageSpans inside*/
 		mInnerLayout.addView(mStoryEditTextView);
 
 	}
@@ -680,9 +677,7 @@ public class PageEditActivity extends ActivityExtended {
 		ArrayList<String> fragmented = new ArrayList<String>();
 		for( int i = 0; i < f.length; i++){
 			fragmented.add(f[i]);
-						
-			//if( i != (f.length - 1) )
-				fragmented.add(" ");	
+			fragmented.add(" ");	
 		}
 		
 		StringBuilder sb = new StringBuilder();
@@ -693,9 +688,49 @@ public class PageEditActivity extends ActivityExtended {
 		return sb.toString();
 	}
 	
+	private String getAuthorText(){
+		String[] f = this.mPageAuthorEditTextView.getText().toString().split(" +");
+		ArrayList<String> fragmented = new ArrayList<String>();
+		for( int i = 0; i < f.length; i++){
+			fragmented.add(f[i]);						
+			fragmented.add(" ");	
+		}
+		
+		// Remove first 2 elements, 'label: ' and space ' ';
+		fragmented.remove(0);
+		fragmented.remove(0);
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for( String s : fragmented){
+			sb.append(s);
+		}
+		return sb.toString();
+	}
+	
+	private String getPageTitleText(){
+		String[] f = this.mPageTitleEditTextView.getText().toString().split(" +");
+		ArrayList<String> fragmented = new ArrayList<String>();
+		for( int i = 0; i < f.length; i++){
+			fragmented.add(f[i]);						
+			fragmented.add(" ");	
+		}
+		
+		// Remove first 2 elements, 'label: ' and space ' ';
+		fragmented.remove(0);
+		fragmented.remove(0);
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for( String s : fragmented){
+			sb.append(s);
+		}
+		return sb.toString();
+	}
+	
 	private void save() {
-		String pageName = this.mPageTitleEditTextView.getText().toString();
-		String pageAuthor = this.mPageAuthorEditTextView.getText().toString();
+		String pageName = getPageTitleText();
+		String pageAuthor =	getAuthorText(); 
 		String pageStory = getStoryText();
 		
 		mPage.setTitle(pageName);
@@ -748,6 +783,8 @@ public class PageEditActivity extends ActivityExtended {
 		startActivity(startActivityIntent);
 	}
 	
+	
+	// TODO: Accomodate AddMultimedia's return here.
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		mPage = mDataSingleton.getCurrentPage();

@@ -219,13 +219,15 @@ public class PageViewActivity extends ActivityExtended{
 		mPage = page;
 	}
 	
-	void setStoryTitle( String storyTitle, float textSize ){
+	void setStoryTitle(String storyTitle, float textSize) {
+		storyTitle = "Story: " + storyTitle;
 		mStoryTitleTextView.setSingleLine(true);
 		mStoryTitleTextView.setText(storyTitle);
 		mStoryTitleTextView.setTextSize(textSize);
 	}
-	
-	void setPageTitle( String pageTitle, float textSize ){
+
+	void setPageTitle(String pageTitle, float textSize) {
+		pageTitle = "Page: " + pageTitle;
 		mPageTitleTextView.setSingleLine(true);
 		mPageTitleTextView.setText(pageTitle);
 		mPageTitleTextView.setTextSize(textSize);
