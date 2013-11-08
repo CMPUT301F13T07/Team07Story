@@ -1,3 +1,12 @@
+/**
+ * Purpose: This fragment starts when the user selects a page to show a preview
+ * of the page consisting of the page title, and page text.
+ * 
+ * Outstanding Issues: There is an issue where if user clicks from selecting a story
+ * the program will crash.
+ * 
+ * Author: Henry Hoang
+ */
 package edu.ualberta.adventstory;
 
 import android.annotation.SuppressLint;
@@ -12,7 +21,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import edu.ualberta.utils.Story;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")

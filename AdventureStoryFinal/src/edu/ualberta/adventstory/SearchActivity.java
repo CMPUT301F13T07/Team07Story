@@ -11,6 +11,7 @@
  */
 package edu.ualberta.adventstory;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.annotation.TargetApi;
@@ -242,6 +243,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		}else if(isStory) {
 			story = (Story) results.get(position);
 			((DataSingleton)getApplicationContext()).setCurrentStory(story);
+
 			pageList = story.getAllPages();
 			Bundle bundle = new Bundle();
 			bundle.putSerializable("pageList", pageList);
