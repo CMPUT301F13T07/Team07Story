@@ -50,6 +50,10 @@ public class DataSingleton extends Application{
 			for(MultimediaAbstract m : database.get_multimedia_by_page_id(mCurrentPage.getID())){
 				mCurrentPage.addMultimedia(m);
 			}
+			mCurrentPage.getPages().clear();
+			for(Page p : database.get_page_options(mCurrentPage.getID())){
+				mCurrentPage.addPage(p);
+			}
 		}		
 		return mCurrentPage;
 	}	

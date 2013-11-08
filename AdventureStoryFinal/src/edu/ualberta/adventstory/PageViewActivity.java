@@ -65,7 +65,7 @@ public class PageViewActivity extends ActivityExtended{
 	 */
 	
 	// Layout.
-	private RelativeLayout mInnerLayout;			// Inner RelativeLayout.
+	private LinearLayout mInnerLayout;			// Inner RelativeLayout.
 	private LinearLayout mOuterLayout;				// Outer LinearLayout.
 	private ScrollView mScrollView;					// Encapsulate mOuterLayout.
 	/*
@@ -77,7 +77,7 @@ public class PageViewActivity extends ActivityExtended{
 	 */
 	private RelativeLayout.LayoutParams mInnerLayoutParam;	
 	private LinearLayout.LayoutParams mOuterLayoutParam;
-	private RelativeLayout.LayoutParams mInnerComponentParam;
+	private LinearLayout.LayoutParams mInnerComponentParam;
 	private LinearLayout.LayoutParams mOuterComponentParam;
 	
 	private Story mStory;					// Story being viewed.
@@ -88,6 +88,12 @@ public class PageViewActivity extends ActivityExtended{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if(mOnVideoViewPreview){
+			this.switchToVideoViewPreview(mVideoDirectory);
+		}else{
+			setContentView(R.layout.activity_pageview);			
+		}		
 		
 		mDataSingleton = (DataSingleton)this.getApplicationContext();
 				
@@ -102,65 +108,40 @@ public class PageViewActivity extends ActivityExtended{
 		
 		if( mStory == null ){ mViewPageOnly = true; }
 		
-		// Layout for mOuterLayout.
-		mOuterLayoutParam = new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		
 		// Layout for mInnerLayout.
 		mInnerLayoutParam = new RelativeLayout.LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		
 		// Layout for Option Body Views.
-		mInnerComponentParam = new RelativeLayout.LayoutParams(
+		mInnerComponentParam = new LinearLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		
 		// Layout for mOuterLayout Components.
 		mOuterComponentParam = new LinearLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
-		// ScrollView.
-		mScrollView = new ScrollView(this);
-		
-		// Outer Layout.
-		mOuterLayout = new LinearLayout(this);
-		// Imperative else will display in awkward horizontal order.
-		mOuterLayout.setOrientation(LinearLayout.VERTICAL);	
-		// Encapsulate with scrollView.
-		mScrollView.addView(mOuterLayout, mOuterLayoutParam);
+		mScrollView = (ScrollView)findViewById(R.id.scrollView);
+				
+		mOuterLayout = (LinearLayout)findViewById(R.id.outerLayout);				
 		
 		// Initialize the Story TextView and its parameters.
+		mStoryTitleTextView = (TextView)findViewById(R.id.storyTitle);
 		if( mViewPageOnly == false ){
-			mStoryTitleTextView = new TextView(this);
-			mStoryTitleTextView.setLayoutParams(mOuterComponentParam);
-			mOuterLayout.addView(mStoryTitleTextView);
 			setStoryTitle(mStory.getTitle(), 26);
 		}
 
 		//Initialize the Page Title TextView and its parameters.
-		mPageTitleTextView = new TextView(this);
-		mPageTitleTextView.setLayoutParams(mOuterComponentParam);
-		mOuterLayout.addView(mPageTitleTextView);
+		mPageTitleTextView = (TextView)findViewById(R.id.pageTitle);		
 		setPageTitle(mPage.getTitle(), 22);
 						
 		// The Inner Layout.
-		mInnerLayout = new RelativeLayout(this);
+		mInnerLayout = (LinearLayout)findViewById(R.id.innerLayout);
 		
 		// Add Inner Layout components.
-		mStoryTextView = new TextView(this);
-		mStoryTextView.setLayoutParams(mInnerComponentParam);
-		mInnerLayout.addView(mStoryTextView);
+		mStoryTextView = (TextView)findViewById(R.id.pageText);				
 		setStoryText(18);
-		
-		// Place the inner layout inside the outer layout.
-		mOuterLayout.addView(mInnerLayout, mInnerLayoutParam);
-		
+				
 		AddButtons();
-		
-		if(mOnVideoViewPreview){
-			this.switchToVideoViewPreview(mVideoDirectory);
-		}else{
-			this.setContentView(mScrollView, mOuterLayoutParam);
-		}
 	}
 
 	private void exit() {

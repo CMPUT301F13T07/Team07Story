@@ -53,6 +53,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	private boolean isStory;
 	private boolean isTitle;
 	private String parentActivity;
+	private boolean addPage;	// Set to true if adding page in PageEdit.
 	
 	private ArrayList<?> results;
 	private ArrayList<String> displayResults;
@@ -76,6 +77,14 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		results = new ArrayList<String>();
 		displayResults = new ArrayList<String>();
 		database = DataSingleton.database;
+
+		addPage = false;		
+		addPage = bundle.getBoolean("ADD_PAGE");
+		// If adding page, don't clear page Stack.
+		if( addPage == false){
+			// Always empty Page Stack.
+			((DataSingleton)getApplicationContext()).clearPageStack();
+		}
 
 		
 		// Initialize view variables
@@ -107,10 +116,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		listResults.setOnItemClickListener(this);
 		
 		searchBy.setOnItemSelectedListener(this);
-		
-		// Always empty Page Stack.
-		((DataSingleton)getApplicationContext()).clearPageStack();
-		
+			
 		// Checks to see if the user has input text into the search box
 		searchText();	
 		
@@ -228,7 +234,11 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		Page page;
 		String title;
 		String text;
-		if (isStory) {
+		if(addPage){
+			page = (Page) results.get(position);
+			this.setResult((int)page.getID());
+			finish();
+		}else if(isStory) {
 			story = (Story) results.get(position);
 			((DataSingleton)getApplicationContext()).setCurrentStory(story);
 			/*
