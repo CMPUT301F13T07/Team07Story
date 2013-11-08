@@ -509,16 +509,21 @@ public class PageEditActivity extends ActivityExtended {
 
 			PaddingableImageSpan deleteImageSpan = new PaddingableImageSpan(
 					this, deleteBitmap, 0);
-
+			
 			if (multimedia.getIsSelected())
 				multimediaImageSpan.enablePadding();
-
-			stringBuilder.setSpan(multimediaImageSpan, multimedia.getIndex(),
-					multimedia.getIndex() + 1,
+			
+			int index = multimedia.getIndex();
+			if(index == -1){ index = stringBuilder.toString().length()-1; }
+			stringBuilder.insert(index, " ");		// Allocate space for multimediaImageSpan.
+			stringBuilder.insert(index+1, " ");		// Allocate space for deleteImageSpan.									
+			
+			stringBuilder.setSpan(multimediaImageSpan, index,
+					index + 1,
 					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 
-			stringBuilder.setSpan(deleteImageSpan, multimedia.getIndex() + 1,
-					multimedia.getIndex() + 2,
+			stringBuilder.setSpan(deleteImageSpan, index + 1,
+					index + 2,
 					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 
 			ClickableMultimediaSpanEx multimediaClickableSpan = new ClickableMultimediaSpanEx(
@@ -527,11 +532,11 @@ public class PageEditActivity extends ActivityExtended {
 					multimedia);
 
 			stringBuilder.setSpan(multimediaClickableSpan,
-					multimedia.getIndex(), multimedia.getIndex() + 1,
+					index, index + 1,
 					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 
 			stringBuilder.setSpan(deleteClickableSpan,
-					multimedia.getIndex() + 1, multimedia.getIndex() + 2,
+					index + 1, index + 2,
 					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 
 		}
@@ -655,10 +660,33 @@ public class PageEditActivity extends ActivityExtended {
 		startActivity(addMultimediaIntent);
 	}
 
+	// Get story texts. This is device so I can get rid of unecessary spaces due to ImageSpan in 
+	// getSpannableStringBuilder method.
+	private String getStoryText(){
+		String pageStory = this.mStoryEditTextView.getText().toString();
+		
+		String f[] = pageStory.split(" +");
+		ArrayList<String> fragmented = new ArrayList<String>();
+		for( int i = 0; i < f.length; i++){
+			fragmented.add(f[i]);
+						
+			//if( i != (f.length - 1) )
+				fragmented.add(" ");	
+		}
+		
+		StringBuilder sb = new StringBuilder();
+		
+		for( String s : fragmented){
+			sb.append(s);
+		}
+		return sb.toString();
+	}
+	
 	private void save() {
 		String pageName = this.mPageTitleEditTextView.getText().toString();
 		String pageAuthor = this.mPageAuthorEditTextView.getText().toString();
-		String pageStory = this.mStoryEditTextView.getText().toString();
+		String pageStory = getStoryText();
+		
 		mPage.setTitle(pageName);
 		mPage.setAuthor(pageAuthor);
 		mPage.setText(pageStory);
@@ -696,6 +724,11 @@ public class PageEditActivity extends ActivityExtended {
 	// TODO: Implement when SearchActivity is finish for pages.
 	void addPage() {
 		// Open the activity for this.
+		Intent searchActivity = new Intent(this, SearchActivity.class);
+		Bundle info = new Bundle();		
+		info.putBoolean("BOOL_IS_STORY", false);		
+		searchActivity.putExtra("android.intent.extra.INTENT",info);
+		startActivity(searchActivity);
 	}
 	
 	void exit(){
