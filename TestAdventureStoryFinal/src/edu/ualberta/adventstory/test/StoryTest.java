@@ -20,11 +20,10 @@ public class StoryTest extends AndroidTestCase {
 		author = "Lyle";
 		tid = 1;
 		root = new Page(tid, "ptitle", author, "text", null);
-		storyConstructorTest();
 		newstory = new Story(tid, stitle, author, root);
 	}
 	
-	public void storyConstructorTest() {
+	public void teststoryConstructor() {
 		Story nstory = new Story(stitle, author, null);
 		assertEquals(nstory.getTitle(), stitle);
 		assertEquals(nstory.getAuthor(), author);
@@ -40,19 +39,13 @@ public class StoryTest extends AndroidTestCase {
 		assertEquals(nstory.getRoot(), root);
 	}
 	
-	public void cloneTest() {
-		assertEquals(newstory, newstory.clone());
+	public void testclone() {
+		Story cstory = newstory.clone();
+		assertEquals(newstory.getID(), cstory.getID());
+		assertEquals(newstory.getTitle(), cstory.getTitle());
+		assertEquals(newstory.getAuthor(), cstory.getAuthor());
+		assertEquals(newstory.getRoot(), cstory.getRoot());
 	}
 	
-	public void cloneEntireStoryTest() {
-		Log.i("Testing", "cloneEntireStoryTest: StoryTest's cloneTest and PageTest's cloneAllChildrenTest test this function");
-	}
 	
-	public void getAllPagesTest() {
-		Log.i("Testing", "getAllPagesTest: Tested in PageTest's getAllChildrenTest");
-	}
-	
-	public void searchTests() {
-		Log.i("Testing", "searchTests: Tested in PageTests searchTests");
-	}
 }

@@ -31,7 +31,7 @@ public class PageTest extends AndroidTestCase {
 		pages.add(new Page(tid, ptitle, author, text, null));
 	}
 	
-	public void pageConstructorTest() {
+	public void testpageConstructor() {
 		Page npage = new Page(ptitle, author, text, null);
 		assertEquals(npage.getTitle(), ptitle);
 		assertEquals(npage.getAuthor(), author);
@@ -77,7 +77,7 @@ public class PageTest extends AndroidTestCase {
 		assertEquals(npage.getMultimedia(), ma);
 	}
 	
-	public void cloneTest() {
+	public void testclone() {
 		Page npage = new Page(tid, ptitle, author, text, pages);
 		Page cpage = npage.clone();
 		assertEquals(npage.getID(), cpage.getID());
@@ -89,45 +89,22 @@ public class PageTest extends AndroidTestCase {
 		assertNotNull(cpage.getPages());
 	}
 
-	public void getAllPagesTest() {
-		Page root = new Page("root", author, "root", null);
-		for (Integer i=0; i<3; i++) {
-			String out = i.toString() + " 1st level";
-			root.addPage(new Page(out, author, out, null));
-		}
+	public void testgetAllPages() {
+		ArrayList<String> spages = new ArrayList<String>();
+		root = new Page(0, ptitle, author, text, null);
+		spages.add(root.toString());
 		pages.clear();
-		pages.addAll(root.getPages());
-		ArrayList<Page> ops;
-		for (Integer i=0; i < (ops = root.getPages()).size(); i++) {
-			for (Integer j=0; j<3; j++) {
-				String out = j.toString() + " 2nd level";
-				ops.get(i).addPage(new Page(out, author, out, null));
-			}
-			pages.addAll(ops.get(i).getPages());
+		pages.add(root);
+		for (int i=0; i<5; i++) {
+			Page npage = new Page(i, ptitle, author, text, null);
+			spages.add(npage.toString());
+			pages.add(npage);
+			root.addPage(npage);
 		}
-		ops = root.getAllPages();
-		assertEquals(pages.size(), ops.size());
-		for (int i=0; i<pages.size(); i++) {
-			if (!pages.contains(ops.get(i)));
-				fail("getAllPages did not return all the pages");
-		}
+		assertEquals(spages.size(), pages.size());
+		for (int i=0; i<spages.size(); i++)
+			assertEquals(pages.get(0).toString(), spages.get(0));
 	}
 	
-	public void cloneAllChildrenTest() {
-		Page root = new Page("root", author, "root", null);
-		for (Integer i=0; i<3; i++) {
-			String out = i.toString() + " 1st level";
-			root.addPage(new Page(out, author, out, null));
-		}
-		ArrayList<Page> ops;
-		for (Integer i=0; i < (ops = root.getPages()).size(); i++) {
-			for (Integer j=0; j<3; j++) {
-				String out = j.toString() + " 2nd level";
-				ops.get(i).addPage(new Page(out, author, out, null));
-			}
-		}
-		
-		Page cpage = root.cloneAllChildren();
-		assertEquals(root, cpage);
-	}
+	
 }
