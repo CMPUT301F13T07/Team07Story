@@ -83,6 +83,8 @@ public class PageEditActivity extends ActivityExtended {
 	// Set to true when something is just selected.
 	private boolean mIsJustSelected = false;
 
+	private int request_code = 1;	// Request code when adding page.
+	
 	static public class Responder {
 		static public class Action {
 			public void act() {
@@ -721,14 +723,14 @@ public class PageEditActivity extends ActivityExtended {
 		exit();
 	}
 
-	// TODO: Implement when SearchActivity is finish for pages.
 	void addPage() {
 		// Open the activity for this.
 		Intent searchActivity = new Intent(this, SearchActivity.class);
-		Bundle info = new Bundle();		
+		Bundle info = new Bundle();
+		info.putBoolean("ADD_PAGE", true);
 		info.putBoolean("BOOL_IS_STORY", false);		
 		searchActivity.putExtra("android.intent.extra.INTENT",info);
-		startActivity(searchActivity);
+		startActivityForResult(searchActivity, request_code);
 	}
 	
 	void exit(){
@@ -740,5 +742,14 @@ public class PageEditActivity extends ActivityExtended {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		mPage = mDataSingleton.getCurrentPage();
+		
+		Page newPage = mDataSingleton.database.get_page_by_id(resultCode);
+		mDataSingleton.database.insert_page_option(mPage, newPage);
+		mPage.addPage(newPage);
+		
+		// Restart Activity.
+		Intent i = getIntent();
+		finish();
+		startActivity(i);
 	}
 }

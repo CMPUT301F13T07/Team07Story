@@ -1,68 +1,55 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
+<ScrollView 
+    android:id="@+id/scrollView"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:ignore="HardcodedText" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- mOuterLayout -->
+    <LinearLayout 
+        android:id="@+id/outerLayout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Story Title"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:ignore="HardcodedText" />
+        android:orientation="vertical"> 
+        
+        <!-- First 4 Text/Edit TextView -->
+        <TextView
+            android:id="@+id/storyTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+			android:text="Story Title"
+			/>                    
+        <TextView
+            android:id="@+id/pageTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Page Title"
+            android:singleLine="true"
+            />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
-        android:text="Page Name"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        tools:ignore="HardcodedText" />
-
-    <QuickContactBadge
-        android:id="@+id/quickContactBadge1"
-        android:layout_width="match_parent"
-        android:layout_height="166dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/quickContactBadge1"
-        android:layout_marginTop="16dp"
-        android:text="Next Adventure: " />
-
-    <RadioGroup
-        android:id="@+id/radioGroup1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/quickContactBadge1"
-        android:layout_marginLeft="19dp"
-        android:layout_toRightOf="@+id/textView3" >
-    </RadioGroup>
-
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView2"
-        android:ems="10"
-        android:hint="This is the text that the page holds. It will be wrappable and will expand to fit all text"
-        android:inputType="textMultiLine"
-        tools:ignore="HardcodedText" >
-
-        <requestFocus />
-    </EditText>
-
-</RelativeLayout>
+        <TextView
+            android:id="@+id/pageText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Page Text or Story Text"            
+            />	
+                <!-- mInnerLayout -->
+        <LinearLayout 
+            android:id="@+id/innerLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">                        
+        </LinearLayout>
+        
+		<TextView
+		    android:id="@+id/nextPageTextView"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:text="Next Page(s):"
+		    />
+		<LinearLayout
+			android:id="@+id/buttonLayout"
+        	android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"
+        	android:orientation="vertical">        		                
+		</LinearLayout>        
+    </LinearLayout>
+</ScrollView>
