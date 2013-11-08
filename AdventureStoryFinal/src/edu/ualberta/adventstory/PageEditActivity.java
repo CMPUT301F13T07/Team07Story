@@ -657,9 +657,9 @@ public class PageEditActivity extends ActivityExtended {
 		int index = mStoryEditTextView.getSelectionStart() == -1 ? 
 					mPage.getText().length()-1 : mStoryEditTextView.getSelectionStart();
 		
-		// Check if index is within 6 indexes within others.
+		// Check if index is within 1 indexes within others.
 		for( MultimediaAbstract m : mPage.getMultimedia()){
-			if( Math.abs(m.getIndex()-index)> 6 ){
+			if( Math.abs(m.getIndex()-index)<= 1 ){
 				Toast.makeText(this, "Select a different location.", Toast.LENGTH_LONG).show();
 				return;
 			}
@@ -705,10 +705,10 @@ public class PageEditActivity extends ActivityExtended {
 		if (pageName.length() <= 0 || pageAuthor.length() <= 0
 				|| pageStory.length() <= 0) {
 			// Things to do if one of the inputs are empty.
-			
+			// - Just have all of them have some default values.
 			Toast.makeText(this, "One of the text inputs are invalid.", 
 												Toast.LENGTH_LONG).show();
-			return;
+			mDataSingleton.database.update_page(new Page(mPage.getID(), "Untitled", "Unknown", "Unfilled", null));
 		}
 
 		mDataSingleton.database.update_page(mPage);

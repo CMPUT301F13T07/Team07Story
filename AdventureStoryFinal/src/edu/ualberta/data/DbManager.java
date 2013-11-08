@@ -359,7 +359,9 @@ public class DbManager implements DataManager{
 		}
 	}
 	
-	/* MOCK SECTION */ 
+	/*
+	 * Work In Progress Section.
+	 */
 	public long update_multimedia(MultimediaAbstract mult, long page_id) {
 		ContentValues values = new ContentValues();
 		String where = Constant.MULT_ID + "=" + mult.getID();
