@@ -48,6 +48,7 @@ public class SearchPreviewFragment extends Fragment {
 		
 		title = getArguments().getString("title");
 		text = getArguments().getString("text");
+
 		// Set the page texts, not quite sure how to pull from database by id yet.
 		pageTitle.setText(title);
 		pageText.setText(text);
