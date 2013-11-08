@@ -485,8 +485,7 @@ public class PageEditActivity extends ActivityExtended {
 		}
 	}
 
-	// Build Spannable String.
-	private String mStoryText;  
+	// Build Spannable String.	
 	public SpannableStringBuilder getSpannableStringBuilder() {
 		ArrayList<MultimediaAbstract> ma = mPage.getMultimedia();
 		
@@ -501,6 +500,8 @@ public class PageEditActivity extends ActivityExtended {
 		// Load Bitmap for delete button.
 		Bitmap deleteBitmap = BitmapFactory.decodeResource(this.getResources(),
 				R.drawable.ic_delete);
+		
+		ArrayList<Integer> indexArray = new ArrayList<Integer>();
 		for (MultimediaAbstract multimedia : ma) {
 			// Load the multimedia Picture representation.
 			Bitmap multimediaBitmap = multimedia.loadPhoto(this);
@@ -513,8 +514,8 @@ public class PageEditActivity extends ActivityExtended {
 			if (multimedia.getIsSelected())
 				multimediaImageSpan.enablePadding();
 			
-			int index = multimedia.getIndex();
-			if(index == -1){ index = stringBuilder.toString().length()-1; }
+			int index = multimedia.getIndex();		
+			
 			stringBuilder.insert(index, " ");		// Allocate space for multimediaImageSpan.
 			stringBuilder.insert(index+1, " ");		// Allocate space for deleteImageSpan.									
 			
@@ -648,12 +649,20 @@ public class PageEditActivity extends ActivityExtended {
 	void addMultimedia() {
 		save();
 		// Load arguments.
-		// TODO: Request to just have a singleton that will start Activities in the DataSingleton.
 		Bundle info = new Bundle();
 		info.putInt("page_id", mPage.getID());
 		
 		int index = mStoryEditTextView.getSelectionStart() == -1 ? 
-						0 : mStoryEditTextView.getSelectionStart();
+					mPage.getText().length()-1 : mStoryEditTextView.getSelectionStart();
+		
+		// Check if index is within 6 indexes within others.
+		for( MultimediaAbstract m : mPage.getMultimedia()){
+			if( Math.abs(m.getIndex()-index)> 6 ){
+				Toast.makeText(this, "Select a different location.", Toast.LENGTH_LONG).show();
+				return;
+			}
+		}
+		
 		info.putInt("index", index);
 		Intent addMultimediaIntent = new Intent(this, AddMultimediaActivity.class);
 		addMultimediaIntent.putExtras(info);
