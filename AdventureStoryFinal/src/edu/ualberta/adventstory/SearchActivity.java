@@ -225,21 +225,25 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 		Story story;
+		ArrayList<Page> pageList;
 		Page page;
 		String title;
 		String text;
 		if (isStory) {
 			story = (Story) results.get(position);
 			((DataSingleton)getApplicationContext()).setCurrentStory(story);
-			/*
+			pageList = story.getAllPages();
+			Bundle bundle = new Bundle();
+			bundle.putSerializable("pageList", pageList);
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 			SearchPageListFragment listpages = new SearchPageListFragment();
 			
+			listpages.setArguments(bundle);
 			fragmentTransaction.replace(android.R.id.content, listpages);
 			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.commit();
-			*/
+			
 		} else {
 			page = (Page) results.get(position);
 			((DataSingleton)getApplicationContext()).setCurrentPage(page);
