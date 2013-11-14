@@ -513,7 +513,11 @@ public class PageEditActivity extends ActivityExtended {
 			if (multimedia.getIsSelected())
 				multimediaImageSpan.enablePadding();
 			
-			int index = multimedia.getIndex();		
+			int index = multimedia.getIndex();
+			
+			if(index >= mPage.getText().length()){
+				index = mPage.getText().length()-1;
+			}
 			
 			stringBuilder.insert(index, " ");		// Allocate space for multimediaImageSpan.
 			stringBuilder.insert(index+1, " ");		// Allocate space for deleteImageSpan.									
