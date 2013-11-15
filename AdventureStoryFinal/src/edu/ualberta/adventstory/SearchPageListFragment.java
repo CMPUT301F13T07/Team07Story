@@ -24,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import edu.ualberta.utils.Page;
-import edu.ualberta.utils.Story;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
@@ -56,7 +55,8 @@ public class SearchPageListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		previewPage(position);
-		
+		page = (Page) pageList.get(position);
+
 	}
 	/**
 	 * This method creates a new preview fragment on the selected page
