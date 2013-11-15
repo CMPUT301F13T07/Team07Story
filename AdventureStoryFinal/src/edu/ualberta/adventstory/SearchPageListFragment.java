@@ -58,7 +58,10 @@ public class SearchPageListFragment extends ListFragment {
 		previewPage(position);
 		
 	}
-	
+	/**
+	 * This method creates a new preview fragment on the selected page
+	 * @param position
+	 */
 	private void previewPage(int position) {
 		text = pageList.get(position).getText();
 		title = pageList.get(position).getTitle();

@@ -245,6 +245,8 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			((DataSingleton)getApplicationContext()).setCurrentStory(story);
 
 			pageList = story.getAllPages();
+			page = (Page) pageList.get(position);
+			((DataSingleton)getApplicationContext()).setCurrentPage(page);
 			Bundle bundle = new Bundle();
 			bundle.putSerializable("pageList", pageList);
 			FragmentManager fragmentManager = getFragmentManager();
