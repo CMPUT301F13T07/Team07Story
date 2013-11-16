@@ -45,9 +45,11 @@ public class AddMultimediaActivity extends Activity {
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	
 	/*
-	 * The folder where the pictures are stored on the sdcard
+	 * The folders where the media are stored on the sdcard
 	 */
 	private String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/";
+	private String mfolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies/";
+	private String sfolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Music/";
 	
 	/*
 	 * The names of the media items in the directory. 
@@ -85,6 +87,13 @@ public class AddMultimediaActivity extends Activity {
 	private Page currpage;
 	
 	/*
+	 * contains which ids are for pictures, videos and sounds
+	 */
+	private ArrayList<Integer> picids;
+	private ArrayList<Integer> movids;
+	private ArrayList<Integer> sids;
+	
+	/*
 	 * loads database and current page from application class and loads arguments
 	 * @author: Lyle Rolleman
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -97,6 +106,9 @@ public class AddMultimediaActivity extends Activity {
 		Bundle args = getIntent().getExtras();
 		page_id = args.getInt("page_id");
 		index = args.getInt("index");
+		picids = new ArrayList<Integer>();
+		movids = new ArrayList<Integer>();
+		sids = new ArrayList<Integer>();
 		addMultimedia();
 	}
 	
@@ -106,14 +118,38 @@ public class AddMultimediaActivity extends Activity {
 	 */
 	private void addMultimedia() {
 		File folderF = new File(folder);
+		File movfolder = new File(mfolder);
+		File sofolder = new File(sfolder);
         if (!folderF.exists()) {
             folderF.mkdir();
         }
         File[] files = folderF.listFiles();
-		if (files != null) 
-			for (int i=0; i<files.length; i++) 
-				if (!medialist.contains(files[i].getName()))
+        File[] mfiles = movfolder.listFiles();
+        File[] sfiles = sofolder.listFiles();
+		if (files != null) {
+			for (int i=0; i<files.length; i++) {
+				if (!medialist.contains(files[i].getName())) {
 					medialist.add(files[i].getName());
+					picids.add(medialist.size() - 1);
+				}
+			}
+		}
+		if (mfiles != null) {
+			for (int i=0; i<mfiles.length; i++) {
+				if (!medialist.contains(mfiles[i].getName())) {
+					medialist.add(mfiles[i].getName());
+					movids.add(medialist.size() - 1);
+				}
+			}
+		}
+		if (sfiles != null) {
+			for (int i=0; i<sfiles.length; i++) {
+				if (!medialist.contains(sfiles[i].getName())) {
+					medialist.add(sfiles[i].getName());
+					sids.add(medialist.size() - 1);
+				}
+			}
+		}
 		
 		Button takephoto = (Button) findViewById(R.id.takephoto);
 		Button finish = (Button) findViewById(R.id.finish);
@@ -131,11 +167,14 @@ public class AddMultimediaActivity extends Activity {
 			public void onClick(View v) {
 				setResult(RESULT_OK);
 				if (currid != null) {
-					savePictureToDB();
+					if (picids.contains(currid))
+						savePictureToDB();
+					else if (movids.contains(currid))
+						saveMovieToDB();
+					else if (sids.contains(currid))
+						saveSoundToDB();
 				}
-				//ArrayList<MultimediaAbstract> ma = new ArrayList<MultimediaAbstract>();
-				//ma = database.get_multimedia_by_page_id(page_id);
-				//Log.w("result", "There is a result at: " + ma.get(0).getID());
+				
 				finish();
 			}
 		});
@@ -154,6 +193,28 @@ public class AddMultimediaActivity extends Activity {
 		String dir = folder + medialist.get(currid);
 		Picture pic = new Picture(page_id, index, dir);				
 		database.insert_multimedia(pic, currpage.getID());
+		
+		// Reset the Current page stack.
+		currpage.getMultimedia().clear();
+		((DataSingleton)this.getApplication()).clearPageStack();
+		((DataSingleton)this.getApplication()).setCurrentPage(currpage);		
+	}
+	
+	private void saveMovieToDB() {
+		String dir = mfolder + medialist.get(currid);
+		Video vid = new Video(page_id, index, dir);				
+		database.insert_multimedia(vid, currpage.getID());
+		
+		// Reset the Current page stack.
+		currpage.getMultimedia().clear();
+		((DataSingleton)this.getApplication()).clearPageStack();
+		((DataSingleton)this.getApplication()).setCurrentPage(currpage);		
+	}
+	
+	private void saveSoundToDB() {
+		String dir = sfolder + medialist.get(currid);
+		SoundClip sc = new SoundClip(page_id, index, dir);				
+		database.insert_multimedia(sc, currpage.getID());
 		
 		// Reset the Current page stack.
 		currpage.getMultimedia().clear();
@@ -229,10 +290,14 @@ public class AddMultimediaActivity extends Activity {
             	iv.setImageDrawable(Drawable.createFromPath(imageuri.getPath()));
             	File Ffolder = new File(folder);
         		File[] files = Ffolder.listFiles();
-        		if (files != null) 
-        			for (int i=0; i<files.length; i++) 
-        				if (!medialist.contains(files[i].getName()))
+        		if (files != null) {
+        			for (int i=0; i<files.length; i++) {
+        				if (!medialist.contains(files[i].getName())) {
         					medialist.add(files[i].getName());
+        					picids.add(medialist.size() - 1);
+        				}
+        			}
+        		}
         			
         		adapter.notifyDataSetChanged();
         		retakeMultimedia();
