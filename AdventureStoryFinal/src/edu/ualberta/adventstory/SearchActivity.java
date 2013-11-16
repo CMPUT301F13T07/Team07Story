@@ -11,7 +11,6 @@
  */
 package edu.ualberta.adventstory;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.annotation.TargetApi;
@@ -245,6 +244,8 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			((DataSingleton)getApplicationContext()).setCurrentStory(story);
 
 			pageList = story.getAllPages();
+
+
 			Bundle bundle = new Bundle();
 			bundle.putSerializable("pageList", pageList);
 			FragmentManager fragmentManager = getFragmentManager();
@@ -255,7 +256,8 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			fragmentTransaction.replace(android.R.id.content, listpages);
 			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.commit();
-			
+			page = (Page) pageList.get(position);
+			((DataSingleton)getApplicationContext()).setCurrentPage(page);
 		} else {
 			page = (Page) results.get(position);
 			((DataSingleton)getApplicationContext()).setCurrentPage(page);
