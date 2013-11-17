@@ -47,6 +47,7 @@ import edu.ualberta.utils.Story;
  * @author JoeyAndres
  *
  */
+@SuppressLint("NewApi")
 public class PageEditActivity extends ActivityExtended {
 	private TextView mStoryTitleTextView; // Story Title TextView
 	private EditText mPageTitleEditTextView; // Page Title EditText.
@@ -85,9 +86,7 @@ public class PageEditActivity extends ActivityExtended {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_pageedit);
-		
-		mDataSingleton = (DataSingleton)getApplicationContext();
+		setContentView(R.layout.activity_pageedit);		
 		
 		Intent intent = getIntent();	// Get intent that started this Activity.
 		if( intent == null){
@@ -436,23 +435,8 @@ public class PageEditActivity extends ActivityExtended {
 	 * used later in development. This is not recommended to be used.
 	 */
 	@Override
-	public void switchToVideoViewPreview(String directory) {
-		super.switchToVideoViewPreview(directory);
-	}
-
-	/**
-	 * <code>switchToOriginalLayout</code> is used for displaying Video preview,
-	 * but really of no use in PageEditActivity since this is only for editing 
-	 * page not viewing.
-	 * 
-	 * <p>
-	 * This will not be depcrated as this will be of great use when the module
-	 * expand.
-	 */
-	@Override
-	public void switchToOriginalLayout() {
-		super.switchToOriginalLayout();
-		this.setContentView(mScrollView, mOuterLayoutParam);
+	public void playVideo(String directory) {
+		super.playVideo(directory);
 	}
 	
 	/**
@@ -738,10 +722,10 @@ public class PageEditActivity extends ActivityExtended {
 	/**
 	 * <code>exit</code> provides a way of exiting to StartActivity.
 	 */
-	private void exit(){
+	@Override
+	protected void exit(){
 		save();
-		Intent startActivityIntent = new Intent(this, StartActivity.class);
-		startActivity(startActivityIntent);
+		super.exit();
 	}
 	
 	/**
@@ -756,7 +740,11 @@ public class PageEditActivity extends ActivityExtended {
 		finish();
 		startActivity(i);
 	}
-
+	
+	/**
+	 * <code>showMultimediaOptionsFragment</code> launches MultimediaOptionsFragment
+	 * to display tools/options to be apply to a Multimedia object.
+	 */
 	private void showMultimediaOptionsFragment(){
 		MultimediaOptionsFragment mof = MultimediaOptionsFragment.MultimediaOptionsFragmentFactory(mPage);
 		

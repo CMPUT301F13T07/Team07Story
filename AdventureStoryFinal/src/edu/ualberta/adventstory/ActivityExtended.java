@@ -1,8 +1,14 @@
 package edu.ualberta.adventstory;
 
+import java.io.IOException;
+
 import edu.ualberta.multimedia.TObservable;
 import android.app.Activity;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 
 /**
  * <code>ActivityExtended</code> is specialization of Activity class to allow anyone who 
@@ -16,9 +22,7 @@ public class ActivityExtended extends Activity implements TObserver<TObservable>
 	// Not the base activity. Transfer this to the base activity then.
 	protected DataSingleton mDataSingleton;
 	
-	protected boolean mOnVideoViewPreview = false;
-	protected String mVideoDirectory = null;
-	//public Db database;
+	static final int PLAY_VIDEO_REQUESTCODE = 0;
 	
 	public ActivityExtended() {
 		super();
@@ -31,31 +35,21 @@ public class ActivityExtended extends Activity implements TObserver<TObservable>
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		// Load savedInstanceState.
-		if(savedInstanceState != null){
-			mOnVideoViewPreview = savedInstanceState.getBoolean("Mode");
-			if(mOnVideoViewPreview){
-				if( savedInstanceState.getString("VideoDirectory") != null){
-						mOnVideoViewPreview = savedInstanceState.getBoolean("Mode");
-						mVideoDirectory = savedInstanceState.getString("VideoDirectory");					
-				}
-			}
-		}
+		mDataSingleton = (DataSingleton)getApplicationContext();
 	}
 	
 	// Override these methods.
 	
 	// Override to display video. The argument is directory of video.	
-	public void switchToVideoViewPreview(String directory){
-		// Creates and Open new VideoViewPreview.
-		VideoViewPreview vvp = new VideoViewPreview(directory, this);
-		mOnVideoViewPreview = true;
-		mVideoDirectory = directory;
-	}
-	
-	// Override to revert to original layout of Activity.
-	public void switchToOriginalLayout(){
-		mOnVideoViewPreview = false;		
+	public void playVideo(String directory){
+		Intent i = new Intent(this, VideoPlayerActivity.class);
+		
+		Bundle b = new Bundle();
+		b.putString("VideoDirectory", directory);
+		
+		i.putExtras(b);
+		
+		startActivityForResult(i, PLAY_VIDEO_REQUESTCODE);
 	}
 	
 	/* 
@@ -66,8 +60,6 @@ public class ActivityExtended extends Activity implements TObserver<TObservable>
 	 */
 	@Override
 	public void onSaveInstanceState(Bundle objects){
-		objects.putBoolean("Mode", mOnVideoViewPreview);
-		objects.putString("VideoDirectory", mVideoDirectory);
 	}
 
 	/**
@@ -81,4 +73,12 @@ public class ActivityExtended extends Activity implements TObserver<TObservable>
 	 * doesn't require any arguments.
 	 */
 	public void localUpdate(){} 
+	
+	/**
+	 * <code>exit</code> is called to go back to the <code>StartActivity</code>.
+	 */
+	protected void exit(){
+		Intent startActivityIntent = new Intent(this, StartActivity.class);
+		startActivity(startActivityIntent);
+	}
 }

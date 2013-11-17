@@ -31,12 +31,13 @@
             android:label="@string/title_activity_create_new" >
         </activity>
         <activity android:name="edu.ualberta.adventstory.PageEditActivity">
-	</activity>
+		</activity>
         <activity
             android:name="edu.ualberta.adventstory.PageViewActivity"
             android:label="@string/title_activity_page_view" >
         </activity>
         <activity android:name="AddMultimediaActivity"></activity>
+        <activity android:name="edu.ualberta.adventstory.VideoPlayerActivity"></activity>
     </application>
 
 

@@ -18,7 +18,7 @@ public class Video extends MultimediaAbstract{
 	@Override
 	public void play(Context context){
 		DataSingleton ds = (DataSingleton)context.getApplicationContext();
-		((ActivityExtended) ds.getCurrentActivity()).switchToVideoViewPreview(file_dir);
+		((ActivityExtended) ds.getCurrentActivity()).playVideo(file_dir);
 	}
 	
 	public Bitmap loadPhoto(Context context){

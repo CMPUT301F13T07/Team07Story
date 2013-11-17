@@ -14,7 +14,7 @@ import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.multimedia.TObservable;
 import edu.ualberta.utils.Page;
 
-@SuppressLint("ValidFragment")
+@SuppressLint({ "ValidFragment", "NewApi" })
 public class MultimediaOptionsFragment extends Fragment implements 
 												TObserver<TObservable> {
 	// A simple static factory problem.
@@ -43,6 +43,7 @@ public class MultimediaOptionsFragment extends Fragment implements
 					R.layout.fragment_pageedit_multimedia_options, container, false);
 	}
 	
+	@SuppressLint("NewApi")
 	@Override
 	public void onStart(){
 		super.onStart();
@@ -51,6 +52,22 @@ public class MultimediaOptionsFragment extends Fragment implements
 		mMultimediaFilePath = (TextView)getActivity().findViewById(R.id.multimediaFileNameTextView);
 		mDeleteMultimediaButton = (Button)getActivity().findViewById(R.id.deleteMultimediaButton);
 		mChangeMultimediaButton = (Button)getActivity().findViewById(R.id.changeMultimediaButton);
+		
+		// Set mMultimediaTypeTextView's string.
+		for(MultimediaAbstract m : mCurrentPage.getMultimedia()){
+			if( m.getIsSelected() ){
+				mMultimediaTypeTextView.setText(m.getClass().getName());
+				break;
+			}
+		}
+		
+		// Set mMultimediaFilePath string.
+		for(MultimediaAbstract m : mCurrentPage.getMultimedia()){
+			if( m.getIsSelected() ){
+				mMultimediaFilePath.setText(m.getFileDir());
+				break;
+			}
+		}
 		
 		mDeleteMultimediaButton.setOnClickListener(new OnClickListener(){
 			@Override

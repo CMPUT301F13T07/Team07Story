@@ -46,13 +46,7 @@ public class PageViewActivity extends ActivityExtended{
 	private LinearLayout mInnerLayout;				// Inner RelativeLayout.
 	private LinearLayout mOuterLayout;				// Outer LinearLayout.
 	private ScrollView mScrollView;					// Encapsulate mOuterLayout.
-	/*
-	 * Params:
-	 * - mInnerLayoutParam: For the mInnerLayout.
-	 * - mOuterLayoutParam: For the mOuterLayout.
-	 * - mInnerComponentParam: Param for the views inside mInnerLayout.
-	 * - mOuterLayoutParam: Param for the views in the mOuterLayout excluding mInnerLayout.
-	 */
+
 	private RelativeLayout.LayoutParams mInnerLayoutParam;	
 	private LinearLayout.LayoutParams mOuterLayoutParam;
 	private LinearLayout.LayoutParams mInnerComponentParam;
@@ -66,15 +60,8 @@ public class PageViewActivity extends ActivityExtended{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		if(mOnVideoViewPreview){
-			this.switchToVideoViewPreview(mVideoDirectory);
-		}else{
-			setContentView(R.layout.activity_pageview);			
-		}		
-		
-		mDataSingleton = (DataSingleton)this.getApplicationContext();
+		super.onCreate(savedInstanceState);		
+		setContentView(R.layout.activity_pageview);
 				
 		Intent intent = getIntent();	// Get intent that started this Activity.
 		if( intent == null){
@@ -123,14 +110,10 @@ public class PageViewActivity extends ActivityExtended{
 		AddButtons();
 	}
 
-	private void exit() {
+	@Override
+	protected void exit() {
 		mPage.getMultimedia().clear();
 		finish();
-	}
-
-	@Override
-	public void onStart(){
-		super.onStart();
 	}
 	
 	@Override
@@ -228,7 +211,7 @@ public class PageViewActivity extends ActivityExtended{
 			return stringBuilder;
 		}
 		
-		for (MultimediaAbstract multimedia : ma) {
+		for (final MultimediaAbstract multimedia : ma) {
 			// Load the multimedia Picture representation.
 			Bitmap multimediaBitmap = multimedia.loadPhoto(this);
 			ImageSpan multimediaImageSpan = new ImageSpan(this, multimediaBitmap, 20);
@@ -245,7 +228,7 @@ public class PageViewActivity extends ActivityExtended{
 			multimediaClickableSpan.setOnClick(new Callback(){
 				@Override
 				public void callback(){
-					mMultimedia.play(getBaseContext());
+					multimedia.play(getBaseContext());
 				}
 			});
 
@@ -258,14 +241,8 @@ public class PageViewActivity extends ActivityExtended{
 	
 	@Override
 	// Video Preview 
-	public void switchToVideoViewPreview(String directory){
-		super.switchToVideoViewPreview(directory);
-	}
-	
-	@Override
-	public void switchToOriginalLayout(){	
-		super.switchToOriginalLayout();
-		this.setContentView(mScrollView, mOuterLayoutParam);
+	public void playVideo(String directory){
+		super.playVideo(directory);
 	}
 	
 	@SuppressWarnings("deprecation")

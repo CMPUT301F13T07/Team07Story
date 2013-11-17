@@ -260,7 +260,7 @@ public class DbManager implements DataManager{
 			      multimedia.add( new Picture(mult_id, index, file_dir));
 			}else if( type.compareTo("SoundClip") == 0){
 			      multimedia.add( new SoundClip(mult_id, index, file_dir));
-			}else if( type.compareTo("VideoClip") == 0){
+			}else if( type.compareTo("Video") == 0){
 			      multimedia.add( new Video(mult_id, index, file_dir));
 			}else{
 			      multimedia.add(new MultimediaAbstract(mult_id, index, file_dir){});
