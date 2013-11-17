@@ -1,13 +1,21 @@
-/*
- * ActivityExtended.java
- * - Place methods here that you want to call when outside an Activity.
- */
 package edu.ualberta.adventstory;
 
+import edu.ualberta.multimedia.TObservable;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class ActivityExtended extends Activity{
+/**
+ * <code>ActivityExtended</code> is specialization of Activity class to allow anyone who 
+ * inherit from these to Acquire MVC's TObserver interface. This allows the Views (this)
+ * whenever critical parts of the model are updated.
+ * 
+ * @author Joey Andres
+ *
+ */
+public class ActivityExtended extends Activity implements TObserver<TObservable>{
+	// Not the base activity. Transfer this to the base activity then.
+	protected DataSingleton mDataSingleton;
+	
 	protected boolean mOnVideoViewPreview = false;
 	protected String mVideoDirectory = null;
 	//public Db database;
@@ -16,6 +24,10 @@ public class ActivityExtended extends Activity{
 		super();
 	}
 	
+	/*
+	 * onCreate for this one allows the subclasses to use VideoPreview.
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -40,20 +52,33 @@ public class ActivityExtended extends Activity{
 		mOnVideoViewPreview = true;
 		mVideoDirectory = directory;
 	}
+	
 	// Override to revert to original layout of Activity.
 	public void switchToOriginalLayout(){
-		mOnVideoViewPreview = false;
-		
+		mOnVideoViewPreview = false;		
 	}
 	
+	/* 
+	 * Stuff to be saved when onDestroy is called. This will
+	 * allow ActivityExtended to recall last state such as,
+	 * where we watching a video or not the last time we change
+	 * orientation.
+	 */
 	@Override
 	public void onSaveInstanceState(Bundle objects){
 		objects.putBoolean("Mode", mOnVideoViewPreview);
 		objects.putString("VideoDirectory", mVideoDirectory);
 	}
+
+	/**
+	 * Part of the MVC template.
+	 */
+	@Override
+	public void update(TObservable s) {}
 	
-	// Override this.
-	public void Update(){
-		
-	}
+	/**
+	 * <code>localUpdate</code> can be called by MVC update or other parts of teh code since
+	 * doesn't require any arguments.
+	 */
+	public void localUpdate(){} 
 }

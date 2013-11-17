@@ -1,18 +1,11 @@
 package edu.ualberta.adventstory;
 
-//TODO: Mock datas are currently being used to test.
-//TODO: Record the last scroll index.
-//TODO: Handle backbutton to display back story. Ask team if adding an explicit button
-//		 is better.
 import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -31,41 +23,27 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.widget.TextView;
-import android.media.MediaPlayer;
 
+import edu.ualberta.adventstory.CommandCollection.Callback;
 import edu.ualberta.adventstory.R;
-import edu.ualberta.adventstory.PageEditActivity.ClickableDeleteSpanEx;
-import edu.ualberta.adventstory.PageEditActivity.ClickableMultimediaSpanEx;
-import edu.ualberta.adventstory.PageEditActivity.PaddingableImageSpan;
+import edu.ualberta.extendedViews.ClickableMultimediaSpan;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
+/**
+ * <code>PageViewActivity</code> is the View responsible for viewing <code>Page</code>.
+ * 
+ * @author JoeyAndres
+ * @version 1.0
+ */
 public class PageViewActivity extends ActivityExtended{
-	// Not the base activity. Transfer this to the base activity then.
-	protected DataSingleton mDataSingleton;			// Application instance.
-	
 	private TextView mStoryTitleTextView;			// Story Title TextView.
 	private TextView mPageTitleTextView;			// Page Title TextView.
 	private TextView mStoryTextView;				// StoryText TextView.
-	/*
-	 * The structure of this Activity is the following:
-	 * -An outer layout
-	 *  contains the stationary components such as title and buttons for
-	 *  next Page(s). A ScrollView and LinearLayout is used to achieve this.
-	 *  The existence of ScrollView will be discussed next.
-	 *  
-	 * -Inner Layout on the other hand contains non-stationary objects.
-	 *  This allows room for movable multimedia objects. Although
-	 *  the text segment of the story is stationary it is placed in the 
-	 *  inner layout since it does expand vertically. Since multimedia(s)
-	 *  are movable and text segment expands, we used a ScrollView to 
-	 *  make sure that when the inner layout does expands beyond the limit
-	 *  of the screensize the user will still have pleasant experience.
-	 */
 	
-	// Layout.
-	private LinearLayout mInnerLayout;			// Inner RelativeLayout.
+	// Layouts.
+	private LinearLayout mInnerLayout;				// Inner RelativeLayout.
 	private LinearLayout mOuterLayout;				// Outer LinearLayout.
 	private ScrollView mScrollView;					// Encapsulate mOuterLayout.
 	/*
@@ -84,6 +62,7 @@ public class PageViewActivity extends ActivityExtended{
 	private Page mPage;						// Current page.
 	
 	private boolean mViewPageOnly = false; 	// True if we are viewing a page independent of story.
+	protected MultimediaAbstract mMultimedia;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -239,31 +218,6 @@ public class PageViewActivity extends ActivityExtended{
 		mStoryTextView.setTextSize(textSize);
 	}
 	
-	// ClickableSpan for Multimedia.
-	// - A developer might notice that this ClickableMultimediaSpanEx 
-	//   also exist in PageEditActivity and that these should merit their
-	//   own module. On the contrary, that is simply not possible. These
-	//   have to be inner classes because they rely on attributes of the
-	//   class their nesting in.
-	class ClickableMultimediaSpanEx extends ClickableSpan {
-		private MultimediaAbstract mMultimedia;
-		private ImageSpan mImageSpan;
-
-		public ClickableMultimediaSpanEx(MultimediaAbstract ma,
-				ImageSpan multimediaImageSpan) {
-			super();
-			mMultimedia = ma;
-			mImageSpan = multimediaImageSpan;
-		}
-
-		@SuppressLint("NewApi")
-		@Override
-		public void onClick(final View widget) {
-			// Set all multimedia mIsSelected to false.
-			mMultimedia.play(getBaseContext());
-		}
-	}
-	
 	public SpannableStringBuilder getSpannableStringBuilder() {
 		ArrayList<MultimediaAbstract> ma = mPage.getMultimedia();
 
@@ -286,8 +240,14 @@ public class PageViewActivity extends ActivityExtended{
 					multimedia.getIndex() + 1,
 					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
 
-			ClickableMultimediaSpanEx multimediaClickableSpan = 
-					new ClickableMultimediaSpanEx(multimedia, multimediaImageSpan);
+			ClickableMultimediaSpan multimediaClickableSpan = 
+													new ClickableMultimediaSpan();
+			multimediaClickableSpan.setOnClick(new Callback(){
+				@Override
+				public void callback(){
+					mMultimedia.play(getBaseContext());
+				}
+			});
 
 			stringBuilder.setSpan(multimediaClickableSpan, multimedia.getIndex(),
 					multimedia.getIndex() + 1,

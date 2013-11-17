@@ -22,14 +22,6 @@ public class Picture extends MultimediaAbstract{
 		// Enter photo effects...		
 	}
 	
-	// Override the following so that setting id will also set mPictureId
-	// and vice versa.
-	@Override
-	public void setID(int id){
-		super.id = id;
-		//super.pictureId = id;
-	}
-	
 	@Override
 	public Bitmap loadPhoto(Context context){
 		if( super.id == -1 || file_dir == null){
@@ -39,6 +31,7 @@ public class Picture extends MultimediaAbstract{
 			WindowManager wm = ((Activity)context).getWindowManager();
 			Display d = wm.getDefaultDisplay();
 			Bitmap bm = BitmapFactory.decodeFile(file_dir);
+			
 			// Force width and height to be within 1/2 screen's limit.			
 			if( bm.getWidth() > d.getWidth()/2 ){
 				bm = getResizedBitmap(bm, bm.getHeight(), d.getWidth()/2);

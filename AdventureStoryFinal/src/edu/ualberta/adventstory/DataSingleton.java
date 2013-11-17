@@ -44,7 +44,7 @@ public class DataSingleton extends Application{
 	
 	// To allow to revert back to past pages when reading a story.
 	public Page getCurrentPage(){
-		// Clear multimedias incase information changes.
+		// Clear multimedias in case information changes.
 		if(mCurrentPage != null){
 			mCurrentPage.getMultimedia().clear();
 			for(MultimediaAbstract m : database.get_multimedia_by_page_id(mCurrentPage.getID())){
