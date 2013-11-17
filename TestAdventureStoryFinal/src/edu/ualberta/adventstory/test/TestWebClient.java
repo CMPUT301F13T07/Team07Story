@@ -27,13 +27,13 @@ public class TestWebClient extends AndroidTestCase {
 	public void setUp() {
 		webclient = new WebClient();
 		// Only needs to be run when elasticsearch repo has been reset
+		System.out.println("in setup");
 		if (!setup_done) {
 			webclient.insert_story(story);
 			webclient.insert_page(page);
 			webclient.insert_page(op_page);
 			//webclient.insert_page_option(page, op_page);
 			webclient.insert_multimedia(test_pic, page.getID());
-			setup_done = true;
 		}
 	}
 	
