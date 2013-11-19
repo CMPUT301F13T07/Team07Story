@@ -47,9 +47,9 @@ public class AddMultimediaActivity extends Activity {
 	/*
 	 * The folders where the media are stored on the sdcard
 	 */
-	private String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/";
-	private String mfolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies/";
-	private String sfolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Music/";
+	private String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures";
+	private String mfolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies";
+	private String sfolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Music";
 	
 	/*
 	 * The names of the media items in the directory. 
@@ -123,6 +123,12 @@ public class AddMultimediaActivity extends Activity {
 		File sofolder = new File(sfolder);
         if (!folderF.exists()) {
             folderF.mkdir();
+        }
+        if (!movfolder.exists()) {
+            movfolder.mkdir();
+        }
+        if (!sofolder.exists()) {
+            sofolder.mkdir();
         }
         File[] files = folderF.listFiles();
         File[] mfiles = movfolder.listFiles();
@@ -271,7 +277,7 @@ public class AddMultimediaActivity extends Activity {
             folderF.mkdir();
         }
         
-        String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis()) + "jpg";
+        String imageFilePath = folder + "/" + String.valueOf(System.currentTimeMillis()) + ".jpg";
         File imageFile = new File(imageFilePath);
         imageuri = Uri.fromFile(imageFile);
         
