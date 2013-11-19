@@ -11,20 +11,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView.BufferType;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.widget.TextView;
 
 import edu.ualberta.adventstory.CommandCollection.Callback;
+import edu.ualberta.adventstory.CommandCollection.Command;
 import edu.ualberta.adventstory.R;
 import edu.ualberta.extendedViews.ClickableMultimediaSpan;
 import edu.ualberta.multimedia.MultimediaAbstract;
@@ -43,77 +40,38 @@ public class PageViewActivity extends ActivityExtended{
 	private TextView mStoryTextView;				// StoryText TextView.
 	
 	// Layouts.
-	private LinearLayout mInnerLayout;				// Inner RelativeLayout.
 	private LinearLayout mOuterLayout;				// Outer LinearLayout.
-	private ScrollView mScrollView;					// Encapsulate mOuterLayout.
-
-	private RelativeLayout.LayoutParams mInnerLayoutParam;	
-	private LinearLayout.LayoutParams mOuterLayoutParam;
 	private LinearLayout.LayoutParams mInnerComponentParam;
-	private LinearLayout.LayoutParams mOuterComponentParam;
 	
 	private Story mStory;					// Story being viewed.
 	private Page mPage;						// Current page.
 	
-	private boolean mViewPageOnly = false; 	// True if we are viewing a page independent of story.
-	protected MultimediaAbstract mMultimedia;
+	private boolean mViewPageOnly = true; 	// True if we are viewing a page independent of story.	
+	
+	private static final int START_EDITPAGE_RESULTCODE = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
 		setContentView(R.layout.activity_pageview);
-				
-		Intent intent = getIntent();	// Get intent that started this Activity.
-		if( intent == null){
-			// Unknown state.
-			exit();
-		}
-	
+		
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
-		
 		if( mStory == null ){ mViewPageOnly = true; }
 		
-		// Layout for mInnerLayout.
-		mInnerLayoutParam = new RelativeLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		
-		// Layout for Option Body Views.
-		mInnerComponentParam = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		
-		// Layout for mOuterLayout Components.
-		mOuterComponentParam = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-
-		mScrollView = (ScrollView)findViewById(R.id.scrollView);
-				
-		mOuterLayout = (LinearLayout)findViewById(R.id.outerLayout);				
-		
+		// Acquire instance of layout.		
+		mOuterLayout = (LinearLayout)findViewById(R.id.outerLayout);		
 		// Initialize the Story TextView and its parameters.
 		mStoryTitleTextView = (TextView)findViewById(R.id.storyTitle);
-		if( mViewPageOnly == false ){
-			setStoryTitle(mStory.getTitle(), 26);
-		}
-
+		if( mViewPageOnly == false ){setStoryTitle(mStory.getTitle(), 26);}
 		//Initialize the Page Title TextView and its parameters.
 		mPageTitleTextView = (TextView)findViewById(R.id.pageTitle);		
 		setPageTitle(mPage.getTitle(), 22);
-						
-		// The Inner Layout.
-		mInnerLayout = (LinearLayout)findViewById(R.id.innerLayout);
-		
-		// Add Inner Layout components.
+		// Initilize story texts.
 		mStoryTextView = (TextView)findViewById(R.id.pageText);				
 		setStoryText(18);
 				
 		AddButtons();
-	}
-
-	@Override
-	protected void exit() {
-		mPage.getMultimedia().clear();
-		finish();
 	}
 	
 	@Override
@@ -124,16 +82,11 @@ public class PageViewActivity extends ActivityExtended{
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.page_view, menu);
 		CreateMenu(menu);
 		return true;
-	}
-	
-	@Override
-	public void onDestroy(){
-		mPage.getMultimedia().clear();
-		super.onDestroy();
 	}
 	
 	@Override
@@ -142,11 +95,12 @@ public class PageViewActivity extends ActivityExtended{
 	}
 	
 	private boolean MenuChoice(MenuItem item){
-		switch(item.getItemId()){
-		case 0:
-			startActivity(new Intent(this, PageEditActivity.class));
+		Command command = mMapMenuToCommand.get(item);
+		if(command != null){
+			command.execute();
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -156,7 +110,14 @@ public class PageViewActivity extends ActivityExtended{
 		{
 			mnu1.setIcon(R.drawable.ic_edit_page);
 			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);  // This is subject to change.
-		}		
+		}
+		Command startEditPageCommand = new Command(new Callback(){
+			@Override
+			public void callback(){
+				startPageEditActivity();
+			}
+		});
+		mMapMenuToCommand.put(mnu1, startEditPageCommand);
 	}
 	
 	void AddButtons(){
@@ -175,10 +136,6 @@ public class PageViewActivity extends ActivityExtended{
 			});
 			mOuterLayout.addView(btn);
 		}
-	}
-	
-	void setPage(Page page){
-		mPage = page;
 	}
 	
 	void setStoryTitle(String storyTitle, float textSize) {
@@ -207,7 +164,8 @@ public class PageViewActivity extends ActivityExtended{
 		SpannableStringBuilder stringBuilder = new SpannableStringBuilder(mPage.getText());
 
 		// Return to caller if ma is null to avoid trivial errors.
-		if( ma == null ){
+		return stringBuilder;
+		/*if( ma == null ){
 			return stringBuilder;
 		}
 		
@@ -237,12 +195,7 @@ public class PageViewActivity extends ActivityExtended{
 					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);			
 		}
 		return stringBuilder;
-	}
-	
-	@Override
-	// Video Preview 
-	public void playVideo(String directory){
-		super.playVideo(directory);
+		*/
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -257,7 +210,6 @@ public class PageViewActivity extends ActivityExtended{
 	    return super.onKeyDown(keyCode, event);
 	}
 	
-	// TODO: Make sure to link to last activity when no oldPage.
 	@SuppressLint("NewApi")
 	@Override
 	public void onBackPressed(){
@@ -266,6 +218,21 @@ public class PageViewActivity extends ActivityExtended{
 		}else{
 			mDataSingleton.revertPage();
 			this.recreate();
+		}
+	}
+	
+	/**
+	 * starts PageEditActivity().
+	 */
+	private void startPageEditActivity(){
+		startActivityForResult(new Intent(this, PageEditActivity.class), START_EDITPAGE_RESULTCODE);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data){
+		// TODO: HASH THESE STUFF INTO COMMAND.
+		if( requestCode == 1){			
+			this.restart();
 		}
 	}
 }

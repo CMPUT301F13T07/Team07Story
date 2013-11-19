@@ -1,14 +1,13 @@
 package edu.ualberta.adventstory;
 
-import java.io.IOException;
+import java.util.HashMap;
 
+import edu.ualberta.adventstory.CommandCollection.Command;
 import edu.ualberta.multimedia.TObservable;
 import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.view.MenuItem;
 
 /**
  * <code>ActivityExtended</code> is specialization of Activity class to allow anyone who 
@@ -18,10 +17,12 @@ import android.os.Environment;
  * @author Joey Andres
  *
  */
-public class ActivityExtended extends Activity implements TObserver<TObservable>{
+abstract public class ActivityExtended extends Activity implements TObserver<TObservable>{
 	// Not the base activity. Transfer this to the base activity then.
 	protected DataSingleton mDataSingleton;
-	
+	// Maps Menu to a Command via hash table. This allows this module to avoid sphagetti code.
+	protected HashMap<MenuItem, Command> mMapMenuToCommand = 
+										new HashMap<MenuItem, Command>();
 	static final int PLAY_VIDEO_REQUESTCODE = 0;
 	
 	public ActivityExtended() {
@@ -78,7 +79,19 @@ public class ActivityExtended extends Activity implements TObserver<TObservable>
 	 * <code>exit</code> is called to go back to the <code>StartActivity</code>.
 	 */
 	protected void exit(){
-		Intent startActivityIntent = new Intent(this, StartActivity.class);
-		startActivity(startActivityIntent);
+		finish();
+	}
+	
+	/**
+	 * <code>restart</code> allows the activity to reinitialize
+	 * all of it's attributes with the newest values.
+	 * 
+	 * @author Joey Andres
+	 */
+	void restart(){
+		// Restart Activity.
+		Intent i = getIntent();
+		finish();
+		startActivity(i);
 	}
 }

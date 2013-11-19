@@ -26,7 +26,7 @@ public class CommandCollection {
 	 */
 	public static class Callback{
 		public void callback(){
-			// Unknown command.
+			// Unknown command. Override.
 		}
 	}
 	
@@ -36,7 +36,7 @@ public class CommandCollection {
 	 * @author Joey Andres
 	 *	@version 1.0
 	 */
-	public static abstract class Command{		
+	public static class Command{		
 		protected Callback mCallBackExecute;
 		
 		public Command(Callback cb){
@@ -110,9 +110,8 @@ public class CommandCollection {
 	}
 	
 	/**
-	 * 
-	 * @author JoeyAndres
-	 *
+	 * Command for saving.
+	 * @author Joey
 	 */
 	static public class SaveCommand extends Command{
 		public SaveCommand(Callback cb){super(cb);}

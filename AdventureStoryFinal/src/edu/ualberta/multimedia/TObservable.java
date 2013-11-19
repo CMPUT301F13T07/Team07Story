@@ -24,8 +24,8 @@ abstract public class TObservable<V extends TObserver> {
 	
 	// All models modify their views to update.
 	public void notifyObservers(){
-		for(V v : mViews)
-			v.update(this);
+		/*for(V v : mViews)
+			v.update(this);*/
 	}
 	
 	// note wether the model has changed.

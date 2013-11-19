@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -49,7 +50,6 @@ import edu.ualberta.utils.Story;
  */
 @SuppressLint("NewApi")
 public class PageEditActivity extends ActivityExtended {
-	private TextView mStoryTitleTextView; // Story Title TextView
 	private EditText mPageTitleEditTextView; // Page Title EditText.
 	private EditText mPageAuthorEditTextView; // Page Title EditText.
 	
@@ -72,10 +72,6 @@ public class PageEditActivity extends ActivityExtended {
 
 	final private int ADDPAGE_REQUESTCODE = 1;			// Request code when adding page.
 	final private int GET_MULTIMEDIA_REQUESTCODE = 2;	// Request code for getting multimedia.
-
-	// Maps Menu to a Command via hash table. This allows this module to avoid sphagetti code.
-	private HashMap<MenuItem, Command> mMapMenuToCommand = 
-									new HashMap<MenuItem, Command>();
 	
 	// Set to true when editing a page only, independent of the story.
 	private boolean mEditPageOnly = false;
@@ -87,12 +83,6 @@ public class PageEditActivity extends ActivityExtended {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pageedit);		
-		
-		Intent intent = getIntent();	// Get intent that started this Activity.
-		if( intent == null){
-			// Unknown state.
-			exit();
-		}
 			
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
@@ -112,11 +102,9 @@ public class PageEditActivity extends ActivityExtended {
 
 		// Outer Layout.
 		mOuterLayout = (LinearLayout)findViewById(R.id.outerLayout);
-
-		// Initialize the Story EditText and its parameters.
-		mStoryTitleTextView = (TextView)findViewById(R.id.storyTitle);
+		
 		if( mEditPageOnly == false ){
-			setStoryTitle(mStory.getTitle(), 26);
+			setStoryTitle();
 		}
 
 		// Initialize the Page Title EditText and its parameters.
@@ -129,9 +117,7 @@ public class PageEditActivity extends ActivityExtended {
 
 		mInnerLayout = (LinearLayout)findViewById(R.id.innerLayout);
 
-		// Add Inner Layout components.
 		// EditTextView.
-		
 		mStoryEditTextView = new EditTextEx(this);
 		mStoryEditTextView.setOnSelectionChangedListener(new OnSelectionChangedListener(){
 			@Override
@@ -139,7 +125,7 @@ public class PageEditActivity extends ActivityExtended {
 				cursorIndexChange(selStart);
 			}
 		});
-		
+		// Mannually add it since it's costum EditText.
 		mInnerComponentParam = new LinearLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		mStoryEditTextView.setLayoutParams(mInnerComponentParam);
@@ -197,7 +183,7 @@ public class PageEditActivity extends ActivityExtended {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.page_view, menu);
+		getMenuInflater().inflate(R.menu.page_edit, menu);
 		CreateMenu(menu);
 		return true;
 	}
@@ -217,9 +203,9 @@ public class PageEditActivity extends ActivityExtended {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Command r = mMapMenuToCommand.get(item);
-		if (r != null) {
-			r.execute();
+		Command command = mMapMenuToCommand.get(item);
+		if (command != null) {
+			command.execute();
 		}
 		return true;
 	}
@@ -307,11 +293,10 @@ public class PageEditActivity extends ActivityExtended {
 	 * 
 	 * @param textSize is the size of the text.
 	 */
-	void setStoryTitle(String storyTitle, float textSize) {
-		storyTitle = "Story: " + storyTitle;
-		mStoryTitleTextView.setSingleLine(true);
-		mStoryTitleTextView.setText(storyTitle);
-		mStoryTitleTextView.setTextSize(textSize);
+	void setStoryTitle() {		
+		//ActionBar actionBar = getActionBar();
+		//actionBar.setTitle(mStory.getTitle());
+		
 	}
 	
 	/**
@@ -320,9 +305,8 @@ public class PageEditActivity extends ActivityExtended {
 	 * @param textSize is the size of the text.
 	 */
 	void setPageTitle(float textSize) {
-		String pageTitle = "Page: " + mPage.getTitle();
 		mPageTitleEditTextView.setSingleLine(true);
-		mPageTitleEditTextView.setText(pageTitle);
+		mPageTitleEditTextView.setText(mPage.getTitle());
 		mPageTitleEditTextView.setTextSize(textSize);
 	}
 	
@@ -334,9 +318,8 @@ public class PageEditActivity extends ActivityExtended {
 	 * @param textSize is the size of the text.
 	 */
 	void setPageAuthor(float textSize) {
-		String pageAuthor = "by: " + mPage.getAuthor();
 		mPageAuthorEditTextView.setSingleLine(true);
-		mPageAuthorEditTextView.setText(pageAuthor);
+		mPageAuthorEditTextView.setText(mPage.getAuthor());
 		mPageAuthorEditTextView.setTextSize(textSize);
 	}
 	
@@ -612,49 +595,17 @@ public class PageEditActivity extends ActivityExtended {
 	}
 	
 	/**
-	 * @return <code>String</code> of the author of the page, stripped-off of label. 
+	 * @return <code>String</code> of the author of the page. 
 	 */
 	private String getAuthorText(){
-		String[] f = this.mPageAuthorEditTextView.getText().toString().split(" +");
-		ArrayList<String> fragmented = new ArrayList<String>();
-		for( int i = 0; i < f.length; i++){
-			fragmented.add(f[i]);						
-			fragmented.add(" ");	
-		}
-		
-		// Remove first 2 elements, 'label: ' and space ' ';
-		fragmented.remove(0);
-		fragmented.remove(0);
-		
-		StringBuilder sb = new StringBuilder();
-		
-		for( String s : fragmented){
-			sb.append(s);
-		}
-		return sb.toString();
+		return mPageAuthorEditTextView.getText().toString();
 	}
 	
 	/**
-	 * @return <code>String</code> of the title of the page, stripped-off of label. 
+	 * @return <code>String</code> of the title of the page. 
 	 */
 	protected String getPageTitleText(){
-		String[] f = this.mPageTitleEditTextView.getText().toString().split(" +");
-		ArrayList<String> fragmented = new ArrayList<String>();
-		for( int i = 0; i < f.length; i++){
-			fragmented.add(f[i]);						
-			fragmented.add(" ");	
-		}
-		
-		// Remove first 2 elements, 'label: ' and space ' ';
-		fragmented.remove(0);
-		fragmented.remove(0);
-		
-		StringBuilder sb = new StringBuilder();
-		
-		for( String s : fragmented){
-			sb.append(s);
-		}
-		return sb.toString();
+		return mPageTitleEditTextView.getText().toString();
 	}
 	
 	/**
@@ -726,19 +677,6 @@ public class PageEditActivity extends ActivityExtended {
 	protected void exit(){
 		save();
 		super.exit();
-	}
-	
-	/**
-	 * <code>restart</code> allows the activity to reinitialize
-	 * all of it's attributes with the newest values.
-	 * 
-	 * @author Joey Andres
-	 */
-	void restart(){
-		// Restart Activity.
-		Intent i = getIntent();
-		finish();
-		startActivity(i);
 	}
 	
 	/**
