@@ -46,6 +46,7 @@ import edu.ualberta.multimedia.MultimediaAbstract;
 
 public class Page implements Serializable{
 	private Integer id;
+	private boolean read_only;
     private String title;
     private String author;
     private String text;
@@ -69,6 +70,7 @@ public class Page implements Serializable{
 	*/
     public Page(Integer id, String title, String author, String text, ArrayList<Page> pages) {
 		this.id = id;
+		this.read_only = false;
 		this.title = title;
 		this.author = author;
 		this.text = text;
@@ -80,6 +82,7 @@ public class Page implements Serializable{
 	}
     public Page(String title, String author, String text, ArrayList<Page> pages) {
 		this.id = null;
+		this.read_only = false;
 		this.title = title;
 		this.author = author;
 		this.text = text;
@@ -91,6 +94,7 @@ public class Page implements Serializable{
 	}
     public Page(Integer id, String title, String author, String text, ArrayList<MultimediaAbstract> mm, ArrayList<Page> pages) {
     	this.id = id;
+    	this.read_only = false;
     	this.title = title;
     	this.author = author;
 	this.text = text;
@@ -105,6 +109,7 @@ public class Page implements Serializable{
     }
     public Page(String title, String author, String text, ArrayList<MultimediaAbstract> mm, ArrayList<Page> pages) {
     	this.id = null;
+    	this.read_only = false;
     	this.title = title;
     	this.author = author;
     	this.text = text;
@@ -120,6 +125,8 @@ public class Page implements Serializable{
 	
 	public void setID(Integer i) {id = i;}
 	public Integer getID() {return id;}
+	public void setReadOnly(boolean p) {read_only = p;}
+	public boolean getPermission() {return read_only;}
     public void setTitle(String t) {title = t;}
     public String getTitle() {return title;}
     public void setAuthor(String a) {author = a;}
