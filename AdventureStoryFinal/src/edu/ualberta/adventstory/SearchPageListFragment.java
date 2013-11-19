@@ -37,11 +37,12 @@ public class SearchPageListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
-
 		// Inflate the layout for this fragment
 		return inflater.inflate(
 					R.layout.fragment_searchstorypagelist, container, false);
 	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onStart(){
 		super.onStart();
@@ -56,6 +57,7 @@ public class SearchPageListFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		previewPage(position);
 		page = (Page) pageList.get(position);
+		((DataSingleton)getActivity().getApplicationContext()).setCurrentPage(page);
 
 	}
 	/**

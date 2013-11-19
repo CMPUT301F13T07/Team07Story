@@ -17,28 +17,22 @@ import edu.ualberta.multimedia.Video;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
+// https://github.com/CMPUT301F13T03/adventure.datetime
 
 public class WebClient implements DataManager{
 	private static final String CON_URL = "http://cmput301.softwareprocess.es:8080";
 	private static final String _index = "cmput301f13t07";
     private static JestClient jestClient;
-    /*private static String MASTER_QUERY = "{query: { query_string: {"
-            					  + "query: %s, fields: [%s]}}";*/
     private static String MASTER_QUERY = "{\n" +
             							 "  \"query\" : {\n" +
             							 "    \"match\" : {\n" +
             							 "      \"%s\" : {\n" +
-            							 "        \"query\" : \"%s\"\n" +
+            							 "        \"query\" : \"%s\"\n," +
+            							 "        \"type\" : \"phrase_prefix\"\n" +
             							 "      }\n" +
             							 "    }\n" +
             							 "  }\n" +
             							 "}";
-    private static final String MATCH_ALL = 
-            					"{\n" +
-            					"  \"query\" : {\n" +
-            					"    \"match_all\" : { }\n" +
-            					"  }\n" +
-            					"}";
     
     public WebClient() {
 		ClientConfig clientConfig = new ClientConfig.Builder(CON_URL).multiThreaded(false).build();
@@ -77,7 +71,7 @@ public class WebClient implements DataManager{
 	@Override
 	public long insert_story(Story story) {
 		ES_Story es_story = new ES_Story(story.getTitle(), story.getAuthor(), 
-										story.getID(), story.getRoot().getID());
+										 story.getID(), story.getRoot().getID());
 		
 		es_execute(es_story, Constant.TABLE_STORY);
 		return 0;
