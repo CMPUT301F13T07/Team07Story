@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 
 
+
 import edu.ualberta.data.DbManager;
 import edu.ualberta.multimedia.*;
 import edu.ualberta.utils.Page;
@@ -31,6 +32,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class AddMultimediaActivity extends Activity {
 	
@@ -161,6 +163,7 @@ public class AddMultimediaActivity extends Activity {
 		Button takephoto = (Button) findViewById(R.id.takephoto);
 		Button finish = (Button) findViewById(R.id.finish);
 		ListView lv = (ListView) findViewById(R.id.amlist);
+		final TextView sel = (TextView) findViewById(R.id.am_selected);
 		adapter = new ArrayAdapter<String>(this, R.layout.am_list_item, medialist);
 		
 		lv.setAdapter(adapter);
@@ -188,6 +191,7 @@ public class AddMultimediaActivity extends Activity {
 		lv.setOnItemClickListener(new ListView.OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> a, View v, int pos, long id) {
 	        	currid = (int)id;
+	        	sel.setText(medialist.get((int)id));
 	        }
 	    });
 	}
@@ -197,7 +201,7 @@ public class AddMultimediaActivity extends Activity {
 	 * @author: Lyle Rolleman
 	 */
 	private void savePictureToDB() {
-		String dir = folder + medialist.get(currid);
+		String dir = folder + "/" + medialist.get(currid);
 		Picture pic = new Picture(page_id, index, dir);				
 		database.insert_multimedia(pic, currpage.getID());
 		
@@ -208,7 +212,7 @@ public class AddMultimediaActivity extends Activity {
 	}
 	
 	private void saveMovieToDB() {
-		String dir = mfolder + medialist.get(currid);
+		String dir = mfolder + "/" + medialist.get(currid);
 		Video vid = new Video(page_id, index, dir);				
 		database.insert_multimedia(vid, currpage.getID());
 		
@@ -219,7 +223,7 @@ public class AddMultimediaActivity extends Activity {
 	}
 	
 	private void saveSoundToDB() {
-		String dir = sfolder + medialist.get(currid);
+		String dir = sfolder + "/" + medialist.get(currid);
 		SoundClip sc = new SoundClip(page_id, index, dir);				
 		database.insert_multimedia(sc, currpage.getID());
 		
@@ -235,18 +239,49 @@ public class AddMultimediaActivity extends Activity {
 	 */
 	private void retakeMultimedia() {
 		File folderF = new File(folder);
+		File movfolder = new File(mfolder);
+		File sofolder = new File(sfolder);
         if (!folderF.exists()) {
             folderF.mkdir();
         }
+        if (!movfolder.exists()) {
+            movfolder.mkdir();
+        }
+        if (!sofolder.exists()) {
+            sofolder.mkdir();
+        }
         File[] files = folderF.listFiles();
-		if (files != null) 
-			for (int i=0; i<files.length; i++) 
-				if (!medialist.contains(files[i].getName()))
+        File[] mfiles = movfolder.listFiles();
+        File[] sfiles = sofolder.listFiles();
+		if (files != null) {
+			for (int i=0; i<files.length; i++) {
+				if (!medialist.contains(files[i].getName())) {
 					medialist.add(files[i].getName());
+					picids.add(medialist.size() - 1);
+				}
+			}
+		}
+		if (mfiles != null) {
+			for (int i=0; i<mfiles.length; i++) {
+				if (!medialist.contains(mfiles[i].getName())) {
+					medialist.add(mfiles[i].getName());
+					movids.add(medialist.size() - 1);
+				}
+			}
+		}
+		if (sfiles != null) {
+			for (int i=0; i<sfiles.length; i++) {
+				if (!medialist.contains(sfiles[i].getName())) {
+					medialist.add(sfiles[i].getName());
+					sids.add(medialist.size() - 1);
+				}
+			}
+		}
 		
 		Button retakePhoto = (Button) findViewById(R.id.retakephoto);
 		Button refinish = (Button) findViewById(R.id.refinish);
 		ListView lv = (ListView) findViewById(R.id.retakelist);
+		final TextView sel = (TextView) findViewById(R.id.re_selected);
 		adapter = new ArrayAdapter<String>(this, R.layout.am_list_item, medialist);
 		
 		lv.setAdapter(adapter);
@@ -259,10 +294,23 @@ public class AddMultimediaActivity extends Activity {
 		refinish.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				setResult(RESULT_OK);
+				if (currid != null) {
+					if (picids.contains(currid))
+						savePictureToDB();
+					else if (movids.contains(currid))
+						saveMovieToDB();
+					else if (sids.contains(currid))
+						saveSoundToDB();
+				}
 				finish();
 			}
 		});
-
+		lv.setOnItemClickListener(new ListView.OnItemClickListener() {
+	        public void onItemClick(AdapterView<?> a, View v, int pos, long id) {
+	        	currid = (int)id;
+	        	sel.setText(medialist.get((int)id));
+	        }
+	    });
 	}
 	
 	/*
