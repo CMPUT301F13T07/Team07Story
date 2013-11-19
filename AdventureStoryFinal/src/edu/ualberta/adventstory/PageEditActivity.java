@@ -23,7 +23,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView.BufferType;
 
@@ -676,7 +675,7 @@ public class PageEditActivity extends ActivityExtended {
 	@Override
 	protected void exit(){
 		save();
-		super.exit();
+		startActivity(new Intent(this, StartActivity.class));
 	}
 	
 	/**
