@@ -53,7 +53,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	private Bundle bundle;
 	private boolean isStory;
 	private boolean isTitle;
-	private String parentActivity;
+	String parentActivity;
 	private boolean addPage;	// Set to true if adding page in PageEdit.
 	
 	private ArrayList<?> results;
@@ -245,19 +245,19 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		}else if(isStory) {
 			story = (Story) results.get(position);
 			((DataSingleton)getApplicationContext()).setCurrentStory(story);
-
 			pageList = story.getAllPages();
+
 			Bundle bundle = new Bundle();
 			bundle.putSerializable("pageList", pageList);
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 			SearchPageListFragment listpages = new SearchPageListFragment();
 			
+			// Setting arguments to be passed
 			listpages.setArguments(bundle);
 			fragmentTransaction.replace(android.R.id.content, listpages);
 			fragmentTransaction.addToBackStack(null);
 			fragmentTransaction.commit();
-			
 		} else {
 			page = (Page) results.get(position);
 			((DataSingleton)getApplicationContext()).setCurrentPage(page);
@@ -272,7 +272,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 			SearchPreviewFragment preview = new SearchPreviewFragment();
 			
-			//Setting Arguments being passed
+			//Setting arguments to be passed
 			preview.setArguments(bundle);
 			fragmentTransaction.replace(android.R.id.content, preview);
 			fragmentTransaction.addToBackStack(null);

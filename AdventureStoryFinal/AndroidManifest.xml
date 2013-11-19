@@ -7,12 +7,16 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
+    <uses-permission 
+        android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_edit_page"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" android:name="DataSingleton">
+        android:theme="@style/AppTheme" 
+        android:name="DataSingleton"
+        android:debuggable="true">
         <activity
             android:name="edu.ualberta.adventstory.StartActivity"
             android:label="@string/title_activity_start" >
@@ -31,12 +35,15 @@
             android:label="@string/title_activity_create_new" >
         </activity>
         <activity android:name="edu.ualberta.adventstory.PageEditActivity">
-	</activity>
+		</activity>
         <activity
             android:name="edu.ualberta.adventstory.PageViewActivity"
             android:label="@string/title_activity_page_view" >
         </activity>
         <activity android:name="AddMultimediaActivity"></activity>
+        <activity android:name="edu.ualberta.adventstory.VideoPlayerActivity"
+            	  android:theme="@android:style/Theme.NoTitleBar.Fullscreen">            
+        </activity>
     </application>
 
 

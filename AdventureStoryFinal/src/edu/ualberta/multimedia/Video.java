@@ -14,18 +14,6 @@ public class Video extends MultimediaAbstract{
 		super(id, index, file_dir);
 	}
 	
-	
-	@Override
-	public void play(Context context){
-		DataSingleton ds = (DataSingleton)context.getApplicationContext();
-		((ActivityExtended) ds.getCurrentActivity()).switchToVideoViewPreview(file_dir);
-	}
-	
-	public Bitmap loadPhoto(Context context){
-		return BitmapFactory.decodeResource(
-					context.getResources(), R.drawable.ic_video);
-	}
-	
 	@Override
 	public boolean equals( Object obj ){
 		if( obj == null ) return false;

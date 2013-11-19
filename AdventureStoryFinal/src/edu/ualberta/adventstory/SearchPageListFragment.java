@@ -24,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import edu.ualberta.utils.Page;
-import edu.ualberta.utils.Story;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
@@ -38,11 +37,12 @@ public class SearchPageListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
-
 		// Inflate the layout for this fragment
 		return inflater.inflate(
 					R.layout.fragment_searchstorypagelist, container, false);
 	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onStart(){
 		super.onStart();
@@ -56,16 +56,20 @@ public class SearchPageListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		previewPage(position);
-		
+		page = (Page) pageList.get(position);
+		((DataSingleton)getActivity().getApplicationContext()).setCurrentPage(page);
 	}
-	
+	/**
+	 * This method creates a new preview fragment on the selected page
+	 * @param position
+	 */
 	private void previewPage(int position) {
 		text = pageList.get(position).getText();
 		title = pageList.get(position).getTitle();
 		
 		Bundle bundle = new Bundle();
 		
-		bundle.putSerializable("pageList", pageList);
+		//bundle.putSerializable("pageList", pageList);
 		bundle.putString("title", title);
 		bundle.putString("text", text);
 
