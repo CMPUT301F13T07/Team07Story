@@ -2,7 +2,8 @@ package edu.ualberta.adventstory;
 
 import java.util.HashMap;
 
-import edu.ualberta.adventstory.CommandCollection.Command;
+import edu.ualberta.controller.CommandCollection.Command;
+import edu.ualberta.controller.MultimediaControllerManager;
 import edu.ualberta.multimedia.TObservable;
 import android.app.Activity;
 import android.content.Intent;
@@ -23,6 +24,7 @@ abstract public class ActivityExtended extends Activity implements TObserver<TOb
 	// Maps Menu to a Command via hash table. This allows this module to avoid sphagetti code.
 	protected HashMap<MenuItem, Command> mMapMenuToCommand = 
 										new HashMap<MenuItem, Command>();
+	protected MultimediaControllerManager mMultimediaControllerManager;
 	static final int PLAY_VIDEO_REQUESTCODE = 0;
 	
 	public ActivityExtended() {
@@ -37,6 +39,7 @@ abstract public class ActivityExtended extends Activity implements TObserver<TOb
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		mDataSingleton = (DataSingleton)getApplicationContext();
+		mMultimediaControllerManager = MultimediaControllerManager.MultimediaControllerFactory();
 	}
 	
 	// Override these methods.

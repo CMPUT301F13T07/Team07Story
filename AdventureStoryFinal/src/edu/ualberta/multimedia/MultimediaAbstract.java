@@ -64,13 +64,6 @@ abstract public class MultimediaAbstract extends TObservable<TObserver>{
 		}
 	}
 	
-	public Bitmap loadPhoto(Context context) {
-		return BitmapFactory.decodeResource(
-				context.getResources(), R.drawable.ic_multimedia);
-	}
-	
-	public void play(Context context) {/*Override.*/}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null) return false;

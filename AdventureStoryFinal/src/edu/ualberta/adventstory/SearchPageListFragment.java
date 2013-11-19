@@ -58,7 +58,6 @@ public class SearchPageListFragment extends ListFragment {
 		previewPage(position);
 		page = (Page) pageList.get(position);
 		((DataSingleton)getActivity().getApplicationContext()).setCurrentPage(page);
-
 	}
 	/**
 	 * This method creates a new preview fragment on the selected page
@@ -70,7 +69,7 @@ public class SearchPageListFragment extends ListFragment {
 		
 		Bundle bundle = new Bundle();
 		
-		bundle.putSerializable("pageList", pageList);
+		//bundle.putSerializable("pageList", pageList);
 		bundle.putString("title", title);
 		bundle.putString("text", text);
 

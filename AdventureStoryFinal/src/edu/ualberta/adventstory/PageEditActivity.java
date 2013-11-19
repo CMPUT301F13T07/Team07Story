@@ -1,11 +1,9 @@
 package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -29,8 +27,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView.BufferType;
 
-import edu.ualberta.adventstory.CommandCollection.Callback;
-import edu.ualberta.adventstory.CommandCollection.Command;
+import edu.ualberta.controller.CommandCollection;
+import edu.ualberta.controller.CommandCollection.Callback;
+import edu.ualberta.controller.CommandCollection.Command;
+import edu.ualberta.controller.MultimediaControllerManager;
 import edu.ualberta.extendedViews.ClickableMultimediaSpan;
 import edu.ualberta.extendedViews.EditTextEx;
 import edu.ualberta.extendedViews.PaddingableImageSpan;
@@ -368,7 +368,7 @@ public class PageEditActivity extends ActivityExtended {
 		
 		for (final MultimediaAbstract multimedia : ma) {
 			// Load the multimedia Picture representation.
-			Bitmap multimediaBitmap = multimedia.loadPhoto(this);
+			Bitmap multimediaBitmap = MultimediaControllerManager.loadBitmap(this, multimedia);
 			final PaddingableImageSpan multimediaImageSpan = new PaddingableImageSpan(
 					this, multimediaBitmap, 20);
 			

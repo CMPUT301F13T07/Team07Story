@@ -41,7 +41,9 @@
             android:label="@string/title_activity_page_view" >
         </activity>
         <activity android:name="AddMultimediaActivity"></activity>
-        <activity android:name="edu.ualberta.adventstory.VideoPlayerActivity"></activity>
+        <activity android:name="edu.ualberta.adventstory.VideoPlayerActivity"
+            	  android:theme="@android:style/Theme.NoTitleBar.Fullscreen">            
+        </activity>
     </application>
 
 

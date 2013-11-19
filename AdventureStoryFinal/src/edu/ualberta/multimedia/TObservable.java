@@ -13,6 +13,7 @@ import edu.ualberta.adventstory.TObserver;
  * @param <TView> is the View associated with the model implementing
  * interface.
  */
+@SuppressWarnings("rawtypes")
 abstract public class TObservable<V extends TObserver> {
 	ArrayList<V> mViews;
 	boolean mHasChanged = false;	// Set to true when changed.

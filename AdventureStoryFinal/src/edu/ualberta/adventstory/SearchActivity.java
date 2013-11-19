@@ -52,7 +52,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	private Bundle bundle;
 	private boolean isStory;
 	private boolean isTitle;
-	private String parentActivity;
+	String parentActivity;
 	private boolean addPage;	// Set to true if adding page in PageEdit.
 	
 	private ArrayList<?> results;

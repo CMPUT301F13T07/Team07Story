@@ -20,9 +20,10 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.widget.TextView;
 
-import edu.ualberta.adventstory.CommandCollection.Callback;
-import edu.ualberta.adventstory.CommandCollection.Command;
 import edu.ualberta.adventstory.R;
+import edu.ualberta.controller.MultimediaControllerManager;
+import edu.ualberta.controller.CommandCollection.Callback;
+import edu.ualberta.controller.CommandCollection.Command;
 import edu.ualberta.extendedViews.ClickableMultimediaSpan;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
@@ -164,14 +165,13 @@ public class PageViewActivity extends ActivityExtended{
 		SpannableStringBuilder stringBuilder = new SpannableStringBuilder(mPage.getText());
 
 		// Return to caller if ma is null to avoid trivial errors.
-		return stringBuilder;
-		/*if( ma == null ){
+		if( ma == null ){
 			return stringBuilder;
 		}
 		
 		for (final MultimediaAbstract multimedia : ma) {
 			// Load the multimedia Picture representation.
-			Bitmap multimediaBitmap = multimedia.loadPhoto(this);
+			Bitmap multimediaBitmap = MultimediaControllerManager.loadBitmap(this, multimedia);
 			ImageSpan multimediaImageSpan = new ImageSpan(this, multimediaBitmap, 20);
 			
 			
@@ -186,7 +186,7 @@ public class PageViewActivity extends ActivityExtended{
 			multimediaClickableSpan.setOnClick(new Callback(){
 				@Override
 				public void callback(){
-					multimedia.play(getBaseContext());
+					MultimediaControllerManager.play(getBaseContext(), multimedia);
 				}
 			});
 
@@ -195,7 +195,6 @@ public class PageViewActivity extends ActivityExtended{
 					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);			
 		}
 		return stringBuilder;
-		*/
 	}
 	
 	@SuppressWarnings("deprecation")

@@ -22,46 +22,6 @@ public class SoundClip extends MultimediaAbstract {
 		super(index, file_dir);
 	}
 	
-	public void play(Context context) {
-		File file = new File(file_dir);
-		byte[] byteArray;
-		
-	    try {
-	    	// Load byte Array.
-	    	byteArray = Utility.load(file, context);
-	    	
-	        // create temp file that will hold byte array
-	    	File tempMp3 = File.createTempFile("kurchina", "mp3", 
-	    										context.getCacheDir());
-	        tempMp3.deleteOnExit();
-	        FileOutputStream fos = new FileOutputStream(tempMp3);
-	        fos.write(byteArray);
-	        fos.close();
-
-	        // Tried reusing instance of media player
-	        // but that resulted in system crashes...  
-	        MediaPlayer mediaPlayer = new MediaPlayer();
-
-	        // Tried passing path directly, but kept getting 
-	        // "Prepare failed.: status=0x1"
-	        // so using file descriptor instead
-	        FileInputStream fis = new FileInputStream(tempMp3);
-	        mediaPlayer.setDataSource(fis.getFD());
-
-	        mediaPlayer.prepare();
-	        mediaPlayer.start();
-	    } catch (IOException ex) {
-	        String s = ex.toString();
-	        ex.printStackTrace();
-	    }
-	}
-	
-	@Override
-	public Bitmap loadPhoto(Context context) {
-		return BitmapFactory.decodeResource(
-				context.getResources(), R.drawable.ic_audio);
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null) return false;
