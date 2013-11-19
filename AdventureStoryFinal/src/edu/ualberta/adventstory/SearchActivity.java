@@ -5,13 +5,13 @@
  * 
  * Outstanding Issue: If the user selects from author or title then enters search by text they are
  * given the appropriate search result, however, if they then change the author/title selection
- * the results are not updated until the search by text is modified.
+ * the results are not updated until the search by text is modified. <This might be fixed with 
+ * commented out code. Need to test this after the demo.>
  * 
  * Author: Kelsey Gaboriau
  */
 package edu.ualberta.adventstory;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.annotation.TargetApi;
@@ -197,9 +197,11 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			if (selected == 0){
 				// User selected to search by title
 				isTitle = true;
+				//updateList(results);
 			} else if (selected == 1){
 				// User selected to search by author
 				isTitle = false;
+				//updateList(results);
 			}
 		}
 		// To be implemented with online functionality
