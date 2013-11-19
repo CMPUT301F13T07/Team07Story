@@ -3,11 +3,6 @@
  * String that is either partly or entirely matching the author or title (after selecting either 
  * author or title). If the user has a blank search it will return all pages or stories.
  * 
- * Outstanding Issue: If the user selects from author or title then enters search by text they are
- * given the appropriate search result, however, if they then change the author/title selection
- * the results are not updated until the search by text is modified. <This might be fixed with 
- * commented out code. Need to test this after the demo.>
- * 
  * Author: Kelsey Gaboriau
  */
 package edu.ualberta.adventstory;
@@ -157,25 +152,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	private void searchText() {
 		searchEntry.addTextChangedListener(new TextWatcher(){
 			public void afterTextChanged(Editable s) {	
-				// Check if the user is searching pages or stories
-				if (isStory && isTitle){
-					// Populate results with appropriate stories based on title
-					results = database.get_stories_by_title(searchEntry.getText().toString());
-					
-				} else if (isStory && !isTitle){
-					// Populate results with appropriate stories based on author
-					results = database.get_stories_by_author(searchEntry.getText().toString());
-					
-				} else if (!isStory && isTitle){
-					// Populate results with appropriate pages based on title
-					results = database.get_pages_by_title(searchEntry.getText().toString());
-					
-				} else {
-					// Populate results with appropriate pages based on author
-					results = database.get_pages_by_author(searchEntry.getText().toString());
-				}
-				
-				updateList(results);
+				searchResults();
 
 			}
 
@@ -188,6 +165,29 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 					int count) {}
 	      
 	    }); 
+		
+	}
+	
+	public void searchResults(){
+		// Check if the user is searching pages or stories
+		if (isStory && isTitle){
+			// Populate results with appropriate stories based on title
+			results = database.get_stories_by_title(searchEntry.getText().toString());
+			
+		} else if (isStory && !isTitle){
+			// Populate results with appropriate stories based on author
+			results = database.get_stories_by_author(searchEntry.getText().toString());
+			
+		} else if (!isStory && isTitle){
+			// Populate results with appropriate pages based on title
+			results = database.get_pages_by_title(searchEntry.getText().toString());
+			
+		} else {
+			// Populate results with appropriate pages based on author
+			results = database.get_pages_by_author(searchEntry.getText().toString());
+		}
+		
+		updateList(results);
 		
 	}
 
@@ -203,11 +203,11 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			if (selected == 0){
 				// User selected to search by title
 				isTitle = true;
-				//updateList(results);
+				searchResults();
 			} else if (selected == 1){
 				// User selected to search by author
 				isTitle = false;
-				//updateList(results);
+				searchResults();
 			}
 		}
 		// To be implemented with online functionality
