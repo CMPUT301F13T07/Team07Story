@@ -101,6 +101,7 @@ public class AddMultimediaActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_addmedia);
+		setTitle(R.string.addmedia);
 		database = ((DataSingleton)this.getApplication()).database;
 		currpage = ((DataSingleton)this.getApplication()).getCurrentPage();
 		Bundle args = getIntent().getExtras();

@@ -64,11 +64,15 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	// Create an ArrayAdapter using the string array and a default spinner layout
 	private ArrayAdapter<CharSequence> adapter;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_story_search);
+		if(isStory){
+			setTitle(R.string.findStory);
+		} else {
+			setTitle(R.string.findPage);
+		}
 		
 		// Initialize variables
 		isTitle = true;
@@ -81,20 +85,22 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 
 		addPage = false;		
 		addPage = bundle.getBoolean("ADD_PAGE");
+		if(isStory){
+			setTitle(R.string.findStory);
+		} else {
+			setTitle(R.string.findPage);
+		}
 		// If adding page, don't clear page Stack.
 		if( addPage == false){
 			// Always empty Page Stack.
 			((DataSingleton)getApplicationContext()).clearPageStack();
 		}
-
 		
 		// Initialize view variables
 		//searchOnline = (Spinner) findViewById(R.id.spinnerOnline);
 		searchBy = (Spinner) findViewById(R.id.spinnerSearchBy);
 		listResults = (ListView) findViewById(R.id.listResults);
 		searchEntry = (EditText) findViewById(R.id.searchEntry);
-		
-		
 		
 		// Initialize adapters
 		adapter = ArrayAdapter.createFromResource(this, R.array.searchBy_dropdown, android.R.layout.simple_spinner_item);
@@ -120,7 +126,6 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			
 		// Checks to see if the user has input text into the search box
 		searchText();	
-		
 	}
 	
     @Override
@@ -148,6 +153,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
                 return super.onOptionsItemSelected(item);
         }
     }
+    
 	private void searchText() {
 		searchEntry.addTextChangedListener(new TextWatcher(){
 			public void afterTextChanged(Editable s) {	
@@ -180,7 +186,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {}
-	        
+	      
 	    }); 
 		
 	}

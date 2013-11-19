@@ -21,6 +21,7 @@ public class CreateNewStoryActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_newstory);
+		setTitle(R.string.createstory);
 		database = DataSingleton.database;
 		mTitle = (EditText) findViewById(R.id.activity_newstory_edittitle);
 		mAuthor = (EditText) findViewById(R.id.activity_newstory_editauthor);

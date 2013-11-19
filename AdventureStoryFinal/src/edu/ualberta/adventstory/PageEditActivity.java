@@ -83,7 +83,7 @@ public class PageEditActivity extends ActivityExtended {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pageedit);		
-			
+		setTitle(R.string.createpage);
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
 		

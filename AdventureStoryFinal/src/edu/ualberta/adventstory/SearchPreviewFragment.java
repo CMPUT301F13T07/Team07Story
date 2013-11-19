@@ -2,8 +2,7 @@
  * Purpose: This fragment starts when the user selects a page to show a preview
  * of the page consisting of the page title, and page text.
  * 
- * Outstanding Issues: There is an issue where if user clicks from selecting a story
- * the program will crash.
+ * Outstanding Issues: N/A
  * 
  * Author: Henry Hoang
  */
@@ -85,7 +84,4 @@ public class SearchPreviewFragment extends Fragment {
 		Intent i = new Intent(getActivity(), PageViewActivity.class);
 		startActivityForResult(i, 0);
 	}
-	
-	
-
 }
