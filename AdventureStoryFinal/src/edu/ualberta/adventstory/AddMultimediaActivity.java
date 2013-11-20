@@ -1,10 +1,10 @@
 package edu.ualberta.adventstory;
 
-/*
+/**
  * The Add Multimedia Activity
  * Allows a user to select a piece of media from the list for adding to a page as well as going to the camera
  * app to take a new picture. 
- * #author: Lyle Rolleman
+ * @author: Lyle Rolleman
  */
 
 import java.io.File;
@@ -41,61 +41,61 @@ public class AddMultimediaActivity extends Activity {
 	 */
 	private Uri imageuri;
 	
-	/*
+	/**
 	 * Constant request code for capturing images from camera app
 	 */
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	
-	/*
+	/**
 	 * The folders where the media are stored on the sdcard
 	 */
 	private String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures";
 	private String mfolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Movies";
 	private String sfolder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Music";
 	
-	/*
+	/**
 	 * The names of the media items in the directory. 
 	 */
 	private ArrayList<String> medialist = new ArrayList<String>();
 	
-	/*
+	/**
 	 * Array adapter for populating list view
 	 */
 	private ArrayAdapter<String> adapter;
 	
-	/*
+	/**
 	 * The database handler class
 	 */
 	private DbManager database;
 	
-	/*
+	/**
 	 * the page_id of the page the media is to be added to
 	 */
 	private int page_id;
 	
-	/*
+	/**
 	 * The index of where the media should be in the text view
 	 */
 	private int index;
 	
-	/*
+	/**
 	 * The current id selected in the list view
 	 */
 	private Integer currid;
 	
-	/*
+	/**
 	 * The Page object for the current page
 	 */
 	private Page currpage;
 	
-	/*
+	/**
 	 * contains which ids are for pictures, videos and sounds
 	 */
 	private ArrayList<Integer> picids;
 	private ArrayList<Integer> movids;
 	private ArrayList<Integer> sids;
 	
-	/*
+	/**
 	 * loads database and current page from application class and loads arguments
 	 * @author: Lyle Rolleman
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -115,7 +115,7 @@ public class AddMultimediaActivity extends Activity {
 		addMultimedia();
 	}
 	
-	/*
+	/**
 	 * Allows for selecting of multimedia and taking of photos
 	 * @author: Lyle Rolleman
 	 */
@@ -196,7 +196,7 @@ public class AddMultimediaActivity extends Activity {
 	    });
 	}
 	
-	/*
+	/**
 	 * Updates the Page object and saves the multimedia to DB
 	 * @author: Lyle Rolleman
 	 */
@@ -233,7 +233,7 @@ public class AddMultimediaActivity extends Activity {
 		((DataSingleton)this.getApplication()).setCurrentPage(currpage);		
 	}
 	
-	/*
+	/**
 	 * Like addMultimedia, but has a picture preview after taking a picture
 	 * @author: Lyle Rolleman
 	 */
@@ -313,7 +313,7 @@ public class AddMultimediaActivity extends Activity {
 	    });
 	}
 	
-	/*
+	/**
 	 * Goes to the camera app to take a photo
 	 * @author: From CameraTest, modified by Lyle Rolleman
 	 */
@@ -333,7 +333,7 @@ public class AddMultimediaActivity extends Activity {
         startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 	
-	/*
+	/**
 	 * Switches to retake content view and adds the taken picture to the list
 	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
 	 */

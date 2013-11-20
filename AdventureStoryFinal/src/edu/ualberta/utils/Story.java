@@ -2,7 +2,7 @@ package edu.ualberta.utils;
 
 import java.util.*;
 
-/*
+/**
  * This class represents the "book cover" of the story for the most part, and as such, most of the functionality
  * in this class is actually just wrappers around functions in Page.java. 
  * Refer to that for further information. 
@@ -16,12 +16,25 @@ public class Story {
 	private Page root;
 
 	//Like Page, overloaded constructors for when creating new story or loading from DB
+	/**
+	 * 
+	 * @param title
+	 * @param author
+	 * @param root
+	 */
 	public Story(String title, String author, Page root) {
 		this.id = null;
 		this.title = title;
 		this.author = author;
 		this.root = root;
 	}
+	/**
+	 * 
+	 * @param id
+	 * @param title
+	 * @param author
+	 * @param root
+	 */
 	public Story(Integer id, String title, String author, Page root) {
 		this.id = id;
 		this.title = title;
@@ -60,7 +73,7 @@ public class Story {
 	}
 	
 	@Override
-	/*
+	/**
 	 * Creates a string representation of a story
 	 * @return: The string version of story
 	 * @author: Kelsey Gaboriau 

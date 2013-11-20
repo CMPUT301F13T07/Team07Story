@@ -35,6 +35,8 @@ package edu.ualberta.utils;
  * ArrayList<Page> searchByTitle(String) : return a list of pages whose title matches the passed string. Currently case sensitive
  * ArrayList<Page> searchByAuthor(Sting) : return a list of pages whose author field matches argument. Currently case sensitive
  * ArrayList<Page> searchByID(Integer) : return a list of pages whose ID matches argument. ID can be null
+ */
+/**
  * @author: Lyle Rolleman, Kelsey Gaboriau (see classes for specifics)
  */
 
@@ -68,6 +70,13 @@ public class Page implements Serializable{
 	*multimedia: the list of MultimediaAbstract objects
 	*pages: The list of pages the user can choose to go to next
 	*/
+	/**
+	 * @param id
+	 * @param title
+	 * @param author
+	 * @param text
+	 * @param pages
+	 */
     public Page(Integer id, String title, String author, String text, ArrayList<Page> pages) {
 		this.id = id;
 		this.read_only = false;
@@ -80,6 +89,13 @@ public class Page implements Serializable{
 		else
 			this.pages = pages;
 	}
+    /**
+     * 
+     * @param title
+     * @param author
+     * @param text
+     * @param pages
+     */
     public Page(String title, String author, String text, ArrayList<Page> pages) {
 		this.id = null;
 		this.read_only = false;
@@ -92,6 +108,15 @@ public class Page implements Serializable{
 		else
 			this.pages = pages;
 	}
+    /**
+     * 
+     * @param id
+     * @param title
+     * @param author
+     * @param text
+     * @param mm
+     * @param pages
+     */
     public Page(Integer id, String title, String author, String text, ArrayList<MultimediaAbstract> mm, ArrayList<Page> pages) {
     	this.id = id;
     	this.read_only = false;
@@ -107,6 +132,14 @@ public class Page implements Serializable{
     else
     	this.pages = pages;
     }
+    /**
+     * 
+     * @param title
+     * @param author
+     * @param text
+     * @param mm
+     * @param pages
+     */
     public Page(String title, String author, String text, ArrayList<MultimediaAbstract> mm, ArrayList<Page> pages) {
     	this.id = null;
     	this.read_only = false;
@@ -146,7 +179,7 @@ public class Page implements Serializable{
 	}
 	public void deletePage(Integer i) {pages.remove(i);}
 	
-	/*
+	/**
 	*Overridden to avoid casting and exception garbage, and it was already here for previous design branch not taken
 	*If you want to get an entire branch of the tree, see cloneAllChildren below
 	*@author: Lyle Rolleman
@@ -155,7 +188,8 @@ public class Page implements Serializable{
 		return new Page(this.id, this.title, this.author, this.text, this.multimedia, null);
 	}
 	
-	/*Clones the caller and all Pages below it in the tree. 
+	/**
+	 * Clones the caller and all Pages below it in the tree. 
 	 * Implementation: 
 	 * clones the current page, then gets the list of children from the ORIGINAL page
 	 * iterates through those pages, performing a recursive call on them. The return value is the clone
@@ -172,7 +206,7 @@ public class Page implements Serializable{
 		return root;
 	}
 	
-	/*
+	/**
 	 * get all pages and return them in a simple arraylist. Ordered by depth in tree
 	 * Get all pages at and below current node. Includes current page
 	 * Implementation: 
@@ -194,10 +228,10 @@ public class Page implements Serializable{
 		return ret;
 	}
 	
-	/*
+	/**
 	 * For internal use
 	 * @author: Lyle Rolleman
-	 * @param: o the current page in the tree
+	 * @param: o
 	 * @param: the current "height" in the tree
 	 */
 	private void getAllPages(Page o, int level) {
@@ -209,7 +243,7 @@ public class Page implements Serializable{
 			getAllPages(ops.get(i), level+1);
 	}
 	
-	/*
+	/**
 	 * searches do not return in any particular order at the moment, can do this later if desirable
 	 * Implementation:
 	 * All the searches are pretty much the same, look to see if the caller if the caller equals the provided 
@@ -217,7 +251,7 @@ public class Page implements Serializable{
 	 * of each, and so on and so forth. each return combines the arraylists of the individual calls providing a list
 	 * of all matches. Will return an empty arraylist if there are no matches. 
 	 * @author: Lyle Rolleman
-	 * @param: t, the title to search for
+	 * @param: t
 	 * @return: All the pages which match that title
 	 */
 	public ArrayList<Page> searchByTitle(String t) {
@@ -231,8 +265,8 @@ public class Page implements Serializable{
 		return res;
 	}
 	
-	/*
-	 * @param: the desired author key
+	/**
+	 * @param: a
 	 * @author: Lyle Rolleman
 	 * @return: The list of pages which match the key
 	 */
@@ -247,8 +281,8 @@ public class Page implements Serializable{
 		return res;
 	}
 	
-	/*
-	 * @param: the desired id to search for
+	/**
+	 * @param: id
 	 * @author: Lyle Rolleman
 	 * @return: The list matching the key
 	 */
@@ -268,7 +302,7 @@ public class Page implements Serializable{
 	}
 	
 	@Override
-	/*
+	/**
 	 * @return: A string representation of the Page
 	 * @author: Kelsey Gaboriau 
 	 * @see java.lang.Object#toString()
