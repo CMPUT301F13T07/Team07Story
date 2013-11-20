@@ -42,9 +42,25 @@
         <ListView
             android:id="@+id/retakelist"
             android:layout_width="match_parent"
-            android:layout_height="267dp" >
+            android:layout_height="248dp" >
         </ListView>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/refinish"
+        android:layout_alignParentLeft="true"
+        android:text="Selected: " />
+
+    <TextView
+        android:id="@+id/re_selected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/refinish"
+        android:layout_toRightOf="@+id/textView1"
+        android:text="" />
 
 </RelativeLayout>
