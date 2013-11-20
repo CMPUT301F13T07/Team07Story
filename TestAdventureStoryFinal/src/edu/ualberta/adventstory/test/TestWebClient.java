@@ -92,6 +92,5 @@ public class TestWebClient extends AndroidTestCase {
 	}
 	
 	public void tearDown() {
-		webclient.close();
 	}
 }

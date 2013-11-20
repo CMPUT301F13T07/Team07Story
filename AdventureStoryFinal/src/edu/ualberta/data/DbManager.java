@@ -49,6 +49,19 @@ public class DbManager implements DataManager{
 			db = dbhelper.getReadableDatabase();
 		}
 	}
+	
+	public int number_stories() {
+		String query = "SELECT COUNT(*) FROM " + Constant.TABLE_STORY;
+		Cursor c = null;
+		try {
+			c = db.rawQuery(query, null);
+		} catch(SQLiteException ex) {
+			Log.v("Select from database exception caught", ex.getMessage());
+			return 0;
+		}
+		c.moveToFirst();
+		return c.getInt(0);
+	}
 
 	public long insert_story(Story story) {
 		ContentValues values = new ContentValues();

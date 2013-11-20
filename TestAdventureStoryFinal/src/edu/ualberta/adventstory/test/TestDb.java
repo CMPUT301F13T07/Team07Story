@@ -32,6 +32,11 @@ public class TestDb extends AndroidTestCase {
 		System.out.println("test_pic id = " + test_pic.getID());
 	}
 	
+	public void testnumber_stories() {
+		int num = test_db.number_stories();
+		assertEquals(num, 1);
+	}
+	
 	public void testinsert_page() {
 		long page_id;
 		page_id = test_db.insert_page(test_page);
