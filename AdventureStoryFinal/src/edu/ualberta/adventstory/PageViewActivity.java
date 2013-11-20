@@ -4,15 +4,21 @@ import java.util.ArrayList;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
+import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView.BufferType;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -39,11 +45,8 @@ public class PageViewActivity extends ActivityExtended{
 	private TextView mStoryTitleTextView;			// Story Title TextView.
 	private TextView mPageTitleTextView;			// Page Title TextView.
 	private TextView mStoryTextView;				// StoryText TextView.
-	
-	// Layouts.
 	private LinearLayout mOuterLayout;				// Outer LinearLayout.
-	private LinearLayout.LayoutParams mInnerComponentParam;
-	
+	private LinearLayout mButtonLayout;
 	private Story mStory;					// Story being viewed.
 	private Page mPage;						// Current page.
 	
@@ -60,18 +63,16 @@ public class PageViewActivity extends ActivityExtended{
 		mStory = mDataSingleton.getCurrentStory();
 		if( mStory == null ){ mViewPageOnly = true; }
 		
-		// Acquire instance of layout.		
-		mOuterLayout = (LinearLayout)findViewById(R.id.outerLayout);		
-		// Initialize the Story TextView and its parameters.
+		mOuterLayout = (LinearLayout)findViewById(R.id.outerLayout);
+		mButtonLayout = (LinearLayout)findViewById(R.id.buttonLayout);
 		mStoryTitleTextView = (TextView)findViewById(R.id.storyTitle);
-		if( mViewPageOnly == false ){setStoryTitle(mStory.getTitle(), 26);}
-		//Initialize the Page Title TextView and its parameters.
+		if( mViewPageOnly == false ){setStoryTitle(mStory.getTitle(), 26);}		
 		mPageTitleTextView = (TextView)findViewById(R.id.pageTitle);		
-		setPageTitle(mPage.getTitle(), 22);
-		// Initilize story texts.
 		mStoryTextView = (TextView)findViewById(R.id.pageText);				
+		
+		setPageTitle(mPage.getTitle(), 22);		
 		setStoryText(18);
-				
+		
 		AddButtons();
 	}
 	
@@ -121,22 +122,29 @@ public class PageViewActivity extends ActivityExtended{
 		mMapMenuToCommand.put(mnu1, startEditPageCommand);
 	}
 	
-	void AddButtons(){
+	/**
+	 * <code>AddButtons()</code> add the buttons that allows the user/author to transition
+	 * to next page.
+	 */
+	private void AddButtons(){
 		for(final Page p : mPage.getPages()){
-			Button btn = new Button(this);
-			btn.setText(p.getTitle());
-			btn.setLayoutParams(mInnerComponentParam);
-			btn.setOnClickListener(new OnClickListener(){
+			TextView tv = (TextView)View.inflate(this, R.layout.next_page_textview, null);
+			tv.setText(p.getTitle());
+			tv.setOnClickListener(new OnClickListener(){
 				@SuppressLint("NewApi")
 				@Override
 				public void onClick(View view){
 					// Go to the next page.
-					mDataSingleton.setCurrentPage(p);
+					mDataSingleton.setCurrentPage(p);					
 					mDataSingleton.getCurrentActivity().recreate();
 				}
 			});
-			mOuterLayout.addView(btn);
-		}
+			View v = (View)View.inflate(this, R.layout.divider, null);
+			mButtonLayout.addView(v);
+			mButtonLayout.addView(tv);			
+			}
+		View v = (View)View.inflate(this, R.layout.divider, null);
+		mButtonLayout.addView(v);
 	}
 	
 	void setStoryTitle(String storyTitle, float textSize) {

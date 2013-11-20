@@ -39,13 +39,6 @@
 	            android:layout_height="wrap_content"
 	            android:text="Contents"            
 	            />	
-	                <!-- mInnerLayout -->
-	        <LinearLayout 
-	            android:id="@+id/innerLayout"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:orientation="vertical">                        
-	        </LinearLayout>
 	        
 			<TextView
 			    android:id="@+id/nextPageTextView"
@@ -55,9 +48,10 @@
 			    />
 			<LinearLayout
 				android:id="@+id/buttonLayout"
-	        	android:layout_width="fill_parent"
+	        	android:layout_width="match_parent"
 	        	android:layout_height="fill_parent"
-	        	android:orientation="vertical">        		                
+	        	android:orientation="vertical"
+	        	>
 			</LinearLayout>        
 	    </LinearLayout>
 	</ScrollView>

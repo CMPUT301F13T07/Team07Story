@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView.BufferType;
 
@@ -268,22 +269,27 @@ public class PageEditActivity extends ActivityExtended {
 	 * <code>addNextPageButtons</code> is used for adding listView elements for next
 	 * page.
 	 */
-	void addNextPageButtons() {
-		for (final Page p : mPage.getPages()) {
-			Button btn = new Button(this);
-			btn.setText(p.getTitle());
-			btn.setLayoutParams(mInnerComponentParam);
-			btn.setOnClickListener(new OnClickListener() {
+	private void addNextPageButtons(){
+		for(final Page p : mPage.getPages()){
+			TextView tv = (TextView)View.inflate(this, R.layout.next_page_textview, null);
+			tv.setText(p.getTitle());
+			tv.setOnClickListener(new OnClickListener(){
 				@SuppressLint("NewApi")
 				@Override
-				public void onClick(View view) {
-					// This doesn't apply here since we are just editing
-					// the page.
+				public void onClick(View view){
+					// Go to the next page.
+					mDataSingleton.setCurrentPage(p);					
+					mDataSingleton.getCurrentActivity().recreate();
 				}
 			});
-			mButtonLayout.addView(btn);
-		}
+			View v = (View)View.inflate(this, R.layout.divider, null);
+			mButtonLayout.addView(v);
+			mButtonLayout.addView(tv);			
+			}
+		View v = (View)View.inflate(this, R.layout.divider, null);
+		mButtonLayout.addView(v);
 	}
+	
 	
 	/**
 	 * <code>setStoryTitle</code> set's the <code>TextView</code> for Story Title.
