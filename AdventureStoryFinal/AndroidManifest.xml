@@ -18,7 +18,7 @@
         android:name="DataSingleton"
         android:debuggable="true">
         <activity
-            android:name="edu.ualberta.adventstory.StartActivity"
+            android:name="edu.ualberta.adventstory.LoginActivity"
             android:label="@string/title_activity_start" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,6 +44,7 @@
         <activity android:name="edu.ualberta.adventstory.VideoPlayerActivity"
             	  android:theme="@android:style/Theme.NoTitleBar.Fullscreen">            
         </activity>
+        <activity android:name="StartActivity"></activity>
     </application>
 
 
