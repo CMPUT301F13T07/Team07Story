@@ -83,6 +83,12 @@ public class DbManager implements DataManager{
 		return insert(Constant.TABLE_MULT, values);
 	}
 	
+	public long insert_user(String username) {
+		ContentValues values = new ContentValues();
+		values.put(Constant.USER, username);
+		return insert(Constant.TABLE_LOGIN, values);
+	}
+	
 	public long insert(String table, ContentValues values) {
 		try{
 			return db.insert(table, null, values);
@@ -130,7 +136,10 @@ public class DbManager implements DataManager{
 		Cursor c = get_from_db(Constant.TABLE_MULT, Constant.PAGE_ID, page_id);
 		return multimedia_from_cursor(c);
 	}
-	
+	public String get_user(String username) {
+		Cursor c = get_from_db(Constant.TABLE_LOGIN, Constant.USER, username);
+		return username_from_cursor(c);
+	}
 	/**
 	 * Fetches story(ies) or page(s) from the db
 	 * @param table
@@ -142,6 +151,11 @@ public class DbManager implements DataManager{
 		String select = "SELECT * FROM " + table
 				+ " WHERE " + column + " LIKE '%"
 				+ term + "%'";
+		if (table.equals(Constant.TABLE_LOGIN)) {
+			select = "SELECT * FROM " + table
+					+ " WHERE " + column + " = '"
+					+ term + "'";
+		}
 		try {
 			return db.rawQuery(select, null);
 		} catch(SQLiteException ex) {
@@ -271,6 +285,14 @@ public class DbManager implements DataManager{
 			}
 		}
 		return multimedia;
+	}
+	
+	public String username_from_cursor(Cursor c) {
+		String username = "";
+		while(c.moveToNext()) {
+			username = c.getString(c.getColumnIndex(Constant.USER));
+		}
+		return username;
 	}
 	
 	public long update_story(Story story) {
