@@ -159,7 +159,7 @@ public class Page implements Serializable{
 	public void setID(Integer i) {id = i;}
 	public Integer getID() {return id;}
 	public void setReadOnly(boolean p) {read_only = p;}
-	public boolean getPermission() {return read_only;}
+	public boolean getReadOnly() {return read_only;}
     public void setTitle(String t) {title = t;}
     public String getTitle() {return title;}
     public void setAuthor(String a) {author = a;}

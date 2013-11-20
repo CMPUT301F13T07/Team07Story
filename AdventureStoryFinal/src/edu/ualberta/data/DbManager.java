@@ -63,6 +63,7 @@ public class DbManager implements DataManager{
 		ContentValues values = new ContentValues();
 	    values.put(Constant.PAGE_TITLE, page.getTitle());
 	    values.put(Constant.PAGE_AUTHOR, page.getAuthor());
+	    values.put(Constant.READONLY, page.getReadOnly());
 		return insert(Constant.TABLE_PAGE, values);
 	}
 	
@@ -196,6 +197,7 @@ public class DbManager implements DataManager{
 	    String title;
 	    String author;
 		String text;
+		Boolean readonly;
 		
 		ArrayList<Page> pages = new ArrayList<Page>();
 				
@@ -204,11 +206,13 @@ public class DbManager implements DataManager{
 			title = c.getString(c.getColumnIndex(Constant.PAGE_TITLE));
 			author = c.getString(c.getColumnIndex(Constant.PAGE_AUTHOR));
 			text = c.getString(c.getColumnIndex(Constant.PAGE_TEXT));
+			readonly = c.getInt(c.getColumnIndex(Constant.READONLY)) > 0;
 			
 			ArrayList<Page> options = new ArrayList<Page>();
 			options = get_page_options(id);
 			
 			Page page = new Page(id, title, author, text, options);
+			page.setReadOnly(readonly);
 			pages.add(page);
 		}
 		
