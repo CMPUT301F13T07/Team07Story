@@ -90,7 +90,7 @@ public class LoginActivity extends Activity {
 	 */
 	private void startAct(String a) {
 		Intent conti = new Intent(this, StartActivity.class);
-		//((DataSingleton)this.getApplication()).author = a;
+		((DataSingleton)this.getApplication()).author = a;
 		startActivity(conti);
 	}
 }
