@@ -9,6 +9,13 @@ import edu.ualberta.utils.Story;
 public interface DataManager {
 	
 	/**
+	 * Counts the number of stories available.
+	 * @parm story
+	 * @return int number of stories
+	 */
+	public abstract int number_stories();
+	
+	/**
 	 * Inserts a story into the Story table
 	 * @param story
 	 * @return id number of the inserted story

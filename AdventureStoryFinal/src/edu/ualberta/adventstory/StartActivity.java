@@ -10,6 +10,8 @@
 package edu.ualberta.adventstory;
 
 
+import java.util.Random;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,12 +19,13 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 import edu.ualberta.data.DataManager;
 import edu.ualberta.utils.Page;
 
 public class StartActivity extends Activity {
 
-	private Button mkStory, publish, searchPage, searchStory, mkPage;
+	private Button mkStory, publish, searchPage, searchStory, mkPage, randomStory;
 	public DataManager database;
 
     @Override
@@ -39,6 +42,7 @@ public class StartActivity extends Activity {
     	searchPage = (Button)findViewById(R.id.findPage);
     	searchStory = (Button)findViewById(R.id.findStory);
     	mkPage = (Button)findViewById(R.id.newPage);
+    	randomStory = (Button) findViewById(R.id.randomStory);
     	
     	// Check for user button clicks
     	mkStory.setOnClickListener(new OnClickListener(){
@@ -72,6 +76,21 @@ public class StartActivity extends Activity {
     		public void onClick(View v){
     			// Bring up Story Search Activity
     			search(true);
+    		}
+    	});
+    	
+    	randomStory.setOnClickListener(new OnClickListener(){
+    		public void onClick(View v){
+    			// Check if there are any available stories. If not, inform user
+    			// with a toast. Otherwise display root page of story for reading.
+    			int numStories = database.number_stories();
+    			if (numStories == 0){
+    				Toast.makeText(getApplicationContext(), "Sorry, there are no stories available.",
+    						   Toast.LENGTH_LONG).show();
+    			} else {
+    				int index = randomGen(numStories);
+    				readRandom(index);
+    			}
     		}
     	});
     }
@@ -118,6 +137,19 @@ public class StartActivity extends Activity {
 		((DataSingleton)getApplicationContext()).setCurrentPage(newPage);
 		((DataSingleton)getApplicationContext()).setCurrentStory(null);
 		startActivity(new Intent(getBaseContext(), PageEditActivity.class));
+	}
+	
+	/* Called when the user clicks on read random story button and stories are available */
+	private void readRandom(int index){
+		// Set the DataSingleton 
+		
+		// Bring up PageViewActivity
+	}
+	
+	/* Random number generator used to find a random story */
+	private int randomGen(int high){
+		Random rand = new Random();
+		return rand.nextInt(high-1) + 1;
 	}
 }
 
