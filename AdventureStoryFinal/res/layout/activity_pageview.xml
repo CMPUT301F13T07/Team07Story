@@ -53,6 +53,13 @@
                 android:layout_height="wrap_content"
                 android:text="Next Page(s):"
                 android:textSize="16dp" />
+            <Button
+                android:id="@+id/randomChoiceButton"
+                android:text="Random Next Page"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >                
+            </Button>
 
             <LinearLayout
                 android:id="@+id/buttonLayout"

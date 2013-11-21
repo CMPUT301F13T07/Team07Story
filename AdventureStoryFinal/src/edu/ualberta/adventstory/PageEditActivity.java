@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -661,9 +662,12 @@ public class PageEditActivity extends ActivityExtended {
 		String pageAuthor = getAuthorText();
 		String pageStory = getStoryText();
 
+		CheckBox cb = (CheckBox)findViewById(R.id.readOnlyCheckBox);
+		
 		mPage.setTitle(pageName);
 		mPage.setAuthor(pageAuthor);
 		mPage.setText(pageStory);
+		mPage.setReadOnly(cb.isChecked());
 
 		if (pageName.length() <= 0 || pageAuthor.length() <= 0
 				|| pageStory.length() <= 0) {
@@ -680,7 +684,7 @@ public class PageEditActivity extends ActivityExtended {
 		 * Multimedia's are only updated as opposed to modified.
 		 */
 		for (MultimediaAbstract m : mPage.getMultimedia()) {
-			mDataSingleton.database.update_multimedia(m, mPage.getID());
+			mDataSingleton.database.update_multimedia(m, mPage.getID());			
 		}
 	}
 

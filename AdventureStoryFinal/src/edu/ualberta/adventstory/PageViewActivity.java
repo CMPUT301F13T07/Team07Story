@@ -2,6 +2,7 @@ package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Stack;
 import java.util.TreeMap;
 
@@ -18,6 +19,8 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Button;
+import android.widget.Toast;
 
 import edu.ualberta.adventstory.R;
 import edu.ualberta.controller.MultimediaControllerManager;
@@ -61,16 +64,28 @@ public class PageViewActivity extends ActivityExtended {
 		mOuterLayout = (LinearLayout) findViewById(R.id.outerLayout);
 		mPageTextLayout = (LinearLayout) findViewById(R.id.pageTextLayout);
 		mButtonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
+		Button buttonRandomNextPage = (Button)findViewById(R.id.randomChoiceButton);
+		mPageTitleTextView = (TextView) findViewById(R.id.pageTitle);
+		
 		if (mViewPageOnly == false) {
 			setStoryTitle(mStory.getTitle(), 26);
 		}
-		mPageTitleTextView = (TextView) findViewById(R.id.pageTitle);
-
+		
+		if(mPage.getPages().size() == 0){
+			buttonRandomNextPage.setEnabled(false);
+		}
+		buttonRandomNextPage.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				randomNextPage();
+			}			
+		});
+		
 		setPageTitle(mPage.getTitle(), 22);
 
 		setStoryText();
 
-		AddButtons();
+		addNextPageButtons();
 	}
 
 	@Override
@@ -123,10 +138,10 @@ public class PageViewActivity extends ActivityExtended {
 	}
 
 	/**
-	 * <code>AddButtons()</code> add the buttons that allows the user/author to
+	 * <code>addNextPageButtons()</code> add the buttons that allows the user/author to
 	 * transition to next page.
 	 */
-	private void AddButtons() {
+	private void addNextPageButtons() {
 		for (final Page p : mPage.getPages()) {
 			TextView tv = (TextView) View.inflate(this,
 					R.layout.next_page_textview, null);
@@ -146,6 +161,19 @@ public class PageViewActivity extends ActivityExtended {
 		}
 		View v = (View) View.inflate(this, R.layout.divider, null);
 		mButtonLayout.addView(v);
+	}
+	
+	void randomNextPage(){
+		ArrayList<Page> mPageList = mPage.getPages();
+		if(mPageList == null || mPageList.size() == 0){
+			Toast.makeText(this, "No next page.", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		int pageSize = mPageList.size();
+		Random rand = new Random();
+		int nextPageIndex = rand.nextInt(pageSize);
+		mDataSingleton.setCurrentPage(mPageList.get(nextPageIndex));
+		recreate();
 	}
 
 	void setStoryTitle(String storyTitle, float textSize) {
@@ -301,8 +329,12 @@ public class PageViewActivity extends ActivityExtended {
 	 * starts PageEditActivity().
 	 */
 	private void startPageEditActivity() {
-		startActivityForResult(new Intent(this, PageEditActivity.class),
-				START_EDITPAGE_RESULTCODE);
+		if( mPage.getReadOnly() == false){
+			startActivityForResult(new Intent(this, PageEditActivity.class),
+					START_EDITPAGE_RESULTCODE);
+		}else{
+			Toast.makeText(this, "Page is Read Only. Access Deneid.", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override

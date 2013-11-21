@@ -98,6 +98,14 @@
             android:layout_height="fill_parent"
             android:orientation="vertical" >
         </LinearLayout>
+        
+        <CheckBox 
+            android:id="@+id/readOnlyCheckBox"
+            android:checked="true"
+            android:text="Read-Only:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+            
     </LinearLayout>
 
 </ScrollView>
