@@ -10,8 +10,6 @@
 package edu.ualberta.adventstory;
 
 
-import java.util.Random;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -88,8 +86,7 @@ public class StartActivity extends Activity {
     				Toast.makeText(getApplicationContext(), "Sorry, there are no stories available.",
     						   Toast.LENGTH_LONG).show();
     			} else {
-    				int index = randomGen(numStories);
-    				readRandom(index);
+    				readRandom(randomGen(numStories));
     			}
     		}
     	});
@@ -141,15 +138,20 @@ public class StartActivity extends Activity {
 	
 	/* Called when the user clicks on read random story button and stories are available */
 	private void readRandom(int index){
-		// Set the DataSingleton 
-		
+		// Set the DataSingleton
+		((DataSingleton)getApplicationContext()).setCurrentStory(database.get_story_by_id(index));
+		((DataSingleton)getApplicationContext()).setCurrentPage(database.get_story_by_id(index).getRoot());
 		// Bring up PageViewActivity
+		Intent randStoryIntent = new Intent(this, PageViewActivity.class);
+		startActivity(randStoryIntent);
 	}
 	
 	/* Random number generator used to find a random story */
 	private int randomGen(int high){
-		Random rand = new Random();
-		return rand.nextInt(high-1) + 1;
+		double rand = Math.random();
+		double num = rand * high;
+		int rtn = (int) num + 1;
+		return rtn;
 	}
 }
 
