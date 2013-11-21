@@ -27,6 +27,7 @@ public class TestDb extends AndroidTestCase {
 		test_db.open();
 		story.setID((int) test_db.insert_story(story));
 		page.setID((int) test_db.insert_page(page));
+		test_db.insert_page_option(page, page);
 		op_page.setID((int) test_db.insert_page(page));
 		test_pic.setID((int) test_db.insert_multimedia(test_pic, page.getID()));
 		System.out.println("test_pic id = " + test_pic.getID());
