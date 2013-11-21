@@ -1,85 +1,111 @@
-<ScrollView 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="fill_parent" >
+
     <!-- mOuterLayout -->
-    <LinearLayout 
+
+    <LinearLayout
         android:id="@+id/outerLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"> 
-        
+        android:orientation="vertical" >
+
         <!-- First 4 Text/Edit TextView -->
-        <TextView
-            android:id="@+id/storyTitle"
+
+        <TableLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-			android:text="Story Title"
-			/>
-        <TableLayout 
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent">
+            android:layout_height="wrap_content" >
+
             <TableRow>
-	            <TextView
-	                android:singleLine="true"
-	                android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-	                android:text="Page: "
-	                />
-		        <EditText
-		            android:id="@+id/pageTitle"
-		            android:layout_width="fill_parent"
-		            android:layout_height="wrap_content"
-		            android:hint="Enter Page Title"
-		            android:singleLine="true"
-		            />
-			</TableRow>
-			<TableRow>
-		        <TextView
-	                android:singleLine="true"
-	                android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-	                android:text="by: "
-	                />
-				<EditText
-		            android:id="@+id/pageAuthor"
-		            android:layout_width="fill_parent"
-		            android:layout_height="wrap_content"
-		            android:hint="Enter Author Name"
-		            android:singleLine="true"
-		            />
-			</TableRow>
-		</TableLayout>         
-        <!-- mStoryEditTextView can't be xml since it will
-        	be overloaded in PageEditActivity.java -->		
-                <!-- mInnerLayout -->
-        <LinearLayout 
-            android:id="@+id/innerLayout"
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="Page: " />
+
+                <EditText
+                    android:id="@+id/pageTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Page Title"
+                    android:singleLine="true" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="by: " />
+
+                <EditText
+                    android:id="@+id/pageAuthor"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Author Name"
+                    android:singleLine="true" />
+            </TableRow>
+        </TableLayout>
+
+        <include layout="@layout/divider" />
+
+        <View
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">            
-            <!-- buttonLayout: For next page buttons.-->
+            android:minHeight="20dp" >
+        </View>
+
+        <!--
+             mStoryEditTextView can't be xml since it will
+        	be overloaded in PageEditActivity.java
+        -->
+
+
+		<!-- mInnerLayout -->
+        <LinearLayout
+            android:id="@+id/pageEditTextLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
         </LinearLayout>
+        
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="10dp" >
+        </View>
+        
         <!-- Add Multimedia button -->
         <Button
             android:id="@+id/addMultimedia"
-            android:text="Add Multimedia"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            />
+            android:text="Add Multimedia" />
         <!-- Add page button. -->
-		<Button 
-		    android:id="@+id/addPage"
-		    android:text="Add Next Page"
-		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-            />
-		<LinearLayout
-			android:id="@+id/buttonLayout"
-        	android:layout_width="fill_parent"
-        	android:layout_height="fill_parent"
-        	android:orientation="vertical">        		                
-		</LinearLayout>        
+
+        <Button
+            android:id="@+id/addPage"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Next Page" />
+
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+        </LinearLayout>
+        
+        <CheckBox 
+            android:id="@+id/readOnlyCheckBox"
+            android:checked="true"
+            android:text="Read-Only:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+            
     </LinearLayout>
+
 </ScrollView>

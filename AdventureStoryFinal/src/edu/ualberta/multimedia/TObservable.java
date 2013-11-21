@@ -20,13 +20,16 @@ abstract public class TObservable<V extends TObserver> {
 	
 	// All models need to keep track of their views.
 	public TObservable(){ mViews = new ArrayList<V>(); }
-	public void addObserver(V view){ mViews.add(view); }
+	public void addObserver(V view){
+		if(mViews.contains(view)) return;
+		mViews.add(view); 
+	}
 	public void deleteObserver(V view){ mViews.remove(view); }
 	
 	// All models modify their views to update.
 	public void notifyObservers(){
-		/*for(V v : mViews)
-			v.update(this);*/
+		for(V v : mViews)
+			v.update(this);
 	}
 	
 	// note wether the model has changed.
