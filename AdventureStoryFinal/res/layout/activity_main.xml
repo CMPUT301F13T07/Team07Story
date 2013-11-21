@@ -45,4 +45,13 @@
             android:layout_marginTop="15dp"
             android:text="@string/newStory" />
 
+        <Button
+            android:id="@+id/randomStory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/findPage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="17dp"
+            android:text="@string/randomStory" />
+
     </RelativeLayout>

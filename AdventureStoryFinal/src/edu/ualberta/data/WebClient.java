@@ -300,4 +300,10 @@ public class WebClient implements DataManager{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public int number_stories() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
