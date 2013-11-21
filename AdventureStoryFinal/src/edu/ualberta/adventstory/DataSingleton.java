@@ -16,6 +16,7 @@ public class DataSingleton extends Application{
 	private Story mCurrentStory;
 	private Page mCurrentPage;
 	private Stack<Page> mPageHistory;
+	protected String author;
 	
 	@Override
 	public void onCreate() {
@@ -27,6 +28,7 @@ public class DataSingleton extends Application{
 		mPageHistory = new Stack<Page>();
 		mCurrentStory = null;
 		mCurrentPage = null;
+		author = null;
 	}
 
 	public Activity getCurrentActivity(){return mCurrentActivity;}
