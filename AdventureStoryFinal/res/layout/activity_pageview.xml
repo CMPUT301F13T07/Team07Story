@@ -1,58 +1,66 @@
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/pageEditMasterLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-   	>
-	<ScrollView 
-	    android:id="@+id/scrollView"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	   	>
-	    <!-- mOuterLayout -->
-	    <LinearLayout 
-	        android:id="@+id/outerLayout"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical"> 
-	        
-	        <!-- First 4 Text/Edit TextView -->
-	
-	        <TextView
-	            android:id="@+id/storyTitle"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:text="Story:" />
-	                    
-	        <TextView
-	            android:id="@+id/pageTitle"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:text="Page:"
-	            android:singleLine="true"
-	            />
-	
-	        <TextView
-	            android:id="@+id/pageText"
-	            android:layout_width="fill_parent"
-	            android:layout_height="wrap_content"
-	            android:text="Contents"            
-	            />	
-	        
-			<TextView
-			    android:id="@+id/nextPageTextView"
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content"
-			    android:text="Next Page(s):"
-			    />
-			<LinearLayout
-				android:id="@+id/buttonLayout"
-	        	android:layout_width="match_parent"
-	        	android:layout_height="fill_parent"
-	        	android:orientation="vertical"
-	        	>
-			</LinearLayout>        
-	    </LinearLayout>
-	</ScrollView>
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <!-- mOuterLayout -->
+
+        <LinearLayout
+            android:id="@+id/outerLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <!-- First 4 Text/Edit TextView -->
+
+            <TextView
+                android:id="@+id/pageTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="Page:" />
+
+            <include layout="@layout/divider" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="20dp" >
+            </View>
+
+            <LinearLayout
+                android:id="@+id/pageTextLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">                
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="10dp" >
+            </View>
+
+            <TextView
+                android:id="@+id/nextPageTextView"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Next Page(s):"
+                android:textSize="16dp" />
+
+            <LinearLayout
+                android:id="@+id/buttonLayout"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

@@ -1,87 +1,84 @@
 package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
+import java.util.TreeMap;
 
 import android.os.Bundle;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView.BufferType;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ImageSpan;
 import android.widget.TextView;
 
 import edu.ualberta.adventstory.R;
 import edu.ualberta.controller.MultimediaControllerManager;
 import edu.ualberta.controller.CommandCollection.Callback;
 import edu.ualberta.controller.CommandCollection.Command;
-import edu.ualberta.extendedViews.ClickableMultimediaSpan;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
 /**
- * <code>PageViewActivity</code> is the View responsible for viewing <code>Page</code>.
+ * <code>PageViewActivity</code> is the View responsible for viewing
+ * <code>Page</code>.
  * 
  * @author JoeyAndres
  * @version 1.0
  */
-public class PageViewActivity extends ActivityExtended{
-	private TextView mStoryTitleTextView;			// Story Title TextView.
-	private TextView mPageTitleTextView;			// Page Title TextView.
-	private TextView mStoryTextView;				// StoryText TextView.
-	private LinearLayout mOuterLayout;				// Outer LinearLayout.
+public class PageViewActivity extends ActivityExtended {
+	private TextView mPageTitleTextView; // Page Title TextView.
+	private LinearLayout mOuterLayout; // Outer LinearLayout.
+	LinearLayout mPageTextLayout;
 	private LinearLayout mButtonLayout;
-	private Story mStory;					// Story being viewed.
-	private Page mPage;						// Current page.
-	
-	private boolean mViewPageOnly = true; 	// True if we are viewing a page independent of story.	
-	
+	private Story mStory; // Story being viewed.
+	private Page mPage; // Current page.
+
+	private boolean mViewPageOnly = true; // True if we are viewing a page
+											// independent of story.
+
 	private static final int START_EDITPAGE_RESULTCODE = 1;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);		
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_pageview);
-		
+
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
-		if( mStory == null ){ mViewPageOnly = true; }
-		
-		mOuterLayout = (LinearLayout)findViewById(R.id.outerLayout);
-		mButtonLayout = (LinearLayout)findViewById(R.id.buttonLayout);
-		mStoryTitleTextView = (TextView)findViewById(R.id.storyTitle);
-		if( mViewPageOnly == false ){setStoryTitle(mStory.getTitle(), 26);}		
-		mPageTitleTextView = (TextView)findViewById(R.id.pageTitle);		
-		mStoryTextView = (TextView)findViewById(R.id.pageText);				
-		
-		setPageTitle(mPage.getTitle(), 22);		
-		setStoryText(18);
-		
+		if (mStory == null) {
+			mViewPageOnly = true;
+		}
+
+		mOuterLayout = (LinearLayout) findViewById(R.id.outerLayout);
+		mPageTextLayout = (LinearLayout) findViewById(R.id.pageTextLayout);
+		mButtonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
+		if (mViewPageOnly == false) {
+			setStoryTitle(mStory.getTitle(), 26);
+		}
+		mPageTitleTextView = (TextView) findViewById(R.id.pageTitle);
+
+		setPageTitle(mPage.getTitle(), 22);
+
+		setStoryText();
+
 		AddButtons();
 	}
-	
+
 	@Override
-	protected void onResume(){
+	protected void onResume() {
 		super.onResume();
 		mDataSingleton.setCurrentActivity(this);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -90,68 +87,70 @@ public class PageViewActivity extends ActivityExtended{
 		CreateMenu(menu);
 		return true;
 	}
-	
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
+	public boolean onOptionsItemSelected(MenuItem item) {
 		return MenuChoice(item);
 	}
-	
-	private boolean MenuChoice(MenuItem item){
+
+	private boolean MenuChoice(MenuItem item) {
 		Command command = mMapMenuToCommand.get(item);
-		if(command != null){
+		if (command != null) {
 			command.execute();
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	@SuppressLint("NewApi")
-	void CreateMenu(Menu menu){
+	void CreateMenu(Menu menu) {
 		MenuItem mnu1 = menu.add(0, 0, 0, "Edit Page");
 		{
 			mnu1.setIcon(R.drawable.ic_edit_page);
-			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);  // This is subject to change.
+			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM); // This is
+																	// subject
+																	// to
+																	// change.
 		}
-		Command startEditPageCommand = new Command(new Callback(){
+		Command startEditPageCommand = new Command(new Callback() {
 			@Override
-			public void callback(){
+			public void callback() {
 				startPageEditActivity();
 			}
 		});
 		mMapMenuToCommand.put(mnu1, startEditPageCommand);
 	}
-	
+
 	/**
-	 * <code>AddButtons()</code> add the buttons that allows the user/author to transition
-	 * to next page.
+	 * <code>AddButtons()</code> add the buttons that allows the user/author to
+	 * transition to next page.
 	 */
-	private void AddButtons(){
-		for(final Page p : mPage.getPages()){
-			TextView tv = (TextView)View.inflate(this, R.layout.next_page_textview, null);
+	private void AddButtons() {
+		for (final Page p : mPage.getPages()) {
+			TextView tv = (TextView) View.inflate(this,
+					R.layout.next_page_textview, null);
 			tv.setText(p.getTitle());
-			tv.setOnClickListener(new OnClickListener(){
+			tv.setOnClickListener(new OnClickListener() {
 				@SuppressLint("NewApi")
 				@Override
-				public void onClick(View view){
+				public void onClick(View view) {
 					// Go to the next page.
-					mDataSingleton.setCurrentPage(p);					
+					mDataSingleton.setCurrentPage(p);
 					mDataSingleton.getCurrentActivity().recreate();
 				}
 			});
-			View v = (View)View.inflate(this, R.layout.divider, null);
+			View v = (View) View.inflate(this, R.layout.divider, null);
 			mButtonLayout.addView(v);
-			mButtonLayout.addView(tv);			
-			}
-		View v = (View)View.inflate(this, R.layout.divider, null);
+			mButtonLayout.addView(tv);
+		}
+		View v = (View) View.inflate(this, R.layout.divider, null);
 		mButtonLayout.addView(v);
 	}
-	
+
 	void setStoryTitle(String storyTitle, float textSize) {
-		storyTitle = "Story: " + storyTitle;
-		mStoryTitleTextView.setSingleLine(true);
-		mStoryTitleTextView.setText(storyTitle);
-		mStoryTitleTextView.setTextSize(textSize);
+		ActionBar ab = getActionBar();
+		ab.setTitle(mStory.getTitle());
 	}
 
 	void setPageTitle(String pageTitle, float textSize) {
@@ -161,84 +160,155 @@ public class PageViewActivity extends ActivityExtended{
 		mPageTitleTextView.setTextSize(textSize);
 	}
 
-	void setStoryText( float textSize){
-		mStoryTextView.setMovementMethod(LinkMovementMethod.getInstance());						
-		mStoryTextView.setText(getSpannableStringBuilder(), BufferType.SPANNABLE);
-		mStoryTextView.setTextSize(textSize);
-	}
-	
-	public SpannableStringBuilder getSpannableStringBuilder() {
-		ArrayList<MultimediaAbstract> ma = mPage.getMultimedia();
+	/**
+	 * <code>setStoryText</code> sets the main content of the Page.
+	 */
+	void setStoryText() {
+		ArrayList<MultimediaAbstract> multimediaList = mPage.getMultimedia();
 
-		SpannableStringBuilder stringBuilder = new SpannableStringBuilder(mPage.getText());
+		if (multimediaList == null) {
+			TextView tv = new TextView(this);			
+			LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT,
+					LayoutParams.WRAP_CONTENT);
+			tv.setText(mPage.getText());
+			tv.setLayoutParams(lp);
+			mPageTextLayout.addView(tv);
+		}
 
-		// Return to caller if ma is null to avoid trivial errors.
-		if( ma == null ){
-			return stringBuilder;
+		// Pool index-multimedia table.
+		TreeMap<Integer, ArrayList<MultimediaAbstract>> indexMultimediaHash = new TreeMap<Integer, ArrayList<MultimediaAbstract>>();
+		for (final MultimediaAbstract m : multimediaList) {
+			ArrayList<MultimediaAbstract> mList = indexMultimediaHash.get(m
+					.getIndex());
+			if (mList != null) {
+				mList.add(m);
+				indexMultimediaHash.put(m.getIndex(), mList);
+			} else {
+				ArrayList<MultimediaAbstract> mListTemp = new ArrayList<MultimediaAbstract>();
+				mListTemp.add(m);
+				indexMultimediaHash.put(m.getIndex(), mListTemp);
+			}
+		}
+
+		// Fragment text base on index of multimedia.
+		TreeMap<Integer, String> stringFragments = new TreeMap<Integer, String>();
+		TreeMap<String, Integer> stringFragmentsReversed = new TreeMap<String, Integer>();
+		int lastIndex = 0;
+		for (int i : indexMultimediaHash.keySet()) {
+			// If multimedia index i is greater than the length of string then just loop through.
+			if (i >= mPage.getText().length()) {
+				continue;
+			}
+			if (i - lastIndex == 0) {				
+				continue;
+			}
+			char[] temp = new char[i - lastIndex];
+			mPage.getText().getChars(lastIndex, i, temp, 0);
+			stringFragments.put(i, new String(temp));
+			stringFragmentsReversed.put(new String(temp), i);
+			lastIndex = i;			
 		}
 		
-		for (final MultimediaAbstract multimedia : ma) {
-			// Load the multimedia Picture representation.
-			Bitmap multimediaBitmap = MultimediaControllerManager.loadBitmap(this, multimedia);
-			ImageSpan multimediaImageSpan = new ImageSpan(this, multimediaBitmap, 20);
-			
-			
-			stringBuilder.insert(multimedia.getIndex(), " ");		// Allocate space for multimediaImageSpan.
-			
-			stringBuilder.setSpan(multimediaImageSpan, multimedia.getIndex(),
-					multimedia.getIndex() + 1,
-					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-
-			ClickableMultimediaSpan multimediaClickableSpan = 
-													new ClickableMultimediaSpan();
-			multimediaClickableSpan.setOnClick(new Callback(){
-				@Override
-				public void callback(){
-					MultimediaControllerManager.play(getBaseContext(), multimedia);
-				}
-			});
-
-			stringBuilder.setSpan(multimediaClickableSpan, multimedia.getIndex(),
-					multimedia.getIndex() + 1,
-					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);			
+		int textLength = mPage.getText().length()-1;
+		if( lastIndex < textLength){
+			char[] temp = new char[textLength - lastIndex];
+			mPage.getText().getChars(lastIndex, textLength, temp, 0);
+			stringFragments.put(textLength, new String(temp));
+			stringFragmentsReversed.put(new String(temp), textLength);
+			lastIndex = textLength;
 		}
-		return stringBuilder;
-	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event)  {
-	    if (Integer.parseInt(android.os.Build.VERSION.SDK) < 5
-	            && keyCode == KeyEvent.KEYCODE_BACK
-	            && event.getRepeatCount() == 0) {	
-	        onBackPressed();
-	        return true;
-	    }
-	    return super.onKeyDown(keyCode, event);
-	}
-	
-	@SuppressLint("NewApi")
-	@Override
-	public void onBackPressed(){
-		if( mDataSingleton.getOldPage() == null ){
-			super.onBackPressed();
-		}else{
-			mDataSingleton.revertPage();
-			this.recreate();
+
+		// Assemble TextViews and ImageViews.		
+		ArrayList<MultimediaAbstract> displayedMultimedia = new ArrayList<MultimediaAbstract>();
+		int multimediaCounter = 0;
+		lastIndex = 0;
+		for (int index : stringFragments.keySet()) {			
+			ArrayList<MultimediaAbstract> mList = indexMultimediaHash
+					.get(lastIndex);
+			if (mList != null) {
+				for (final MultimediaAbstract m : mList) {
+					addImageViewInPage(m);
+					multimediaCounter++;
+					displayedMultimedia.add(m);
+				}
+			}
+
+			TextView tv = new TextView(this);
+			LayoutParams lp2 = new LayoutParams(LayoutParams.FILL_PARENT,
+					LayoutParams.WRAP_CONTENT);
+			tv.setText(stringFragments.get(index));
+			tv.setLayoutParams(lp2);
+			mPageTextLayout.addView(tv);
+			lastIndex = index;
+		}
+
+		// If there are non-displayed multimedia, place them all at the end.
+		if (multimediaCounter < multimediaList.size()) {
+			for (final MultimediaAbstract m : multimediaList) {
+				if (displayedMultimedia.contains(m) == false) {
+					addImageViewInPage(m);
+				}
+			}
 		}
 	}
 	
 	/**
+	 * <code>addImageViewInPage</code> helper method for
+	 * <code>setStoryText</code>.
+	 */
+	private void addImageViewInPage(final MultimediaAbstract m) {
+		final ImageView iv = new ImageView(this);
+		iv.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MultimediaControllerManager.play(getBaseContext(), m);
+			}
+		});
+		
+		iv.setPadding(5, 5, 5, 5);
+		
+		LayoutParams lp1 = new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
+		iv.setImageBitmap(MultimediaControllerManager.loadBitmap(this, m));
+		iv.setLayoutParams(lp1);
+		mPageTextLayout.addView(iv);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (Integer.parseInt(android.os.Build.VERSION.SDK) < 5
+				&& keyCode == KeyEvent.KEYCODE_BACK
+				&& event.getRepeatCount() == 0) {
+			onBackPressed();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	public void onBackPressed() {
+		if (mDataSingleton.getOldPage() == null) {
+			super.onBackPressed();
+		} else {
+			mDataSingleton.revertPage();
+			this.recreate();
+		}
+	}
+
+	/**
 	 * starts PageEditActivity().
 	 */
-	private void startPageEditActivity(){
-		startActivityForResult(new Intent(this, PageEditActivity.class), START_EDITPAGE_RESULTCODE);
+	private void startPageEditActivity() {
+		startActivityForResult(new Intent(this, PageEditActivity.class),
+				START_EDITPAGE_RESULTCODE);
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data){
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO: HASH THESE STUFF INTO COMMAND.
-		if( requestCode == 1){			
+		if (requestCode == 1) {
 			this.restart();
 		}
 	}

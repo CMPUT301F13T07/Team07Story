@@ -1,13 +1,16 @@
 package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Spannable;
@@ -21,6 +24,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -31,118 +36,95 @@ import edu.ualberta.controller.CommandCollection;
 import edu.ualberta.controller.CommandCollection.Callback;
 import edu.ualberta.controller.CommandCollection.Command;
 import edu.ualberta.controller.MultimediaControllerManager;
-import edu.ualberta.extendedViews.ClickableMultimediaSpan;
-import edu.ualberta.extendedViews.EditTextEx;
-import edu.ualberta.extendedViews.PaddingableImageSpan;
-import edu.ualberta.extendedViews.EditTextEx.OnSelectionChangedListener;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.multimedia.TObservable;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
 /**
- * <code>PageEditActivity</code> is a view that is responsible
- * for editing page. It is a subclass of ActivityExtended thus
- * inheriting MVC's <code>Observable</code> Update interface.
+ * <code>PageEditActivity</code> is a view that is responsible for editing page.
+ * It is a subclass of ActivityExtended thus inheriting MVC's
+ * <code>Observable</code> Update interface.
  * 
  * @author JoeyAndres
- *
+ * 
  */
 @SuppressLint("NewApi")
 public class PageEditActivity extends ActivityExtended {
 	private EditText mPageTitleEditTextView; // Page Title EditText.
 	private EditText mPageAuthorEditTextView; // Page Title EditText.
-	
-	private EditTextEx mStoryEditTextView; // StoryText TextView.
-	
+	private ArrayList<EditText> mStoryEditTextArray = new ArrayList<EditText>();
+
 	// For more info concerning views, see activity_pageedit.xml
-	private LinearLayout mInnerLayout; // Inner RelativeLayout.
-	private LinearLayout mOuterLayout; // Outer LinearLayout.
-	private ScrollView mScrollView; // Encapsulate mOuterLayout.
+	private LinearLayout mPageTextLayout;
 	private LinearLayout mButtonLayout; // Encapsulate the buttons.
-	private Button mButtonAddPage; // Button for adding page.	
-	private LinearLayout.LayoutParams mOuterLayoutParam;
-	private LinearLayout.LayoutParams mInnerComponentParam;	
+	private Button mButtonAddPage; // Button for adding page.
 	private Story mStory; // Story being viewed.
 	private Page mPage; // Current page.
-	private Button mButtonAddMultimedia;	// Button for adding multimedias.
-	
-	private boolean mIsAnyMultimediaSelected = false; 	// Set to true when something is selected.
-	private boolean mIsJustSelected = false; 			// Set to true when something is just selected.
+	private Button mButtonAddMultimedia; // Button for adding multimedias.
 
-	final private int ADDPAGE_REQUESTCODE = 1;			// Request code when adding page.
-	final private int GET_MULTIMEDIA_REQUESTCODE = 2;	// Request code for getting multimedia.
-	
+	final private int ADDPAGE_REQUESTCODE = 1; // Request code when adding page.
+	final private int GET_MULTIMEDIA_REQUESTCODE = 2; // Request code for
+														// getting multimedia.
+
 	// Set to true when editing a page only, independent of the story.
 	private boolean mEditPageOnly = false;
 
-	
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_pageedit);		
+		setContentView(R.layout.activity_pageedit);
 		setTitle(R.string.createpage);
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
-		
-		// Determine if the mStory is null if we are just creating a page independent
+
+		// Determine if the mStory is null if we are just creating a page
+		// independent
 		// of the Story.
-		if( mStory == null){ mEditPageOnly = true; }
-		
+		if (mStory == null) {
+			mEditPageOnly = true;
+		}
+
 		// Exit if mPage is null.
-		if( mPage == null){
-			Toast.makeText(this, "Error occured, mPage or mStory is null.", Toast.LENGTH_LONG).show();
+		if (mPage == null) {
+			Toast.makeText(this, "Error occured, mPage or mStory is null.",
+					Toast.LENGTH_LONG).show();
 			exit();
 		}
 
-		// ScrollView.
-		mScrollView = (ScrollView)findViewById(R.id.scrollView);
-
-		// Outer Layout.
-		mOuterLayout = (LinearLayout)findViewById(R.id.outerLayout);
-		
-		if( mEditPageOnly == false ){
+		if (mEditPageOnly == false) {
 			setStoryTitle();
 		}
 
-		// Initialize the Page Title EditText and its parameters.
-		mPageTitleEditTextView = (EditText)findViewById(R.id.pageTitle);
+		mPageTitleEditTextView = (EditText) findViewById(R.id.pageTitle);
+		mPageTextLayout = (LinearLayout) findViewById(R.id.pageEditTextLayout);
+		mPageAuthorEditTextView = (EditText) findViewById(R.id.pageAuthor);
+		mButtonAddMultimedia = (Button) findViewById(R.id.addMultimedia);
+		mButtonAddPage = (Button) findViewById(R.id.addPage);
+		mButtonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
+
 		setPageTitle(22);
-
-		// Initialize the Page Author EditText.
-		mPageAuthorEditTextView = (EditText)findViewById(R.id.pageAuthor);		
 		setPageAuthor(20);
+		setStoryText();
 
-		mInnerLayout = (LinearLayout)findViewById(R.id.innerLayout);
-
-		// EditTextView.
-		mStoryEditTextView = new EditTextEx(this);
-		mStoryEditTextView.setOnSelectionChangedListener(new OnSelectionChangedListener(){
+		mPageTextLayout.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onSelectionChangedListener(int selStart, int selEnd){
-				cursorIndexChange(selStart);
+			// Click background to deselect any selection.
+			public void onClick(View v) {
+				clearSelection();
 			}
 		});
-		// Mannually add it since it's costum EditText.
-		mInnerComponentParam = new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		mStoryEditTextView.setLayoutParams(mInnerComponentParam);
-		// TextView. - We start off with these.
-		mInnerLayout.addView(mStoryEditTextView);
-		setStoryText(18);
 
-		mButtonAddMultimedia = (Button)findViewById(R.id.addMultimedia);
-		mButtonAddMultimedia.setOnClickListener(new OnClickListener(){
+		mButtonAddMultimedia.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				addMultimedia();
-			}			
-		});		
-		
+			}
+		});
+
 		// Add an 'Add Page' Button to the outerlayout.
-		mButtonAddPage = (Button)findViewById(R.id.addPage);
 		mButtonAddPage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -152,31 +134,28 @@ public class PageEditActivity extends ActivityExtended {
 			}
 		});
 
-		// Initialize the mButtonLayout.
-		mButtonLayout = (LinearLayout)findViewById(R.id.buttonLayout);				
-		// Add the buttons.
 		addNextPageButtons();
 	}
 
 	/*
-	 * onResume is where we placed some duplicates of getCurrentPage and getCurrentStory
-	 * since this in situations when we call an Activity to expect a return, it will go back here,
-	 * and not in onCreate anymore.
+	 * onResume is where we placed some duplicates of getCurrentPage and
+	 * getCurrentStory since this in situations when we call an Activity to
+	 * expect a return, it will go back here,setStoryText and not in onCreate
+	 * anymore.
 	 * 
 	 * @see android.app.Activity#onResume()
 	 */
 	@Override
 	protected void onResume() {
-		super.onResume();		
+		super.onResume();
 		/*
-		 * These are placed here to acquire data when 
-		 * screen orientation changed since onCreate is 
-		 * not called in such situation.
+		 * These are placed here to acquire data when screen orientation changed
+		 * since onCreate is not called in such situation.
 		 */
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
-		setStoryText(18);
-		
+		setStoryText();
+
 		mDataSingleton.setCurrentActivity(this);
 	}
 
@@ -189,15 +168,15 @@ public class PageEditActivity extends ActivityExtended {
 	}
 
 	/*
-	 * onPause is where the save() instead of onDestroy
-	 * since onPause is where the views are still in place 
-	 * and thus we can still extract data's from them.
+	 * onPause is where the save() instead of onDestroy since onPause is where
+	 * the views are still in place and thus we can still extract data's from
+	 * them.
 	 * 
 	 * @see android.app.Activity#onPause()
 	 */
 	@Override
-	public void onPause(){
-		save();	
+	public void onPause() {
+		save();
 		super.onPause();
 	}
 
@@ -211,12 +190,12 @@ public class PageEditActivity extends ActivityExtended {
 	}
 
 	/**
-	 * <code>CreateMenu</code> here is responsible for creating
-	 * Actionbar items and mapping these MenuItems to their 
-	 * corresponding Command and Callback method via Hash table.
+	 * <code>CreateMenu</code> here is responsible for creating Actionbar items
+	 * and mapping these MenuItems to their corresponding Command and Callback
+	 * method via Hash table.
 	 * 
-	 * @see PageEditActivity.mMapMenuToCommand 
-	 *  
+	 * @see PageEditActivity.mMapMenuToCommand
+	 * 
 	 * @param menu
 	 */
 	@SuppressLint("NewApi")
@@ -226,13 +205,14 @@ public class PageEditActivity extends ActivityExtended {
 			mnu1.setIcon(R.drawable.ic_addmultimedia);
 			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
-		
-		Command addMultimediaResponder = new CommandCollection.AddMultimediaCommand(new Callback(){
-			@Override
-			public void callback() {
-				addMultimedia();
-			}
-		});
+
+		Command addMultimediaResponder = new CommandCollection.AddMultimediaCommand(
+				new Callback() {
+					@Override
+					public void callback() {
+						addMultimedia();
+					}
+				});
 		mMapMenuToCommand.put(mnu1, addMultimediaResponder);
 
 		MenuItem mnu2 = menu.add(0, 1, 1, "Save");
@@ -241,13 +221,14 @@ public class PageEditActivity extends ActivityExtended {
 			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
 
-		Command saveResponder = new CommandCollection.SaveCommand(new Callback() {
-			@Override
-			public void callback() {
-				save();
-				exit();
-			}
-		});		
+		Command saveResponder = new CommandCollection.SaveCommand(
+				new Callback() {
+					@Override
+					public void callback() {
+						save();
+						exit();
+					}
+				});
 		mMapMenuToCommand.put(mnu2, saveResponder);
 
 		MenuItem mnu3 = menu.add(0, 2, 2, "Cancel");
@@ -256,175 +237,296 @@ public class PageEditActivity extends ActivityExtended {
 			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
 
-		Command cancelResponder = new CommandCollection.ExitActivityCommand(this, new Callback() {
-			@Override
-			public void callback() {
-				cancel();
-			}
-		});
+		Command cancelResponder = new CommandCollection.ExitActivityCommand(
+				this, new Callback() {
+					@Override
+					public void callback() {
+						cancel();
+					}
+				});
 		mMapMenuToCommand.put(mnu3, cancelResponder);
 	}
-	
+
 	/**
-	 * <code>addNextPageButtons</code> is used for adding listView elements for next
-	 * page.
+	 * <code>addNextPageButtons</code> is used for adding listView elements for
+	 * next page.
 	 */
-	private void addNextPageButtons(){
-		for(final Page p : mPage.getPages()){
-			TextView tv = (TextView)View.inflate(this, R.layout.next_page_textview, null);
+	private void addNextPageButtons() {
+		for (final Page p : mPage.getPages()) {
+			TextView tv = (TextView) View.inflate(this,
+					R.layout.next_page_textview, null);
 			tv.setText(p.getTitle());
-			tv.setOnClickListener(new OnClickListener(){
+			tv.setOnClickListener(new OnClickListener() {
 				@SuppressLint("NewApi")
 				@Override
-				public void onClick(View view){
+				public void onClick(View view) {
 					// Go to the next page.
-					mDataSingleton.setCurrentPage(p);					
+					mDataSingleton.setCurrentPage(p);
 					mDataSingleton.getCurrentActivity().recreate();
 				}
 			});
-			View v = (View)View.inflate(this, R.layout.divider, null);
+			View v = (View) View.inflate(this, R.layout.divider, null);
 			mButtonLayout.addView(v);
-			mButtonLayout.addView(tv);			
-			}
-		View v = (View)View.inflate(this, R.layout.divider, null);
+			mButtonLayout.addView(tv);
+		}
+		View v = (View) View.inflate(this, R.layout.divider, null);
 		mButtonLayout.addView(v);
 	}
-	
-	
+
 	/**
-	 * <code>setStoryTitle</code> set's the <code>TextView</code> for Story Title.
-	 * Unlike Other Views here, this is the only <code>TextView</code> as we don't allow
-	 * modification of Story Title while editing page.
-	 * 
-	 * @param textSize is the size of the text.
+	 * @return <code>String</code> of the title of the page, stripped-off of
+	 *         unnecessary white space.
 	 */
-	void setStoryTitle() {		
-		//ActionBar actionBar = getActionBar();
-		//actionBar.setTitle(mStory.getTitle());
-		
+	private String getStoryText() {
+		ArrayList<String> fragmented = new ArrayList<String>();
+		for (EditText et : mStoryEditTextArray) {
+			String f[] = et.getText().toString().split(" +");
+			for (int j = 0; j < f.length; j++) {
+				if (f[j].length() == 0)
+					break;
+				fragmented.add(f[j]);
+				fragmented.add(" ");
+			}
+		}
+
+		StringBuilder sb = new StringBuilder();
+
+		for (String s : fragmented) {
+			sb.append(s);
+		}
+		return sb.toString();
 	}
-	
+
+	/**
+	 * Since there can be multiple fragmented views, this method will return the
+	 * offset since the first view to the current view in focus.
+	 * 
+	 * @param selectedEditText
+	 *            The EditText currently in focus.
+	 * @return int
+	 */
+	private int getPageTextIndexOffset(EditText selectedEditText) {
+		int offset = 0;
+		for (EditText et : mStoryEditTextArray) {
+			if (et != selectedEditText) {
+				String f[] = et.getText().toString().split(" +");
+				for (int j = 0; j < f.length; j++) {
+					if (f[j].length() == 0)
+						break;
+					offset += f[j].length();
+					offset += 1;
+				}
+			} else {
+				break;
+			}
+		}
+
+		return offset;
+	}
+
+	/**
+	 * @return <code>String</code> of the author of the page.
+	 */
+	protected String getAuthorText() {
+		return mPageAuthorEditTextView.getText().toString();
+	}
+
+	/**
+	 * @return <code>String</code> of the title of the page.
+	 */
+	protected String getPageTitleText() {
+		return mPageTitleEditTextView.getText().toString();
+	}
+
+	/**
+	 * <code>setStoryTitle</code> set's the <code>TextView</code> for Story
+	 * Title. Unlike Other Views here, this is the only <code>TextView</code> as
+	 * we don't allow modification of Story Title while editing page.
+	 * 
+	 * @param textSize
+	 *            is the size of the text.
+	 */
+	void setStoryTitle() {
+		ActionBar ab = getActionBar();
+		ab.setTitle(mStory.getTitle());
+	}
+
 	/**
 	 * <code>setPageTitle</code> set's the <code>EditText</code> for page title.
 	 * This is done via getTitle method in <code>Page</code>
-	 * @param textSize is the size of the text.
+	 * 
+	 * @param textSize
+	 *            is the size of the text.
 	 */
 	void setPageTitle(float textSize) {
 		mPageTitleEditTextView.setSingleLine(true);
 		mPageTitleEditTextView.setText(mPage.getTitle());
 		mPageTitleEditTextView.setTextSize(textSize);
 	}
-	
+
 	/**
-	 * <code>setPageAuthor</code> set's the <code>TextView</code> for page author.
-	 * This is done by getting the author's name via mPage's getAuthor
+	 * <code>setPageAuthor</code> set's the <code>TextView</code> for page
+	 * author. This is done by getting the author's name via mPage's getAuthor
 	 * method.
 	 * 
-	 * @param textSize is the size of the text.
+	 * @param textSize
+	 *            is the size of the text.
 	 */
 	void setPageAuthor(float textSize) {
 		mPageAuthorEditTextView.setSingleLine(true);
 		mPageAuthorEditTextView.setText(mPage.getAuthor());
 		mPageAuthorEditTextView.setTextSize(textSize);
 	}
-	
+
 	/**
-	 * <code>setStoryText</code> sets the current Page content or the "story text".
-	 * Of course it delegates the compilation of <code> SpannableStringBuilder </code>
-	 * to <code>getSpannableStringBuilder</code>.
+	 * <code>setStoryText</code> sets the current Page content or the
+	 * "story text". Of course it delegates the compilation of
+	 * <code> SpannableStringBuilder </code> to
+	 * <code>getSpannableStringBuilder</code>.
 	 * 
-	 * @param textSize is the size of the text.
+	 * @param textSize
+	 *            is the size of the text.
 	 */
-	void setStoryText(float textSize) {
-		mStoryEditTextView.setMovementMethod(LinkMovementMethod.getInstance());
-		mStoryEditTextView.setText(getSpannableStringBuilder(),
-				BufferType.SPANNABLE);
-		mStoryEditTextView.setTextSize(textSize);
-		mInnerLayout.removeAllViews();	/*ImageSpans inside*/
-		mInnerLayout.addView(mStoryEditTextView);
-	}
-	
-	/**
-	 * <code>getSpannableStringBuilder</code> is responsible for 
-	 * merging text and multimedia icons ( as proxy ) to be display
-	 * in EditText. This method is likely the heart of this module.
-	 * This is where the callback method are defined for when the
-	 * <code>MultimediaAbstract</code> images are clicked.
-	 * 
-	 * @return SpannableStringBuilder allows this program
-	 * to display images via <code>EditText</code> or <code>TextView</code>.
-	 * 
-	 * @author Joey Andres
-	 */
-	public SpannableStringBuilder getSpannableStringBuilder() {
-		ArrayList<MultimediaAbstract> ma = mPage.getMultimedia();
-		
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	void setStoryText() {
+		// Make sure the layout is empty first.
+		mPageTextLayout.removeAllViewsInLayout();
+		mStoryEditTextArray.clear();
+
+		ArrayList<MultimediaAbstract> multimediaList = mPage.getMultimedia();
 		// Add an observer to these models/observable.
-		for( MultimediaAbstract m : ma )
+		for (MultimediaAbstract m : multimediaList) {
 			m.addObserver(this);
-			
-		SpannableStringBuilder stringBuilder = new SpannableStringBuilder(
-				mPage.getText());
+		}
 
-		// Return to caller if ma is null to avoid trivial errors.
-		if (ma == null) {
-			return stringBuilder;
+		// If no multimedia.
+		if (multimediaList == null) {
+			addEditTextInPage(mPage.getText());
+			return;
+		}
+
+		// Pool index-multimedia table.
+		TreeMap<Integer, ArrayList<MultimediaAbstract>> indexMultimediaHash = new TreeMap<Integer, ArrayList<MultimediaAbstract>>();
+		for (final MultimediaAbstract m : multimediaList) {
+			ArrayList<MultimediaAbstract> mList = indexMultimediaHash.get(m
+					.getIndex());
+			if (mList != null) {
+				mList.add(m);
+				indexMultimediaHash.put(m.getIndex(), mList);
+			} else {
+				ArrayList<MultimediaAbstract> mListTemp = new ArrayList<MultimediaAbstract>();
+				mListTemp.add(m);
+				indexMultimediaHash.put(m.getIndex(), mListTemp);
+			}
+		}
+
+		// Fragment text base on index.
+		TreeMap<Integer, String> stringFragments = new TreeMap<Integer, String>();
+		TreeMap<String, Integer> stringFragmentsReversed = new TreeMap<String, Integer>();
+		int lastIndex = 0;
+		for (int i : indexMultimediaHash.keySet()) {
+			if (i >= mPage.getText().length()) {
+				continue;
+			}
+			if (i - lastIndex == 0) {
+				continue;
+			}
+			char[] temp = new char[i - lastIndex];
+			mPage.getText().getChars(lastIndex, i, temp, 0);
+			stringFragments.put(i, new String(temp));
+			stringFragmentsReversed.put(new String(temp), i);
+			lastIndex = i;
+		}
+
+		int textLength = mPage.getText().length();
+		if (lastIndex < textLength) {
+			char[] temp = new char[textLength - lastIndex];
+			mPage.getText().getChars(lastIndex, textLength, temp, 0);
+			stringFragments.put(textLength, new String(temp));
+			stringFragmentsReversed.put(new String(temp), textLength);
+			lastIndex = textLength;
+		}
+
+		// Assemble EditTextEx and ImageViews.
+		ArrayList<MultimediaAbstract> displayedMultimedia = new ArrayList<MultimediaAbstract>();
+		int multimediaCounter = 0;
+		lastIndex = 0;
+		for (int index : stringFragments.keySet()) {
+			ArrayList<MultimediaAbstract> mList = indexMultimediaHash
+					.get(lastIndex);
+			if (mList != null) {
+				for (final MultimediaAbstract m : mList) {
+					addImageViewInPage(m);
+					multimediaCounter++;
+					displayedMultimedia.add(m);
+				}
+			}
+			addEditTextInPage(stringFragments.get(index));
+			lastIndex = index;
+		}
+
+		// If there are non-displayed multimedia, place them all at the end.
+		if (multimediaCounter < multimediaList.size()) {
+			for (final MultimediaAbstract m : multimediaList) {
+				if (displayedMultimedia.contains(m) == false) {
+					addImageViewInPage(m);
+				}
+			}
 		}
 		
-		for (final MultimediaAbstract multimedia : ma) {
-			// Load the multimedia Picture representation.
-			Bitmap multimediaBitmap = MultimediaControllerManager.loadBitmap(this, multimedia);
-			final PaddingableImageSpan multimediaImageSpan = new PaddingableImageSpan(
-					this, multimediaBitmap, 20);
-			
-			if (multimedia.getIsSelected()){
-				multimediaImageSpan.enablePadding();
-				// Display delete image.
-			}
-			
-			int index = multimedia.getIndex();
-			
-			if(index >= mPage.getText().length()){
-				index = mPage.getText().length()-1;
-			}
-			
-			stringBuilder.insert(index, " ");		// Allocate space for multimediaImageSpan.
-			
-			stringBuilder.setSpan(multimediaImageSpan, index,
-					index + 1,
-					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-
-			ClickableMultimediaSpan multimediaClickableSpan = 
-											new ClickableMultimediaSpan();
-			multimediaClickableSpan.setOnClick(new Callback(){
-				@Override 
-				public void callback(){
-					mIsAnyMultimediaSelected = true;
-					mIsJustSelected = true;
-					multimediaImageSpan.enablePadding();
-					
-					clearSelection();					
-					// Set the multimedia we want to enable to true.
-					multimedia.setIsSelected(true);					
-					// Display MultimediaFragmentOptions.
-					showMultimediaOptionsFragment();
-				}
-			});
-
-			stringBuilder.setSpan(multimediaClickableSpan,
-					index, index + 1,
-					Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+		// If by the end still no EditText.
+		if(mStoryEditTextArray.size()==0){
+			addEditTextInPage("");			
 		}
-		return stringBuilder;
 	}
-	
+
 	/**
-	 * @deprecated This method is only here in case it will be
-	 * used later in development. This is not recommended to be used.
+	 * <code>addImageViewInPage</code> helper method for
+	 * <code>setStoryText</code>.
 	 */
-	@Override
-	public void playVideo(String directory) {
-		super.playVideo(directory);
+	private void addImageViewInPage(final MultimediaAbstract m) {
+		final ImageView iv = new ImageView(this);
+		if (m.getIsSelected()) {
+			iv.setPadding(10, 10, 10, 10);
+			iv.setScaleType(ScaleType.CENTER_INSIDE);
+			iv.setBackgroundColor(Color.GRAY);
+		}
+		iv.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				save();
+				clearSelection();
+				m.setIsSelected(true);
+				showMultimediaOptionsFragment();
+			}
+		});
+
+		iv.setPadding(5, 5, 5, 5);
+
+		LayoutParams lp1 = new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
+		iv.setImageBitmap(MultimediaControllerManager.loadBitmap(this, m));
+		iv.setLayoutParams(lp1);
+		mPageTextLayout.addView(iv);
+	}
+
+	/**
+	 * <code>addEditTextInPage()</code> adds an EditText in Page body.
+	 */
+	private void addEditTextInPage(String text){
+		final EditText et = new EditText(this);
+		et.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				cursorIndexChange(et.getSelectionStart(), et);
+			}
+		});
+		LayoutParams lp2 = new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT);
+		et.setText(text);
+		et.setLayoutParams(lp2);
+		mPageTextLayout.addView(et);
+		mStoryEditTextArray.add(et);
 	}
 	
 	/**
@@ -443,8 +545,8 @@ public class PageEditActivity extends ActivityExtended {
 	}
 
 	/*
-	 * This event handler is overriden so backpress will always go back
-	 * to last activity.
+	 * This event handler is overriden so backpress will always go back to last
+	 * activity.
 	 * 
 	 * @see android.app.Activity#onBackPressed()
 	 */
@@ -462,34 +564,35 @@ public class PageEditActivity extends ActivityExtended {
 
 	/*
 	 * (non-Javadoc)
-	 * @see edu.ualberta.adventstory.ActivityExtended#update(edu.ualberta.multimedia.TObservable)
+	 * 
+	 * @see
+	 * edu.ualberta.adventstory.ActivityExtended#update(edu.ualberta.multimedia
+	 * .TObservable)
 	 */
 	@Override
 	public void update(TObservable o) {
 		super.update(o);
 		localUpdate();
 	}
-	
+
 	/**
 	 * See parent class ActivityExtended.
 	 */
 	@Override
-	public void localUpdate(){
+	public void localUpdate() {
 		// Things to update.
-		setStoryText(18);
+		setStoryText();
 	}
-	
+
 	/**
-	 * <code>clearSelection</code> clear all trace of selection.
-	 * This is required as opposed to doing it mannually.
+	 * <code>clearSelection</code> clear all trace of selection. This is
+	 * required as opposed to doing it mannually.
 	 */
 	void clearSelection() {
 		ArrayList<MultimediaAbstract> ma = mPage.getMultimedia();
 		for (MultimediaAbstract m : ma) {
 			m.setIsSelected(false);
 		}
-
-		mIsAnyMultimediaSelected = false;
 	}
 
 	/**
@@ -500,56 +603,36 @@ public class PageEditActivity extends ActivityExtended {
 	 * @param index
 	 * @version 1.0
 	 */
-	void cursorIndexChange(int index) {
+	void cursorIndexChange(int index, EditText editTextClicked) {
 		// If a multimedia is selected, move it to where the user clicked
 		// and update.
+		
+		// Offset the index to not select any index in the middle of word..
+		String str = editTextClicked.getText().toString();
+		char[] charArray = str.toCharArray();
+		while( index != 0 && index != charArray.length && charArray[index++] != ' ' ){}		
+		index = index + getPageTextIndexOffset(editTextClicked);
+
 		int maxIndex = mPage.getText().length();
 		if (index > maxIndex) {
 			index = maxIndex;
 		}
 
-		if (mIsAnyMultimediaSelected && (mIsJustSelected == false)
-				&& index >= 0) {
-			ArrayList<MultimediaAbstract> ma = mPage.getMultimedia();
+		ArrayList<MultimediaAbstract> ma = mPage.getMultimedia();
 
-			for (MultimediaAbstract m : ma) {
-				if (m.getIsSelected()) {
-					// Make sure no multimedia have that index.
-					for (MultimediaAbstract m2 : ma) {
-						if (m2 != m) {
-							if (m.getIndex() == index) {
-								Toast.makeText(
-										this,
-										"Index is occupied, place multimedia somewhere else.",
-										Toast.LENGTH_LONG).show();
-								return;
-							}
-						}
-					}
-					m.setIndex(index);
+		for (MultimediaAbstract m : ma) {
+			if (m.getIsSelected()) {
+				m.setIndex(index);
 
-					clearSelection();
-					localUpdate();
-					// It is assumed that only one MultimediaAbstract is
-					// selected.
-					// Exit as soon as one is found.
-					return;
-				}
+				clearSelection();
+				return;
 			}
-			// index >= 0 is a really important condition.
-			// Make sure that although mIsJustSelected is true,
-			// this must NOT be set to false when the user selected
-			// an illegal destionation (index = -1)..
-		} else if (mIsJustSelected == true && index >= 0) {
-			mIsJustSelected = false;
-		} else {
-			// Unknown state.
 		}
 	}
 
 	/**
-	 * <code>addMultimedia</code> is called when adding Multimedia
-	 * in PageEditActivity.
+	 * <code>addMultimedia</code> is called when adding Multimedia in
+	 * PageEditActivity.
 	 * 
 	 * @author JoeyAndres
 	 * @version 1.0
@@ -559,110 +642,65 @@ public class PageEditActivity extends ActivityExtended {
 		// Load arguments.
 		Bundle info = new Bundle();
 		info.putInt("page_id", mPage.getID());
-		
-		int index = mStoryEditTextView.getSelectionStart() == -1 ? 
-					mPage.getText().length()-1 : mStoryEditTextView.getSelectionStart();
-		
-		// Check if index is within 1 indexes within others.
-		for( MultimediaAbstract m : mPage.getMultimedia()){
-			if( Math.abs(m.getIndex()-index)<= 1 ){
-				Toast.makeText(this, "Select a different location.", Toast.LENGTH_LONG).show();
-				return;
-			}
-		}
-		
+
+		int index = 0;
+
 		info.putInt("index", index);
-		Intent addMultimediaIntent = new Intent(this, AddMultimediaActivity.class);
+		Intent addMultimediaIntent = new Intent(this,
+				AddMultimediaActivity.class);
 		addMultimediaIntent.putExtras(info);
 		startActivity(addMultimediaIntent);
 	}
 
 	/**
-	 * @return <code>String</code> of the title of the page, stripped-off of unnecessary
-	 * white space. 
-	 */
-	private String getStoryText(){
-		String pageStory = this.mStoryEditTextView.getText().toString();
-		
-		String f[] = pageStory.split(" +");
-		ArrayList<String> fragmented = new ArrayList<String>();
-		for( int i = 0; i < f.length; i++){
-			fragmented.add(f[i]);
-			fragmented.add(" ");	
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		
-		for( String s : fragmented){
-			sb.append(s);
-		}
-		return sb.toString();
-	}
-	
-	/**
-	 * @return <code>String</code> of the author of the page. 
-	 */
-	private String getAuthorText(){
-		return mPageAuthorEditTextView.getText().toString();
-	}
-	
-	/**
-	 * @return <code>String</code> of the title of the page. 
-	 */
-	protected String getPageTitleText(){
-		return mPageTitleEditTextView.getText().toString();
-	}
-	
-	/**
-	 * <code>save</code> must be called when saving. <code>onPause</code> 
-	 * is the recommended event to when/where this should be called.
+	 * <code>save</code> must be called when saving. <code>onPause</code> is the
+	 * recommended event to when/where this should be called.
 	 */
 	void save() {
 		String pageName = getPageTitleText();
-		String pageAuthor =	getAuthorText(); 
+		String pageAuthor = getAuthorText();
 		String pageStory = getStoryText();
-		
+
 		mPage.setTitle(pageName);
 		mPage.setAuthor(pageAuthor);
 		mPage.setText(pageStory);
-		
+
 		if (pageName.length() <= 0 || pageAuthor.length() <= 0
 				|| pageStory.length() <= 0) {
 			// Things to do if one of the inputs are empty.
 			// - Just have all of them have some default values.
-			Toast.makeText(this, "One of the text inputs are invalid.", 
-												Toast.LENGTH_LONG).show();
-			mDataSingleton.database.update_page(new Page(mPage.getID(), 
-								"Untitled", "Unknown", "Unfilled", null));
+			Toast.makeText(this, "One of the text inputs are invalid.",
+					Toast.LENGTH_LONG).show();
+			mDataSingleton.database.update_page(new Page(mPage.getID(),
+					"Untitled", "Unknown", "Unfilled", null));
 		}
 
 		mDataSingleton.database.update_page(mPage);
 		/*
 		 * Multimedia's are only updated as opposed to modified.
 		 */
-		for( MultimediaAbstract m : mPage.getMultimedia()){
+		for (MultimediaAbstract m : mPage.getMultimedia()) {
 			mDataSingleton.database.update_multimedia(m, mPage.getID());
 		}
 	}
-	
+
 	/**
-	 * <code>cancel</code>
-	 * For now cancel is no use.
+	 * <code>cancel</code> For now cancel is no use.
 	 * 
-	 * TODO: Discuss with team what to do when cancelling.
-	 * 		- Do I delete the current page?
-	 * 		- If there's only one page, Do I also delete the current story?
-	 * 		- Or do I just save whatever is typed?
+	 * TODO: Discuss with team what to do when cancelling. - Do I delete the
+	 * current page? - If there's only one page, Do I also delete the current
+	 * story? - Or do I just save whatever is typed?
 	 * 
 	 * @deprecated
 	 */
 	private void cancel() {
 		exit();
 	}
-	
+
 	/**
-	 * <code>addPage</code> is the method to call when adding page.
-	 * Usually attached with a button associated for adding page.
+	 * <code>addPage</code> is the method to call when adding page. Usually
+	 * attached with a button associated for adding page.
+	 * 
 	 * @author Joey Andres
 	 */
 	void addPage() {
@@ -670,42 +708,45 @@ public class PageEditActivity extends ActivityExtended {
 		Intent searchActivity = new Intent(this, SearchActivity.class);
 		Bundle info = new Bundle();
 		info.putBoolean("ADD_PAGE", true);
-		info.putBoolean("BOOL_IS_STORY", false);		
-		searchActivity.putExtra("android.intent.extra.INTENT",info);
+		info.putBoolean("BOOL_IS_STORY", false);
+		searchActivity.putExtra("android.intent.extra.INTENT", info);
 		startActivityForResult(searchActivity, ADDPAGE_REQUESTCODE);
 	}
-	
+
 	/**
 	 * <code>exit</code> provides a way of exiting to StartActivity.
 	 */
 	@Override
-	protected void exit(){
+	protected void exit() {
 		save();
 		startActivity(new Intent(this, StartActivity.class));
 	}
-	
+
 	/**
-	 * <code>showMultimediaOptionsFragment</code> launches MultimediaOptionsFragment
-	 * to display tools/options to be apply to a Multimedia object.
+	 * <code>showMultimediaOptionsFragment</code> launches
+	 * MultimediaOptionsFragment to display tools/options to be apply to a
+	 * Multimedia object.
 	 */
-	private void showMultimediaOptionsFragment(){
-		MultimediaOptionsFragment mof = MultimediaOptionsFragment.MultimediaOptionsFragmentFactory(mPage);
-		
+	private void showMultimediaOptionsFragment() {
+		MultimediaOptionsFragment mof = MultimediaOptionsFragment
+				.MultimediaOptionsFragmentFactory(mPage);
+
 		FragmentManager fragmentManager = getFragmentManager();
-		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();		
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
 		fragmentTransaction.replace(android.R.id.content, mof);
 		fragmentTransaction.commit();
 	}
-	
+
 	// TODO: Accomodate AddMultimedia's return here.
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		mPage = mDataSingleton.getCurrentPage();
-		
+
 		Page newPage = mDataSingleton.database.get_page_by_id(resultCode);
 		mDataSingleton.database.insert_page_option(mPage, newPage);
 		mPage.addPage(newPage);
-		
+
 		restart();
 	}
 }
