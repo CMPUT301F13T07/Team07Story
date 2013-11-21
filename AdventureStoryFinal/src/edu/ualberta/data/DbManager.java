@@ -143,7 +143,7 @@ public class DbManager implements DataManager{
 	}
 	public ArrayList<Page> get_page_options(Integer id) {
 		Cursor c = get_from_db(Constant.TABLE_PAGE_CHILDREN, Constant.PAGE_ID, id);
-		return page_from_cursor_children(c);
+		return page_from_cursor_children(c, id);
 	}
 	public ArrayList<MultimediaAbstract> get_multimedia_by_page_id(Integer page_id) {
 		Cursor c = get_from_db(Constant.TABLE_MULT, Constant.PAGE_ID, page_id);
@@ -201,15 +201,17 @@ public class DbManager implements DataManager{
 	 * @param c
 	 * @return
 	 */
-	public ArrayList<Page> page_from_cursor_children(Cursor c) {
+	public ArrayList<Page> page_from_cursor_children(Cursor c, int parent_id) {
 		Integer id;
 		ArrayList<Page> pages = new ArrayList<Page>();
 		
 		while (c.moveToNext()) {
 			id = c.getInt(c.getColumnIndex(Constant.NEXT_PAGE_ID));
 			
-			Page page = get_page_by_id(id);
-			pages.add(page);
+			if (id != parent_id) {
+				Page page = get_page_by_id(id);
+				pages.add(page);
+			}
 		}
 		return pages;
 	}
