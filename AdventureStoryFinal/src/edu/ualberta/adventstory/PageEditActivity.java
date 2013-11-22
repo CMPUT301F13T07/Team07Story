@@ -13,9 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TextView.BufferType;
 
 import edu.ualberta.controller.CommandCollection;
 import edu.ualberta.controller.CommandCollection.Callback;
@@ -105,10 +101,12 @@ public class PageEditActivity extends ActivityExtended {
 		mButtonAddMultimedia = (Button) findViewById(R.id.addMultimedia);
 		mButtonAddPage = (Button) findViewById(R.id.addPage);
 		mButtonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
-
+		CheckBox cb = (CheckBox)findViewById(R.id.readOnlyCheckBox);
+		
 		setPageTitle(22);
 		setPageAuthor(20);
 		setStoryText();
+		cb.setChecked(mPage.getReadOnly());
 
 		mPageTextLayout.setOnClickListener(new OnClickListener() {
 			@Override
@@ -349,6 +347,10 @@ public class PageEditActivity extends ActivityExtended {
 	 */
 	void setStoryTitle() {
 		ActionBar ab = getActionBar();
+		if(mStory == null){
+			Toast.makeText(this, "Error: Story is null", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		ab.setTitle(mStory.getTitle());
 	}
 
@@ -658,6 +660,12 @@ public class PageEditActivity extends ActivityExtended {
 	 * recommended event to when/where this should be called.
 	 */
 	void save() {
+		// Null pointer check.
+		if(mPage == null){
+			Toast.makeText(this, "Error: Page is null.", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
 		String pageName = getPageTitleText();
 		String pageAuthor = getAuthorText();
 		String pageStory = getStoryText();
@@ -752,5 +760,5 @@ public class PageEditActivity extends ActivityExtended {
 		mPage.addPage(newPage);
 
 		restart();
-	}
+	}	
 }

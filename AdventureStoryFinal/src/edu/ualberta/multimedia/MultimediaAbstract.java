@@ -1,10 +1,5 @@
 package edu.ualberta.multimedia;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import edu.ualberta.adventstory.R;
 import edu.ualberta.adventstory.TObserver;
 
 abstract public class MultimediaAbstract extends TObservable<TObserver>{
