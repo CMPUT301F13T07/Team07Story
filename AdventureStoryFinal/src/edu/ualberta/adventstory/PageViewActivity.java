@@ -64,23 +64,23 @@ public class PageViewActivity extends ActivityExtended {
 		mOuterLayout = (LinearLayout) findViewById(R.id.outerLayout);
 		mPageTextLayout = (LinearLayout) findViewById(R.id.pageTextLayout);
 		mButtonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
-		Button buttonRandomNextPage = (Button)findViewById(R.id.randomChoiceButton);
+		Button buttonRandomNextPage = (Button) findViewById(R.id.randomChoiceButton);
 		mPageTitleTextView = (TextView) findViewById(R.id.pageTitle);
-		
+
 		if (mViewPageOnly == false) {
 			setStoryTitle(mStory.getTitle(), 26);
 		}
-		
-		if(mPage.getPages().size() == 0){
+
+		if (mPage.getPages().size() == 0) {
 			buttonRandomNextPage.setEnabled(false);
 		}
-		buttonRandomNextPage.setOnClickListener(new OnClickListener(){
+		buttonRandomNextPage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				randomNextPage();
-			}			
+			}
 		});
-		
+
 		setPageTitle(mPage.getTitle(), 22);
 
 		setStoryText();
@@ -120,26 +120,30 @@ public class PageViewActivity extends ActivityExtended {
 
 	@SuppressLint("NewApi")
 	void CreateMenu(Menu menu) {
-		MenuItem mnu1 = menu.add(0, 0, 0, "Edit Page");
-		{
-			mnu1.setIcon(R.drawable.ic_edit_page);
-			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM); // This is
-																	// subject
-																	// to
-																	// change.
-		}
-		OnCommand startEditPageCommand = new OnCommand(new OnCallbackListener() {
-			@Override
-			public void callback() {
-				startPageEditActivity();
+		if (mPage.getReadOnly() == false) {
+			MenuItem mnu1 = menu.add(0, 0, 0, "Edit Page");
+			{
+				mnu1.setIcon(R.drawable.ic_edit_page);
+				mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM); // This
+																		// is
+																		// subject
+																		// to
+																		// change.
 			}
-		});
-		mMapMenuToCommand.put(mnu1, startEditPageCommand);
+			OnCommand startEditPageCommand = new OnCommand(
+					new OnCallbackListener() {
+						@Override
+						public void callback() {
+							startPageEditActivity();
+						}
+					});
+			mMapMenuToCommand.put(mnu1, startEditPageCommand);
+		}
 	}
 
 	/**
-	 * <code>addNextPageButtons()</code> add the buttons that allows the user/author to
-	 * transition to next page.
+	 * <code>addNextPageButtons()</code> add the buttons that allows the
+	 * user/author to transition to next page.
 	 */
 	private void addNextPageButtons() {
 		for (final Page p : mPage.getPages()) {
@@ -162,10 +166,10 @@ public class PageViewActivity extends ActivityExtended {
 		View v = (View) View.inflate(this, R.layout.divider, null);
 		mButtonLayout.addView(v);
 	}
-	
-	void randomNextPage(){
+
+	void randomNextPage() {
 		ArrayList<Page> mPageList = mPage.getPages();
-		if(mPageList == null || mPageList.size() == 0){
+		if (mPageList == null || mPageList.size() == 0) {
 			Toast.makeText(this, "No next page.", Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -195,7 +199,7 @@ public class PageViewActivity extends ActivityExtended {
 		ArrayList<MultimediaAbstract> multimediaList = mPage.getMultimedia();
 
 		if (multimediaList == null) {
-			TextView tv = new TextView(this);			
+			TextView tv = new TextView(this);
 			LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT,
 					LayoutParams.WRAP_CONTENT);
 			tv.setText(mPage.getText());
@@ -223,22 +227,23 @@ public class PageViewActivity extends ActivityExtended {
 		TreeMap<String, Integer> stringFragmentsReversed = new TreeMap<String, Integer>();
 		int lastIndex = 0;
 		for (int i : indexMultimediaHash.keySet()) {
-			// If multimedia index i is greater than the length of string then just loop through.
+			// If multimedia index i is greater than the length of string then
+			// just loop through.
 			if (i >= mPage.getText().length()) {
 				continue;
 			}
-			if (i - lastIndex == 0) {				
+			if (i - lastIndex == 0) {
 				continue;
 			}
 			char[] temp = new char[i - lastIndex];
 			mPage.getText().getChars(lastIndex, i, temp, 0);
 			stringFragments.put(i, new String(temp));
 			stringFragmentsReversed.put(new String(temp), i);
-			lastIndex = i;			
+			lastIndex = i;
 		}
-		
-		int textLength = mPage.getText().length()-1;
-		if( lastIndex < textLength){
+
+		int textLength = mPage.getText().length() - 1;
+		if (lastIndex < textLength) {
 			char[] temp = new char[textLength - lastIndex];
 			mPage.getText().getChars(lastIndex, textLength, temp, 0);
 			stringFragments.put(textLength, new String(temp));
@@ -246,11 +251,11 @@ public class PageViewActivity extends ActivityExtended {
 			lastIndex = textLength;
 		}
 
-		// Assemble TextViews and ImageViews.		
+		// Assemble TextViews and ImageViews.
 		ArrayList<MultimediaAbstract> displayedMultimedia = new ArrayList<MultimediaAbstract>();
 		int multimediaCounter = 0;
 		lastIndex = 0;
-		for (int index : stringFragments.keySet()) {			
+		for (int index : stringFragments.keySet()) {
 			ArrayList<MultimediaAbstract> mList = indexMultimediaHash
 					.get(lastIndex);
 			if (mList != null) {
@@ -279,7 +284,7 @@ public class PageViewActivity extends ActivityExtended {
 			}
 		}
 	}
-	
+
 	/**
 	 * <code>addImageViewInPage</code> helper method for
 	 * <code>setStoryText</code>.
@@ -292,9 +297,9 @@ public class PageViewActivity extends ActivityExtended {
 				MultimediaControllerManager.play(getBaseContext(), m);
 			}
 		});
-		
+
 		iv.setPadding(5, 5, 5, 5);
-		
+
 		LayoutParams lp1 = new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT);
 		iv.setImageBitmap(MultimediaControllerManager.loadBitmap(this, m));
@@ -329,12 +334,13 @@ public class PageViewActivity extends ActivityExtended {
 	 * starts PageEditActivity().
 	 */
 	private void startPageEditActivity() {
-		if( mPage.getReadOnly() == false){
+		if (mPage.getReadOnly() == false) {
 			startActivityForResult(new Intent(this, PageEditActivity.class),
 					START_EDITPAGE_RESULTCODE);
-		}else{
-			Toast.makeText(this, "Page is Read Only. Access Deneid.", Toast.LENGTH_SHORT).show();
-		}		
+		} else {
+			Toast.makeText(this, "Page is Read Only. Access Deneid.",
+					Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override

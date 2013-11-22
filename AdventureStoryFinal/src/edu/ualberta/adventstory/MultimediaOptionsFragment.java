@@ -117,6 +117,7 @@ public class MultimediaOptionsFragment extends Fragment implements
 				((PageEditActivity) getActivity())
 						.swapMultimedia(mSelectedMultimedia.getID());
 				// It is implied that a save will occur.
+				closeFragment();
 			}
 
 		});
