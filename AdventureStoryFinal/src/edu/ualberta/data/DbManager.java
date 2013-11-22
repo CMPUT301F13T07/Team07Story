@@ -88,11 +88,14 @@ public class DbManager implements DataManager{
 	}
 	
 	public long insert_multimedia(MultimediaAbstract mult, int page_id) {
+		String mult_type = mult.getClass().getSimpleName();
 		ContentValues values = new ContentValues();
 		values.put(Constant.DIRECTORY, mult.getFileDir());
 		values.put(Constant.PAGE_ID, page_id);
 		values.put(Constant.INDEX, mult.getIndex());
-		values.put(Constant.MULT_TYPE, mult.getClass().getSimpleName());		
+		values.put(Constant.MULT_TYPE, mult_type);
+		if (mult_type.equals("Picture"))
+			values.put(Constant.SIZE, ((Picture) mult).getPictureSize());
 		return insert(Constant.TABLE_MULT, values);
 	}
 	
@@ -280,6 +283,7 @@ public class DbManager implements DataManager{
 		String file_dir;
 		String type;
 		Integer index;
+		Integer size;
 		
 		ArrayList<MultimediaAbstract> multimedia = 
 				new ArrayList<MultimediaAbstract>();
@@ -290,13 +294,14 @@ public class DbManager implements DataManager{
 			type = c.getString(c.getColumnIndex(Constant.MULT_TYPE));
 			
 			if( type.compareTo("Picture") == 0 ){
-			      multimedia.add( new Picture(mult_id, index, file_dir));
-			}else if( type.compareTo("SoundClip") == 0){
-			      multimedia.add( new SoundClip(mult_id, index, file_dir));
-			}else if( type.compareTo("Video") == 0){
-			      multimedia.add( new Video(mult_id, index, file_dir));
+				size = c.getInt(c.getColumnIndex(Constant.SIZE));
+				multimedia.add(new Picture(mult_id, index, file_dir, size));
+			}else if(type.compareTo("SoundClip") == 0){
+				multimedia.add(new SoundClip(mult_id, index, file_dir));
+			}else if(type.compareTo("Video") == 0){
+				multimedia.add(new Video(mult_id, index, file_dir));
 			}else{
-			      multimedia.add(new MultimediaAbstract(mult_id, index, file_dir){});
+				multimedia.add(new MultimediaAbstract(mult_id, index, file_dir){});
 			}
 		}
 		return multimedia;
@@ -404,13 +409,16 @@ public class DbManager implements DataManager{
 	 * Work In Progress Section.
 	 */
 	public long update_multimedia(MultimediaAbstract mult, long page_id) {
+		String mult_type = mult.getClass().getSimpleName();
 		ContentValues values = new ContentValues();
 		String where = Constant.MULT_ID + "=" + mult.getID();
-		
+
 		values.put(Constant.DIRECTORY, mult.getFileDir());
 		values.put(Constant.INDEX, mult.getIndex());
 		values.put(Constant.PAGE_ID, page_id);
-		values.put(Constant.MULT_TYPE, mult.getClass().getSimpleName());		
+		values.put(Constant.MULT_TYPE, mult_type);
+		if (mult_type.equals("Picture"))
+			values.put(Constant.SIZE, ((Picture) mult).getPictureSize());
 		return update(Constant.TABLE_MULT, values, where);
 	}
 	

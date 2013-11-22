@@ -2,7 +2,7 @@ package edu.ualberta.data;
 
 public class Constant {
 	public static final String DATABASE_NAME = "story_page_storage";
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 10;
     
 	// table titles
 	public static final String TABLE_STORY = "Story";
@@ -34,6 +34,7 @@ public class Constant {
 	public static final String DIRECTORY = "directory";
 	public static final String INDEX = "multimedia_index";
 	public static final String MULT_TYPE = "multimedia_type";
+	public static final String SIZE = "pic_size";
 	
 	// table login
 	public static final String USER = "user";
@@ -52,6 +53,10 @@ public class Constant {
 												   + MULT_TYPE + " = 'Picture' OR "
 												   + MULT_TYPE + " = 'Video' OR "
 												   + MULT_TYPE + " = 'SoundClip'), "
+												   + SIZE + " INTEGER CHECK ("
+												   + SIZE + " = 1 OR "
+												   + SIZE + " = 2 OR "
+												   + SIZE + " = 3), "
 												   + "FOREIGN KEY (" + PAGE_ID
 			  									   + ") REFERENCES " + TABLE_PAGE
 			  									   + " (" + PAGE_ID + "))";
