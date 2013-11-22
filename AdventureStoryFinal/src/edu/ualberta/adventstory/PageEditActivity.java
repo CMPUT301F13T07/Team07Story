@@ -622,7 +622,8 @@ public class PageEditActivity extends ActivityExtended {
 		// Offset the index to not select any index in the middle of word..
 		String str = editTextClicked.getText().toString();
 		char[] charArray = str.toCharArray();
-		while( index != 0 && index != charArray.length && charArray[index++] != ' ' ){}		
+		while( index != 0 && index != charArray.length && 
+				charArray[index] != ' ' && charArray[index] != '\n'){index++;}		
 		index = index + getPageTextIndexOffset(editTextClicked);
 
 		int maxIndex = mPage.getText().length();

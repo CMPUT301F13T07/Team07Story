@@ -172,8 +172,9 @@ public class MultimediaOptionsFragment extends Fragment implements
 	}
 
 	private void closeFragment() {
-		getActivity().getFragmentManager().beginTransaction()
-				.remove(MultimediaOptionsFragment.this).commit();
+		//((PageEditActivity)getActivity()).save();
 		((PageEditActivity)getActivity()).setFRAGMENTINFLATED(false);
+		getActivity().getFragmentManager().beginTransaction()
+				.remove(MultimediaOptionsFragment.this).commit();		
 	}
 }
