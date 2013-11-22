@@ -60,6 +60,8 @@ public class PageEditActivity extends ActivityExtended {
 	private Page mPage; // Current page.
 	private Button mButtonAddMultimedia; // Button for adding multimedias.
 
+	private boolean FRAGMENT_INFLATED = false;
+	
 	final private int ADDPAGE_REQUESTCODE = 1; 
 	final private int GET_MULTIMEDIA_REQUESTCODE = 2; 
 	final private int SWAP_MULTIMEDIA_REQUESTCODE = 3;
@@ -497,10 +499,12 @@ public class PageEditActivity extends ActivityExtended {
 		iv.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				if( FRAGMENT_INFLATED ) return; 
 				save();
 				clearSelection();
 				m.setIsSelected(true);
-				showMultimediaOptionsFragment();
+				FRAGMENT_INFLATED = true;
+				showMultimediaOptionsFragment(m);
 			}
 		});
 
@@ -512,6 +516,11 @@ public class PageEditActivity extends ActivityExtended {
 		iv.setLayoutParams(lp1);
 		mPageTextLayout.addView(iv);
 	}
+	
+	/**
+	 * set FRAGMENT_INFLATED to val.
+	 */
+	public void setFRAGMENTINFLATED(boolean value){FRAGMENT_INFLATED = value;}
 
 	/**
 	 * <code>addEditTextInPage()</code> adds an EditText in Page body.
@@ -762,9 +771,9 @@ public class PageEditActivity extends ActivityExtended {
 	 * MultimediaOptionsFragment to display tools/options to be apply to a
 	 * Multimedia object.
 	 */
-	private void showMultimediaOptionsFragment() {
+	private void showMultimediaOptionsFragment(MultimediaAbstract m) {
 		MultimediaOptionsFragment mof = MultimediaOptionsFragment
-				.MultimediaOptionsFragmentFactory(mPage);
+				.MultimediaOptionsFragmentFactory(mPage, m);
 
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager

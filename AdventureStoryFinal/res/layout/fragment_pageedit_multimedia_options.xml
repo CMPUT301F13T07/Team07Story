@@ -105,16 +105,16 @@
                         android:layout_gravity="bottom"
                         android:src="@drawable/ic_image_size_large" />
                 </LinearLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray" />
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dp" />
             </LinearLayout>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" />
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="20dp" />
 
             <Button
                 android:id="@+id/exitButton"

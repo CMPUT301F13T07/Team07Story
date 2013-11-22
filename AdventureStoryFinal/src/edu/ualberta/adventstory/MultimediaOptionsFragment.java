@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -18,164 +19,161 @@ import edu.ualberta.multimedia.TObservable;
 import edu.ualberta.utils.Page;
 
 @SuppressLint({ "ValidFragment", "NewApi" })
-public class MultimediaOptionsFragment extends Fragment implements 
-												TObserver<TObservable> {
+public class MultimediaOptionsFragment extends Fragment implements
+		TObserver<TObservable> {
 	// A simple static factory problem.
 	static public MultimediaOptionsFragment MultimediaOptionsFragmentFactory(
-																Page currentPage){
-		return new MultimediaOptionsFragment(currentPage);
+			Page currentPage,  MultimediaAbstract selectedMultimedia) {
+		return new MultimediaOptionsFragment(currentPage,  selectedMultimedia);
 	}
-		
-	protected Page mCurrentPage;							// Current page.
+
+	protected Page mCurrentPage; // Current page.
+	protected MultimediaAbstract mSelectedMultimedia;
 	
-	private TextView mMultimediaTypeTextView;				
-	private TextView mMultimediaFilePath;					
+	private TextView mMultimediaTypeTextView;
+	private TextView mMultimediaFilePath;
 	private Button mDeleteMultimediaButton;
 	private Button mChangeMultimediaButton;
-	
-	private MultimediaOptionsFragment(Page currentPage){	
+
+	private MultimediaOptionsFragment(Page currentPage, MultimediaAbstract selectedMultimedia) {
 		mCurrentPage = currentPage;
+		mSelectedMultimedia = selectedMultimedia;
 	}
-	
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+
 		// Inflate the layout for this fragment
-		return inflater.inflate(
-					R.layout.fragment_pageedit_multimedia_options, container, false);
+		return inflater.inflate(R.layout.fragment_pageedit_multimedia_options,
+				container, false);
 	}
-	
+
 	@SuppressLint("NewApi")
 	@Override
-	public void onStart(){
+	public void onStart() {
 		super.onStart();
-		
-		mMultimediaTypeTextView = (TextView)getActivity().findViewById(R.id.multimediaTypeTextView);
-		mMultimediaFilePath = (TextView)getActivity().findViewById(R.id.multimediaFileNameTextView);
-		mDeleteMultimediaButton = (Button)getActivity().findViewById(R.id.deleteMultimediaButton);
-		mChangeMultimediaButton = (Button)getActivity().findViewById(R.id.changeMultimediaButton);
-		LinearLayout mButtonLayout = (LinearLayout)getActivity().findViewById(R.id.multimediaSizeLayout);
-		ImageButton mButtonSmallSize = (ImageButton)getActivity().findViewById(R.id.multimediaSmallSizeButton); 
-		ImageButton mButtonMediumSize = (ImageButton)getActivity().findViewById(R.id.multimediaMediumSizeButton); 
-		ImageButton mButtonLargeSize = (ImageButton)getActivity().findViewById(R.id.multimediaLargeSizeButton);
-		Button mExitButton = (Button)getActivity().findViewById(R.id.exitButton);
-		
+
+		mMultimediaTypeTextView = (TextView) getActivity().findViewById(
+				R.id.multimediaTypeTextView);
+		mMultimediaFilePath = (TextView) getActivity().findViewById(
+				R.id.multimediaFileNameTextView);
+		mDeleteMultimediaButton = (Button) getActivity().findViewById(
+				R.id.deleteMultimediaButton);
+		mChangeMultimediaButton = (Button) getActivity().findViewById(
+				R.id.changeMultimediaButton);
+		LinearLayout mButtonLayout = (LinearLayout) getActivity().findViewById(
+				R.id.multimediaSizeLayout);
+		ImageButton mButtonSmallSize = (ImageButton) getActivity()
+				.findViewById(R.id.multimediaSmallSizeButton);
+		ImageButton mButtonMediumSize = (ImageButton) getActivity()
+				.findViewById(R.id.multimediaMediumSizeButton);
+		ImageButton mButtonLargeSize = (ImageButton) getActivity()
+				.findViewById(R.id.multimediaLargeSizeButton);
+		Button mExitButton = (Button) getActivity().findViewById(
+				R.id.exitButton);
+
 		// Set mMultimediaTypeTextView's string.
-		for(MultimediaAbstract m : mCurrentPage.getMultimedia()){
-			if( m.getIsSelected() ){
+		for (MultimediaAbstract m : mCurrentPage.getMultimedia()) {
+			if (m.getIsSelected()) {
 				mMultimediaTypeTextView.setText("Multimedia Editor");
 				break;
 			}
 		}
-		
+
 		// Set mMultimediaFilePath string.
-		for(MultimediaAbstract m : mCurrentPage.getMultimedia()){
-			if( m.getIsSelected() ){
+		for (MultimediaAbstract m : mCurrentPage.getMultimedia()) {
+			if (m.getIsSelected()) {
 				mMultimediaFilePath.setText(m.getFileDir());
 				break;
 			}
 		}
-		
-		mDeleteMultimediaButton.setOnClickListener(new OnClickListener(){
+
+		mDeleteMultimediaButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(mCurrentPage.getMultimedia() == null){
+				if (mCurrentPage.getMultimedia() == null) {
 					// UNKNOWN STATE, EXIT AT ONCE.
 					closeFragment();
 				}
-				for(MultimediaAbstract m : mCurrentPage.getMultimedia()){
-					if( m.getIsSelected() ){
+				for (MultimediaAbstract m : mCurrentPage.getMultimedia()) {
+					if (m.getIsSelected()) {
 						mCurrentPage.getMultimedia().remove(m);
 						closeFragment();
-						((PageEditActivity)getActivity()).mDataSingleton.database.delete_mult(m, mCurrentPage);	
-						((PageEditActivity)getActivity()).update(m);
-						((PageEditActivity)getActivity()).save();						
-						((PageEditActivity)getActivity()).restart();
+						((PageEditActivity) getActivity()).mDataSingleton.database
+								.delete_mult(m, mCurrentPage);
+						((PageEditActivity) getActivity()).update(m);
+						((PageEditActivity) getActivity()).save();
+						((PageEditActivity) getActivity()).restart();
 						break;
 					}
 				}
 			}
 		});
-		
-		mChangeMultimediaButton.setOnClickListener(new OnClickListener(){
+
+		mChangeMultimediaButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				((PageEditActivity)getActivity()).swapMultimedia(getSelectedMultimedia().getID());
+				((PageEditActivity) getActivity())
+						.swapMultimedia(mSelectedMultimedia.getID());
 				closeFragment();
 			}
-			
+
 		});
-		
-		mButtonSmallSize.setOnClickListener(new OnClickListener(){
+
+		mButtonSmallSize.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {				
-				MultimediaAbstract m = getSelectedMultimedia();
-				if( m instanceof Picture ){
-					Picture p = (Picture)m;
+			public void onClick(View v) {
+				if (mSelectedMultimedia instanceof Picture) {
+					Picture p = (Picture) mSelectedMultimedia;
 					p.setPictureSize(Picture.SMALL);
 					update(p);
 				}
 			}
 		});
-		
-		mButtonMediumSize.setOnClickListener(new OnClickListener(){
+
+		mButtonMediumSize.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {				
-				MultimediaAbstract m = getSelectedMultimedia();
-				if( m instanceof Picture ){
-					Picture p = (Picture)m;
+			public void onClick(View v) {
+				if (mSelectedMultimedia instanceof Picture) {
+					Picture p = (Picture) mSelectedMultimedia;
 					p.setPictureSize(Picture.MEDIUM);
 					update(p);
 				}
 			}
 		});
-		
-		mButtonLargeSize.setOnClickListener(new OnClickListener(){
+
+		mButtonLargeSize.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {				
-				MultimediaAbstract m = getSelectedMultimedia();
-				if( m instanceof Picture ){
-					Picture p = (Picture)m;
+				if (mSelectedMultimedia instanceof Picture) {
+					Picture p = (Picture) mSelectedMultimedia;
 					p.setPictureSize(Picture.LARGE);
 					update(p);
 				}
 			}
 		});
-		
-		mExitButton.setOnClickListener(new OnClickListener(){
+
+		mExitButton.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {				
+			public void onClick(View v) {
 				closeFragment();
-			}			
+			}
 		});
-		
-		if(!(getSelectedMultimedia() instanceof Picture)){
+
+		if (!(mSelectedMultimedia instanceof Picture)) {
 			mButtonLayout.setVisibility(View.INVISIBLE);
 		}
 	}
 	
 	@Override
 	public void update(TObservable model) {
-		((PageEditActivity)this.getActivity()).update(model);
+		((PageEditActivity) this.getActivity()).update(model);
 	}
-	
+
 	private void closeFragment() {
-        getActivity().getFragmentManager().beginTransaction().remove(MultimediaOptionsFragment.this).commit();
-    }
-	
-	/**
-	 * Acquire the currently selected multimedia in current page.
-	 * @return
-	 */
-	private MultimediaAbstract getSelectedMultimedia(){
-		for(MultimediaAbstract m : mCurrentPage.getMultimedia()){
-			if(m.getIsSelected()){
-				return m;
-			}
-		}
-		
-		// UNKNOWN STATE.
-		return null;
+		getActivity().getFragmentManager().beginTransaction()
+				.remove(MultimediaOptionsFragment.this).commit();
+		((PageEditActivity)getActivity()).setFRAGMENTINFLATED(false);
 	}
 }

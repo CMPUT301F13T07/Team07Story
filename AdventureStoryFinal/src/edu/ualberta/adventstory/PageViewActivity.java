@@ -334,7 +334,7 @@ public class PageViewActivity extends ActivityExtended {
 					START_EDITPAGE_RESULTCODE);
 		}else{
 			Toast.makeText(this, "Page is Read Only. Access Deneid.", Toast.LENGTH_SHORT).show();
-		}
+		}		
 	}
 
 	@Override
