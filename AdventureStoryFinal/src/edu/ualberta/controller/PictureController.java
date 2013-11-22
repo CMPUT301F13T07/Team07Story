@@ -9,6 +9,7 @@ import android.view.Display;
 import android.view.WindowManager;
 import edu.ualberta.adventstory.R;
 import edu.ualberta.multimedia.MultimediaAbstract;
+import edu.ualberta.multimedia.Picture;
 
 /**
  * <code>PictureController</code> helpse abstract the loadBitmap method as
@@ -33,7 +34,23 @@ public class PictureController extends MultimediaController {
 			Display d = wm.getDefaultDisplay();
 			Bitmap bm = BitmapFactory.decodeFile(ma.getFileDir());
 			
-			// Force width and height to be within 1/2 screen's limit.			
+			Picture p = (Picture)ma;
+			
+			if( p.getPictureSize() == Picture.SMALL){
+				int width = (int) (d.getWidth()/20.0);
+				int height = (int) (d.getWidth()/20.0);			
+				bm = getResizedBitmap(bm, height, width);
+			}else if(p.getPictureSize() == Picture.MEDIUM){
+				int width = (int) (d.getWidth()/15.0);
+				int height = (int) (d.getWidth()/15.0);			
+				bm = getResizedBitmap(bm, height, width);
+			}else{
+				int width = (int) (d.getWidth()/10.0);
+				int height = (int) (d.getWidth()/10.0);			
+				bm = getResizedBitmap(bm, height, width);
+			}
+			
+			// Force width and height to be AT MOST within 1/2 screen's limit.			
 			if( bm.getWidth() > d.getWidth()/2 ){
 				bm = getResizedBitmap(bm, bm.getHeight(), d.getWidth()/2);
 			}

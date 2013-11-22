@@ -22,6 +22,7 @@ public class Picture extends MultimediaAbstract{
 		mImageSize = imageSize;		
 	}
 	
+	public int getPictureSize(){return mImageSize; }
 	public void setPictureSize(int is){mImageSize = is;}
 
 	@Override
