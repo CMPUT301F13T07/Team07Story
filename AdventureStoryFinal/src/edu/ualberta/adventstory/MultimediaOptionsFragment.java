@@ -59,11 +59,12 @@ public class MultimediaOptionsFragment extends Fragment implements
 		ImageButton mButtonSmallSize = (ImageButton)getActivity().findViewById(R.id.multimediaSmallSizeButton); 
 		ImageButton mButtonMediumSize = (ImageButton)getActivity().findViewById(R.id.multimediaMediumSizeButton); 
 		ImageButton mButtonLargeSize = (ImageButton)getActivity().findViewById(R.id.multimediaLargeSizeButton);
+		Button mExitButton = (Button)getActivity().findViewById(R.id.exitButton);
 		
 		// Set mMultimediaTypeTextView's string.
 		for(MultimediaAbstract m : mCurrentPage.getMultimedia()){
 			if( m.getIsSelected() ){
-				mMultimediaTypeTextView.setText(m.getClass().getName());
+				mMultimediaTypeTextView.setText("Multimedia Editor");
 				break;
 			}
 		}
@@ -99,7 +100,8 @@ public class MultimediaOptionsFragment extends Fragment implements
 		
 		mChangeMultimediaButton.setOnClickListener(new OnClickListener(){
 			@Override
-			public void onClick(View v) {				
+			public void onClick(View v) {
+				((PageEditActivity)getActivity()).swapMultimedia(getSelectedMultimedia().getID());
 				closeFragment();
 			}
 			
@@ -112,6 +114,7 @@ public class MultimediaOptionsFragment extends Fragment implements
 				if( m instanceof Picture ){
 					Picture p = (Picture)m;
 					p.setPictureSize(Picture.SMALL);
+					update(p);
 				}
 			}
 		});
@@ -123,6 +126,7 @@ public class MultimediaOptionsFragment extends Fragment implements
 				if( m instanceof Picture ){
 					Picture p = (Picture)m;
 					p.setPictureSize(Picture.MEDIUM);
+					update(p);
 				}
 			}
 		});
@@ -134,8 +138,16 @@ public class MultimediaOptionsFragment extends Fragment implements
 				if( m instanceof Picture ){
 					Picture p = (Picture)m;
 					p.setPictureSize(Picture.LARGE);
+					update(p);
 				}
 			}
+		});
+		
+		mExitButton.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {				
+				closeFragment();
+			}			
 		});
 		
 		if(!(getSelectedMultimedia() instanceof Picture)){

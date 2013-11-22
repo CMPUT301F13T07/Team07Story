@@ -24,8 +24,8 @@ import android.widget.Toast;
 
 import edu.ualberta.adventstory.R;
 import edu.ualberta.controller.MultimediaControllerManager;
-import edu.ualberta.controller.CommandCollection.Callback;
-import edu.ualberta.controller.CommandCollection.Command;
+import edu.ualberta.controller.CommandCollection.OnCallbackListener;
+import edu.ualberta.controller.CommandCollection.OnCommand;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
@@ -109,7 +109,7 @@ public class PageViewActivity extends ActivityExtended {
 	}
 
 	private boolean MenuChoice(MenuItem item) {
-		Command command = mMapMenuToCommand.get(item);
+		OnCommand command = mMapMenuToCommand.get(item);
 		if (command != null) {
 			command.execute();
 			return true;
@@ -128,7 +128,7 @@ public class PageViewActivity extends ActivityExtended {
 																	// to
 																	// change.
 		}
-		Command startEditPageCommand = new Command(new Callback() {
+		OnCommand startEditPageCommand = new OnCommand(new OnCallbackListener() {
 			@Override
 			public void callback() {
 				startPageEditActivity();

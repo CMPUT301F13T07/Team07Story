@@ -96,6 +96,12 @@ public class AddMultimediaActivity extends Activity {
 	private ArrayList<Integer> sids;
 	
 	/**
+	 * The index of the currently selected multimedia.
+	 */
+	private int selectedMultimediaId;
+	private long newSelectedMultimediaId;
+	
+	/**
 	 * loads database and current page from application class and loads arguments
 	 * @author: Lyle Rolleman
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -112,6 +118,13 @@ public class AddMultimediaActivity extends Activity {
 		picids = new ArrayList<Integer>();
 		movids = new ArrayList<Integer>();
 		sids = new ArrayList<Integer>();
+		
+		/**
+		 * Handling for swapping multimedia.
+		 * @author Joey Andres
+		 */
+		selectedMultimediaId = args.getInt("selectedMultimediaID");
+		
 		addMultimedia();
 	}
 	
@@ -185,6 +198,8 @@ public class AddMultimediaActivity extends Activity {
 						saveSoundToDB();
 				}
 				
+				swapMultimedia();
+				
 				finish();
 			}
 		});
@@ -197,13 +212,30 @@ public class AddMultimediaActivity extends Activity {
 	}
 	
 	/**
+	 *  Sends data if this activity is called on the purpose of swapping activity.
+	 */
+	private void swapMultimedia(){
+		/**
+		 * Note: This block of code below will not affect any other module
+		 * since they can ignore the existence of such return.
+		 * @author Joey Andres
+		 */
+		Intent data = new Intent();				
+		Bundle bundle = new Bundle();
+		bundle.putInt("selectedMultimediaId", selectedMultimediaId);
+		bundle.putLong("NewMultimediaId", newSelectedMultimediaId);
+		data.putExtras(bundle);
+		setResult(RESULT_OK, data);
+	}
+	
+	/**
 	 * Updates the Page object and saves the multimedia to DB
 	 * @author: Lyle Rolleman
 	 */
 	private void savePictureToDB() {
 		String dir = folder + "/" + medialist.get(currid);
 		Picture pic = new Picture(page_id, index, dir);				
-		database.insert_multimedia(pic, currpage.getID());
+		newSelectedMultimediaId = database.insert_multimedia(pic, currpage.getID());
 		
 		// Reset the Current page stack.
 		currpage.getMultimedia().clear();
@@ -214,7 +246,7 @@ public class AddMultimediaActivity extends Activity {
 	private void saveMovieToDB() {
 		String dir = mfolder + "/" + medialist.get(currid);
 		Video vid = new Video(page_id, index, dir);				
-		database.insert_multimedia(vid, currpage.getID());
+		newSelectedMultimediaId = database.insert_multimedia(vid, currpage.getID());
 		
 		// Reset the Current page stack.
 		currpage.getMultimedia().clear();
@@ -225,8 +257,8 @@ public class AddMultimediaActivity extends Activity {
 	private void saveSoundToDB() {
 		String dir = sfolder + "/" + medialist.get(currid);
 		SoundClip sc = new SoundClip(page_id, index, dir);				
-		database.insert_multimedia(sc, currpage.getID());
-		
+		newSelectedMultimediaId = database.insert_multimedia(sc, currpage.getID());
+
 		// Reset the Current page stack.
 		currpage.getMultimedia().clear();
 		((DataSingleton)this.getApplication()).clearPageStack();

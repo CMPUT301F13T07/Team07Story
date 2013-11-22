@@ -12,7 +12,7 @@ import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.multimedia.Picture;
 
 /**
- * <code>PictureController</code> helpse abstract the loadBitmap method as
+ * <code>PictureController</code> helps abstract the loadBitmap method as
  * this is system dependent therefore not suitable in the model package.
  * @author Joey
  *
@@ -37,25 +37,17 @@ public class PictureController extends MultimediaController {
 			Picture p = (Picture)ma;
 			
 			if( p.getPictureSize() == Picture.SMALL){
-				int width = (int) (d.getWidth()/20.0);
-				int height = (int) (d.getWidth()/20.0);			
+				int width = (int) (d.getWidth()/7.5);
+				int height = (int) (d.getWidth()/7.5);			
 				bm = getResizedBitmap(bm, height, width);
 			}else if(p.getPictureSize() == Picture.MEDIUM){
-				int width = (int) (d.getWidth()/15.0);
-				int height = (int) (d.getWidth()/15.0);			
+				int width = (int) (d.getWidth()/5.0);
+				int height = (int) (d.getWidth()/5.0);			
 				bm = getResizedBitmap(bm, height, width);
 			}else{
-				int width = (int) (d.getWidth()/10.0);
-				int height = (int) (d.getWidth()/10.0);			
+				int width = (int) (d.getWidth()/2.5);
+				int height = (int) (d.getWidth()/2.5);			
 				bm = getResizedBitmap(bm, height, width);
-			}
-			
-			// Force width and height to be AT MOST within 1/2 screen's limit.			
-			if( bm.getWidth() > d.getWidth()/2 ){
-				bm = getResizedBitmap(bm, bm.getHeight(), d.getWidth()/2);
-			}
-			if( bm.getHeight() > d.getHeight()/2){
-				bm=getResizedBitmap(bm, d.getHeight()/2, bm.getWidth());
 			}
 			return bm;
 		}

@@ -30,8 +30,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.ualberta.controller.CommandCollection;
-import edu.ualberta.controller.CommandCollection.Callback;
-import edu.ualberta.controller.CommandCollection.Command;
+import edu.ualberta.controller.CommandCollection.OnCallbackListener;
+import edu.ualberta.controller.CommandCollection.OnCommand;
 import edu.ualberta.controller.MultimediaControllerManager;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.multimedia.TObservable;
@@ -60,9 +60,9 @@ public class PageEditActivity extends ActivityExtended {
 	private Page mPage; // Current page.
 	private Button mButtonAddMultimedia; // Button for adding multimedias.
 
-	final private int ADDPAGE_REQUESTCODE = 1; // Request code when adding page.
-	final private int GET_MULTIMEDIA_REQUESTCODE = 2; // Request code for
-														// getting multimedia.
+	final private int ADDPAGE_REQUESTCODE = 1; 
+	final private int GET_MULTIMEDIA_REQUESTCODE = 2; 
+	final private int SWAP_MULTIMEDIA_REQUESTCODE = 3;
 
 	// Set to true when editing a page only, independent of the story.
 	private boolean mEditPageOnly = false;
@@ -181,7 +181,7 @@ public class PageEditActivity extends ActivityExtended {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		Command command = mMapMenuToCommand.get(item);
+		OnCommand command = mMapMenuToCommand.get(item);
 		if (command != null) {
 			command.execute();
 		}
@@ -205,8 +205,8 @@ public class PageEditActivity extends ActivityExtended {
 			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
 
-		Command addMultimediaResponder = new CommandCollection.AddMultimediaCommand(
-				new Callback() {
+		OnCommand addMultimediaResponder = new CommandCollection.OnAddMultimedia(
+				new OnCallbackListener() {
 					@Override
 					public void callback() {
 						addMultimedia();
@@ -220,8 +220,8 @@ public class PageEditActivity extends ActivityExtended {
 			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
 
-		Command saveResponder = new CommandCollection.SaveCommand(
-				new Callback() {
+		OnCommand saveResponder = new CommandCollection.OnSave(
+				new OnCallbackListener() {
 					@Override
 					public void callback() {
 						save();
@@ -236,8 +236,8 @@ public class PageEditActivity extends ActivityExtended {
 			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
 
-		Command cancelResponder = new CommandCollection.ExitActivityCommand(
-				this, new Callback() {
+		OnCommand cancelResponder = new CommandCollection.OnExitActivity(
+				this, new OnCallbackListener() {
 					@Override
 					public void callback() {
 						cancel();
@@ -652,8 +652,31 @@ public class PageEditActivity extends ActivityExtended {
 		Intent addMultimediaIntent = new Intent(this,
 				AddMultimediaActivity.class);
 		addMultimediaIntent.putExtras(info);
-		startActivity(addMultimediaIntent);
+		startActivityForResult(addMultimediaIntent, this.GET_MULTIMEDIA_REQUESTCODE);
 	}
+	
+	/**
+	 * <code>swapMultimedia</code> is called when wanting to swap a currently
+	 * selected Multimedia. Usually from <code>MultimediaOptionsFragment</code>.
+	 * 
+	 * @param id refers to the Multimedia id being swapped.
+	 */
+	public void swapMultimedia(int id) {
+		save();
+		// Load arguments.
+		Bundle info = new Bundle();
+		info.putInt("page_id", mPage.getID());
+		info.putInt("selectedMultimediaID", id);
+		
+		// Just place them all at start.
+		int index = 0;
+
+		info.putInt("index", index);
+		Intent addMultimediaIntent = new Intent(this,
+				AddMultimediaActivity.class);
+		addMultimediaIntent.putExtras(info);
+		startActivityForResult(addMultimediaIntent, this.SWAP_MULTIMEDIA_REQUESTCODE);
+	}	
 
 	/**
 	 * <code>save</code> must be called when saving. <code>onPause</code> is the
@@ -753,12 +776,63 @@ public class PageEditActivity extends ActivityExtended {
 	// TODO: Accomodate AddMultimedia's return here.
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		mPage = mDataSingleton.getCurrentPage();
-
-		Page newPage = mDataSingleton.database.get_page_by_id(resultCode);
-		mDataSingleton.database.insert_page_option(mPage, newPage);
-		mPage.addPage(newPage);
-
-		restart();
-	}	
+		if( requestCode == ADDPAGE_REQUESTCODE){
+			mPage = mDataSingleton.getCurrentPage();
+			Page newPage = mDataSingleton.database.get_page_by_id(resultCode);
+			mDataSingleton.database.insert_page_option(mPage, newPage);
+			mPage.addPage(newPage);
+			restart();
+			return;
+		}else if(requestCode == GET_MULTIMEDIA_REQUESTCODE){
+			// Empty.
+			return;
+		}else if(requestCode == SWAP_MULTIMEDIA_REQUESTCODE){
+			mPage = mDataSingleton.getCurrentPage();
+			mStory = mDataSingleton.getCurrentStory();
+			
+			Bundle bundle = data.getExtras();			
+			int newId = (int)bundle.getLong("NewMultimediaId");
+			int selectedId = bundle.getInt("selectedMultimediaId");
+			
+			// Check if selected multimedia exist.
+			MultimediaAbstract selectedMultimedia = null;
+			ArrayList<MultimediaAbstract> mList = mPage.getMultimedia();
+			for( MultimediaAbstract m : mList ){
+				if( m.getID() == selectedId){
+					selectedMultimedia = m;
+					break;
+				}
+			}
+			
+			if( selectedMultimedia == null ){
+				// didn't find the new selected multimedia.
+				// ERROR.
+				return;
+			}
+			
+			// Check if to be swap exist.
+			MultimediaAbstract toBeSwapMultimedia = null;
+			for( MultimediaAbstract m : mList ){
+				if( m.getID() == newId){
+					toBeSwapMultimedia = m;
+					break;
+				}
+			}
+			
+			if( toBeSwapMultimedia == null ){
+				// didn't find the new selected multimedia.
+				// ERROR.
+				return;
+			}
+			
+			// The swapping process.
+			toBeSwapMultimedia.setIndex(selectedMultimedia.getIndex());			
+			mDataSingleton.database.delete_mult(selectedMultimedia, mPage);			
+			mDataSingleton.database.update_multimedia(toBeSwapMultimedia, mPage.getID());
+			localUpdate();
+			return;
+		}else{
+			// UKNOWN STATE.
+		}
+	}
 }

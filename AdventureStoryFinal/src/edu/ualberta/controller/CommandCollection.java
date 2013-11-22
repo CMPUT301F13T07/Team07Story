@@ -24,32 +24,26 @@ public class CommandCollection {
 	 * @author Joey Andres
 	 *
 	 */
-	public static class Callback{
-		public void callback(){
-			// Unknown command. Override.
-		}
+	public static interface OnCallbackListener{
+		public void callback();		
 	}
 	
 	/**
 	 * <code>Command</code> is the abstract classs for the command.
 	 * This must be overriden. 
-	 * @author Joey Andres
 	 *	@version 1.0
 	 */
-	public static class Command{		
-		protected Callback mCallBackExecute;
+	public static class OnCommand{		
+		protected OnCallbackListener mCallBackExecute;
 		
-		public Command(Callback cb){
-			if( cb == null)
-				mCallBackExecute = new Callback();
-			else
-				mCallBackExecute = cb;
+		public OnCommand(OnCallbackListener cb){
+			mCallBackExecute = cb;
 		}
 		
 		public void execute(){ mCallBackExecute.callback(); }
 		public void unexecute(){ }
 		public boolean isReversible(){ return false; }		
-		public void setCallback( Callback callback ){mCallBackExecute = callback;}
+		public void setCallback( OnCallbackListener callback ){mCallBackExecute = callback;}
 	}
 	
 	/**
@@ -57,12 +51,10 @@ public class CommandCollection {
 	 * handling adding Multimedias. Since this varies alot
 	 * between implementation, the user must stOnCommandExecute
 	 * to define call back method <code>act()</code>
-	 * 
-	 * @author JoeyAndres
 	 *
 	 */
-	static public class AddMultimediaCommand extends Command{
-		public AddMultimediaCommand(Callback cb){
+	static public class OnAddMultimedia extends OnCommand{
+		public OnAddMultimedia(OnCallbackListener cb){
 			super(cb);
 		}
 				
@@ -79,18 +71,16 @@ public class CommandCollection {
 	/**
 	 * <code>exitActivityCommand</code> contains the call back for
 	 * exiting current activity.
-	 * 
-	 * @author JoeyAndres
 	 *
 	 */
-	static public class ExitActivityCommand extends Command{
+	static public class OnExitActivity extends OnCommand{
 		Activity mCurrentActivity;
-		public ExitActivityCommand(Activity activity, Callback cb){
+		public OnExitActivity(Activity activity, OnCallbackListener cb){
 			super(cb);
 			mCurrentActivity = activity;
 			
 			if( cb == null ){
-				this.mCallBackExecute = new Callback(){
+				this.mCallBackExecute = new OnCallbackListener(){
 					@Override
 					public void callback(){
 						mCurrentActivity.finish();
@@ -111,10 +101,9 @@ public class CommandCollection {
 	
 	/**
 	 * Command for saving.
-	 * @author Joey
 	 */
-	static public class SaveCommand extends Command{
-		public SaveCommand(Callback cb){super(cb);}
+	static public class OnSave extends OnCommand{
+		public OnSave(OnCallbackListener cb){super(cb);}
 				
 		@Override
 		public void execute() {super.execute();}

@@ -2,7 +2,7 @@ package edu.ualberta.adventstory;
 
 import java.util.HashMap;
 
-import edu.ualberta.controller.CommandCollection.Command;
+import edu.ualberta.controller.CommandCollection.OnCommand;
 import edu.ualberta.controller.MultimediaControllerManager;
 import edu.ualberta.multimedia.TObservable;
 import android.app.Activity;
@@ -22,8 +22,8 @@ abstract public class ActivityExtended extends Activity implements TObserver<TOb
 	// Not the base activity. Transfer this to the base activity then.
 	protected DataSingleton mDataSingleton;
 	// Maps Menu to a Command via hash table. This allows this module to avoid sphagetti code.
-	protected HashMap<MenuItem, Command> mMapMenuToCommand = 
-										new HashMap<MenuItem, Command>();
+	protected HashMap<MenuItem, OnCommand> mMapMenuToCommand = 
+										new HashMap<MenuItem, OnCommand>();
 	static final int PLAY_VIDEO_REQUESTCODE = 0;
 	
 	public ActivityExtended() {
