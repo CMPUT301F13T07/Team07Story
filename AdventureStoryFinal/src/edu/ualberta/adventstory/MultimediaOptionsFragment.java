@@ -116,7 +116,7 @@ public class MultimediaOptionsFragment extends Fragment implements
 			public void onClick(View v) {
 				((PageEditActivity) getActivity())
 						.swapMultimedia(mSelectedMultimedia.getID());
-				closeFragment();
+				// It is implied that a save will occur.
 			}
 
 		});
@@ -172,7 +172,7 @@ public class MultimediaOptionsFragment extends Fragment implements
 	}
 
 	private void closeFragment() {
-		//((PageEditActivity)getActivity()).save();
+		((PageEditActivity)getActivity()).save();
 		((PageEditActivity)getActivity()).setFRAGMENTINFLATED(false);
 		getActivity().getFragmentManager().beginTransaction()
 				.remove(MultimediaOptionsFragment.this).commit();		

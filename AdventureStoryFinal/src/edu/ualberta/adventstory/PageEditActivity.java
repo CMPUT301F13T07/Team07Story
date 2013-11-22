@@ -284,7 +284,7 @@ public class PageEditActivity extends ActivityExtended {
 			String f[] = et.getText().toString().split(" +");
 			for (int j = 0; j < f.length; j++) {
 				if (f[j].length() == 0)
-					break;
+					continue;
 				fragmented.add(f[j]);
 				fragmented.add(" ");
 			}
@@ -313,7 +313,7 @@ public class PageEditActivity extends ActivityExtended {
 				String f[] = et.getText().toString().split(" +");
 				for (int j = 0; j < f.length; j++) {
 					if (f[j].length() == 0)
-						break;
+						continue;
 					offset += f[j].length();
 					offset += 1;
 				}
@@ -391,8 +391,7 @@ public class PageEditActivity extends ActivityExtended {
 	 * 
 	 * @param textSize
 	 *            is the size of the text.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	 */	
 	void setStoryText() {
 		// Make sure the layout is empty first.
 		mPageTextLayout.removeAllViewsInLayout();
@@ -455,6 +454,7 @@ public class PageEditActivity extends ActivityExtended {
 		// Assemble EditTextEx and ImageViews.
 		ArrayList<MultimediaAbstract> displayedMultimedia = new ArrayList<MultimediaAbstract>();
 		int multimediaCounter = 0;
+		int textViewCounter = 0;
 		lastIndex = 0;
 		for (int index : stringFragments.keySet()) {
 			ArrayList<MultimediaAbstract> mList = indexMultimediaHash
@@ -467,9 +467,12 @@ public class PageEditActivity extends ActivityExtended {
 				}
 			}
 			addEditTextInPage(stringFragments.get(index));
+			textViewCounter++;
 			lastIndex = index;
 		}
-
+		
+		Toast.makeText(this, Integer.toString(textViewCounter), Toast.LENGTH_SHORT).show();
+				
 		// If there are non-displayed multimedia, place them all at the end.
 		if (multimediaCounter < multimediaList.size()) {
 			for (final MultimediaAbstract m : multimediaList) {
