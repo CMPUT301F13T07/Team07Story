@@ -12,6 +12,7 @@ import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,7 +69,9 @@ public class PageViewActivity extends ActivityExtended {
 		mPageTitleTextView = (TextView) findViewById(R.id.pageTitle);
 
 		if (mViewPageOnly == false) {
-			setStoryTitle(mStory.getTitle(), 26);
+			setStoryTitle(mPage.getTitle());
+		}else{
+			setStoryTitle("Editing Page");
 		}
 
 		if (mPage.getPages().size() == 0) {
@@ -80,9 +83,8 @@ public class PageViewActivity extends ActivityExtended {
 				randomNextPage();
 			}
 		});
-
-		setPageTitle(mPage.getTitle(), 22);
-
+		
+		setPageTitle(mPage.getTitle());
 		setStoryText();
 
 		addNextPageButtons();
@@ -167,6 +169,9 @@ public class PageViewActivity extends ActivityExtended {
 		mButtonLayout.addView(v);
 	}
 
+	/**
+	 * Random next page.
+	 */
 	void randomNextPage() {
 		ArrayList<Page> mPageList = mPage.getPages();
 		if (mPageList == null || mPageList.size() == 0) {
@@ -180,16 +185,15 @@ public class PageViewActivity extends ActivityExtended {
 		recreate();
 	}
 
-	void setStoryTitle(String storyTitle, float textSize) {
+	void setStoryTitle(String title) {
 		ActionBar ab = getActionBar();
-		ab.setTitle(mStory.getTitle());
+		ab.setTitle(title);
 	}
 
-	void setPageTitle(String pageTitle, float textSize) {
+	void setPageTitle(String pageTitle) {
 		pageTitle = "Page: " + pageTitle;
 		mPageTitleTextView.setSingleLine(true);
 		mPageTitleTextView.setText(pageTitle);
-		mPageTitleTextView.setTextSize(textSize);
 	}
 
 	/**
@@ -199,12 +203,7 @@ public class PageViewActivity extends ActivityExtended {
 		ArrayList<MultimediaAbstract> multimediaList = mPage.getMultimedia();
 
 		if (multimediaList == null) {
-			TextView tv = new TextView(this);
-			LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT,
-					LayoutParams.WRAP_CONTENT);
-			tv.setText(mPage.getText());
-			tv.setLayoutParams(lp);
-			mPageTextLayout.addView(tv);
+			addTextViewInPage(mPage.getText());
 		}
 
 		// Pool index-multimedia table.
@@ -266,12 +265,7 @@ public class PageViewActivity extends ActivityExtended {
 				}
 			}
 
-			TextView tv = new TextView(this);
-			LayoutParams lp2 = new LayoutParams(LayoutParams.FILL_PARENT,
-					LayoutParams.WRAP_CONTENT);
-			tv.setText(stringFragments.get(index));
-			tv.setLayoutParams(lp2);
-			mPageTextLayout.addView(tv);
+			addTextViewInPage(stringFragments.get(index));
 			lastIndex = index;
 		}
 
@@ -283,6 +277,12 @@ public class PageViewActivity extends ActivityExtended {
 				}
 			}
 		}
+	}
+	
+	private void  addTextViewInPage(String text){
+		TextView tv = (TextView) LayoutInflater.from(this).inflate(R.layout.page_textview, null);
+		tv.setText(text);		
+		mPageTextLayout.addView(tv);
 	}
 
 	/**

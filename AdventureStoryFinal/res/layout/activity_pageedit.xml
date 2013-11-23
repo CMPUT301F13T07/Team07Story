@@ -23,14 +23,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="Page: " />
+                    android:text="Page: " 
+                    android:textSize="28sp"/>
 
                 <EditText
                     android:id="@+id/pageTitle"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Page Title"
-                    android:singleLine="true" />
+                    android:hint="Enter Page Title"                    
+                    android:textSize="28sp" />
             </TableRow>
 
             <TableRow>
@@ -39,14 +40,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="by: " />
+                    android:text="by: "
+                    android:textSize="28sp" />
 
                 <EditText
                     android:id="@+id/pageAuthor"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Author Name"
-                    android:singleLine="true" />
+                    android:hint="Enter Author Name"                    
+                    android:textSize="28sp"/>
             </TableRow>
         </TableLayout>
 

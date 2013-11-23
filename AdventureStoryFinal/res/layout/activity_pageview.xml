@@ -24,7 +24,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="Page:" />
+                android:text="Page:" 
+                android:textSize="28sp"/>
 
             <include layout="@layout/divider" />
 

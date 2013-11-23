@@ -61,7 +61,7 @@ public class MultimediaOptionsFragment extends Fragment implements
 		mDeleteMultimediaButton = (Button) getActivity().findViewById(
 				R.id.deleteMultimediaButton);
 		mChangeMultimediaButton = (Button) getActivity().findViewById(
-				R.id.changeMultimediaButton);
+				R.id.changeMultimediaButton);					 
 		LinearLayout mButtonLayout = (LinearLayout) getActivity().findViewById(
 				R.id.multimediaSizeLayout);
 		ImageButton mButtonSmallSize = (ImageButton) getActivity()

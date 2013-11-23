@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -105,6 +106,7 @@ public class PageEditActivity extends ActivityExtended {
 		mButtonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
 		CheckBox cb = (CheckBox)findViewById(R.id.readOnlyCheckBox);
 		
+		setStoryTitle();
 		setPageTitle(22);
 		setPageAuthor(20);
 		setStoryText();
@@ -529,17 +531,15 @@ public class PageEditActivity extends ActivityExtended {
 	 * <code>addEditTextInPage()</code> adds an EditText in Page body.
 	 */
 	private void addEditTextInPage(String text){
-		final EditText et = new EditText(this);
+		final EditText et = (EditText) LayoutInflater.from(this).inflate(R.layout.page_edittext, null);
 		et.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				cursorIndexChange(et.getSelectionStart(), et);
 			}
 		});
-		LayoutParams lp2 = new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT);
-		et.setText(text);
-		et.setLayoutParams(lp2);
+		
+		et.setText(text);		
 		mPageTextLayout.addView(et);
 		mStoryEditTextArray.add(et);
 	}
@@ -639,7 +639,6 @@ public class PageEditActivity extends ActivityExtended {
 		for (MultimediaAbstract m : ma) {
 			if (m.getIsSelected()) {
 				m.setIndex(index);
-
 				clearSelection();
 				return;
 			}
