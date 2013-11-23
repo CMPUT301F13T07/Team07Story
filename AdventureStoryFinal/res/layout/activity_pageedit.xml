@@ -15,10 +15,11 @@
 
         <TableLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="fill_parent" 
+            android:stretchColumns="1"
+            android:shrinkColumns="0">
 
             <TableRow>
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -94,12 +95,13 @@
             android:layout_height="wrap_content"
             android:text="Add Next Page" />
 
-        <LinearLayout
+        <TableLayout
+            android:layout_width="fill_parent" 
+    		android:layout_height="wrap_content"             
             android:id="@+id/buttonLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical" >
-        </LinearLayout>
+            android:stretchColumns="0"
+            android:shrinkColumns="1">
+        </TableLayout>
         
         <CheckBox 
             android:id="@+id/readOnlyCheckBox"

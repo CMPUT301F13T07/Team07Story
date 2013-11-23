@@ -23,10 +23,13 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +58,7 @@ public class PageEditActivity extends ActivityExtended {
 
 	// For more info concerning views, see activity_pageedit.xml
 	private LinearLayout mPageTextLayout;
-	private LinearLayout mButtonLayout; // Encapsulate the buttons.
+	private TableLayout mButtonLayout; // Encapsulate the buttons.
 	private Button mButtonAddPage; // Button for adding page.
 	private Story mStory; // Story being viewed.
 	private Page mPage; // Current page.
@@ -103,7 +106,7 @@ public class PageEditActivity extends ActivityExtended {
 		mPageAuthorEditTextView = (EditText) findViewById(R.id.pageAuthor);
 		mButtonAddMultimedia = (Button) findViewById(R.id.addMultimedia);
 		mButtonAddPage = (Button) findViewById(R.id.addPage);
-		mButtonLayout = (LinearLayout) findViewById(R.id.buttonLayout);
+		mButtonLayout = (TableLayout) findViewById(R.id.buttonLayout);
 		CheckBox cb = (CheckBox)findViewById(R.id.readOnlyCheckBox);
 		
 		setStoryTitle();
@@ -256,8 +259,15 @@ public class PageEditActivity extends ActivityExtended {
 	 */
 	private void addNextPageButtons() {
 		for (final Page p : mPage.getPages()) {
+			TableRow tr = (TableRow) View.inflate(this, 
+									  R.layout.table_row, null);
+			TableRow trDivider = (TableRow) View.inflate(this,
+									R.layout.table_row, null);
 			TextView tv = (TextView) View.inflate(this,
-					R.layout.next_page_textview, null);
+									R.layout.next_page_textview, null);
+			ImageButton ib = (ImageButton)View.inflate(this, 
+									R.layout.delete_imagebutton, null);									
+									
 			tv.setText(p.getTitle());
 			tv.setOnClickListener(new OnClickListener() {
 				@SuppressLint("NewApi")
@@ -268,12 +278,21 @@ public class PageEditActivity extends ActivityExtended {
 					mDataSingleton.getCurrentActivity().recreate();
 				}
 			});
-			View v = (View) View.inflate(this, R.layout.divider, null);
-			mButtonLayout.addView(v);
-			mButtonLayout.addView(tv);
+			ib.setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v) {					
+					mDataSingleton.database.delete_page_option(mPage, p);
+					mDataSingleton.getCurrentActivity().recreate();
+				}				
+			});
+			
+			View v = (View) View.inflate(this, R.layout.divider, null);			
+			tr.addView(tv);
+			tr.addView(ib);
+			trDivider.addView(v);
+			mButtonLayout.addView(tr);
+			mButtonLayout.addView(trDivider);
 		}
-		View v = (View) View.inflate(this, R.layout.divider, null);
-		mButtonLayout.addView(v);
 	}
 
 	/**
@@ -791,6 +810,14 @@ public class PageEditActivity extends ActivityExtended {
 		if( requestCode == ADDPAGE_REQUESTCODE){
 			mPage = mDataSingleton.getCurrentPage();
 			Page newPage = mDataSingleton.database.get_page_by_id(resultCode);
+			
+			// Have the Activity also return a resultCode concerning the failure/sucess of operation.
+			// See if the user canceled the request.
+			if(newPage == null){
+				// No new page.
+				return;
+			}
+			
 			mDataSingleton.database.insert_page_option(mPage, newPage);
 			mPage.addPage(newPage);
 			restart();

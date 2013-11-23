@@ -2,9 +2,9 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:textSize="21sp"    
-    android:gravity="left" 
-   android:layout_margin="10dp"
+    android:textSize="21sp"        
+    android:layout_weight="1"
+   	android:layout_margin="10dp"
     android:textColor="@layout/next_page_textview_color"    
     >
 </TextView>
