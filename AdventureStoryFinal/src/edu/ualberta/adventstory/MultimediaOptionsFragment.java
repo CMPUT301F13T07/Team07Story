@@ -103,8 +103,6 @@ public class MultimediaOptionsFragment extends Fragment implements
 						((PageEditActivity) getActivity()).mDataSingleton.database
 								.delete_mult(m, mCurrentPage);
 						((PageEditActivity) getActivity()).update(m);
-						((PageEditActivity) getActivity()).save();
-						((PageEditActivity) getActivity()).restart();
 						break;
 					}
 				}

@@ -9,7 +9,6 @@ import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,15 +26,22 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.ualberta.controller.CommandCollection;
-import edu.ualberta.controller.CommandCollection.OnCallbackListener;
-import edu.ualberta.controller.CommandCollection.OnCommand;
+import edu.ualberta.controller.OnRedoListener;
+import edu.ualberta.controller.CommandCollection.OnRedo;
+import edu.ualberta.controller.OnUndoListener;
+import edu.ualberta.controller.CommandManager;
+import edu.ualberta.controller.OnAddMultimediaListener;
+import edu.ualberta.controller.CommandCollection.CommandAbstract;
+import edu.ualberta.controller.CommandCollection.OnExitListener;
+import edu.ualberta.controller.CommandCollection.OnSave;
+import edu.ualberta.controller.CommandCollection.OnUndo;
+import edu.ualberta.controller.CommandCollection.OnSaveListener;
 import edu.ualberta.controller.MultimediaControllerManager;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.multimedia.TObservable;
@@ -58,17 +64,22 @@ public class PageEditActivity extends ActivityExtended {
 
 	// For more info concerning views, see activity_pageedit.xml
 	private LinearLayout mPageTextLayout;
-	private TableLayout mButtonLayout; // Encapsulate the buttons.
-	private Button mButtonAddPage; // Button for adding page.
-	private Story mStory; // Story being viewed.
-	private Page mPage; // Current page.
+	private TableLayout mButtonLayout;
+	private Button mButtonAddPage;
+	private Story mStory;
+	private Page mPage;
 	private Button mButtonAddMultimedia; // Button for adding multimedias.
 
 	private boolean FRAGMENT_INFLATED = false;
-	
-	final private int ADDPAGE_REQUESTCODE = 1; 
-	final private int GET_MULTIMEDIA_REQUESTCODE = 2; 
-	final private int SWAP_MULTIMEDIA_REQUESTCODE = 3;
+
+	final public static int ADDPAGE_REQUESTCODE = 1;
+	final public static int GET_MULTIMEDIA_REQUESTCODE = 2;
+	final public static int SWAP_MULTIMEDIA_REQUESTCODE = 3;
+
+	private CommandManager mCommandManager; // Manages Undo/Redo.
+	// Current Command being executed. This is used when AddMultimedia is being
+	// executed since it requires waiting for the callback.
+	CommandAbstract mCurrentCommand = null;
 
 	// Set to true when editing a page only, independent of the story.
 	private boolean mEditPageOnly = false;
@@ -107,8 +118,8 @@ public class PageEditActivity extends ActivityExtended {
 		mButtonAddMultimedia = (Button) findViewById(R.id.addMultimedia);
 		mButtonAddPage = (Button) findViewById(R.id.addPage);
 		mButtonLayout = (TableLayout) findViewById(R.id.buttonLayout);
-		CheckBox cb = (CheckBox)findViewById(R.id.readOnlyCheckBox);
-		
+		CheckBox cb = (CheckBox) findViewById(R.id.readOnlyCheckBox);
+
 		setStoryTitle();
 		setPageTitle(22);
 		setPageAuthor(20);
@@ -123,10 +134,15 @@ public class PageEditActivity extends ActivityExtended {
 			}
 		});
 
+		final ActivityExtended ae = this;
 		mButtonAddMultimedia.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				addMultimedia();
+
+				OnAddMultimediaListener addMultimediaResponder = new OnAddMultimediaListener(
+																				mPage, null, ae);
+				mCurrentCommand = addMultimediaResponder;
 			}
 		});
 
@@ -141,6 +157,7 @@ public class PageEditActivity extends ActivityExtended {
 		});
 
 		addNextPageButtons();
+		mCommandManager = CommandManager.getInstance();
 	}
 
 	/*
@@ -188,9 +205,14 @@ public class PageEditActivity extends ActivityExtended {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		OnCommand command = mMapMenuToCommand.get(item);
+
+		CommandAbstract command = mMapMenuToCommand.get(item);
 		if (command != null) {
-			command.execute();
+			if (command instanceof OnAddMultimediaListener) {
+				mCurrentCommand = command;
+				return true;
+			}
+			mCommandManager.invokeCommand(command);
 		}
 		return true;
 	}
@@ -212,45 +234,70 @@ public class PageEditActivity extends ActivityExtended {
 			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
 
-		OnCommand addMultimediaResponder = new CommandCollection.OnAddMultimedia(
-				new OnCallbackListener() {
-					@Override
-					public void callback() {
-						addMultimedia();
-					}
-				});
+		OnAddMultimediaListener addMultimediaResponder = new OnAddMultimediaListener(
+				mPage, null, this);
 		mMapMenuToCommand.put(mnu1, addMultimediaResponder);
 
-		MenuItem mnu2 = menu.add(0, 1, 1, "Save");
+		MenuItem mnu2 = menu.add(0, 1, 1, "Undo");
 		{
-			mnu1.setIcon(R.drawable.ic_addmultimedia);
-			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+			mnu2.setIcon(R.drawable.ic_undo);
 		}
 
-		OnCommand saveResponder = new CommandCollection.OnSave(
-				new OnCallbackListener() {
+		OnUndoListener undoResonder = new OnUndoListener(new OnUndo() {
+			@Override
+			public void undo() {
+				mCommandManager.undo();
+				localUpdate();
+			}
+		});
+
+		mMapMenuToCommand.put(mnu2, undoResonder);
+
+		MenuItem mnu3 = menu.add(0, 2, 2, "Redo");
+		{
+			mnu3.setIcon(R.drawable.ic_redo);
+			mnu3.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		}
+		
+		OnRedoListener redoResonder = new OnRedoListener(new OnRedo() {
+			@Override
+			public void redo() {
+				mCommandManager.redo();
+				localUpdate();
+			}
+		});
+		
+		mMapMenuToCommand.put(mnu3, redoResonder);
+
+		MenuItem mnu4 = menu.add(0, 3, 3, "Save");
+		{
+			mnu4.setIcon(R.drawable.ic_save);
+			mnu4.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		}
+
+		OnSaveListener saveResponder = new OnSaveListener(new OnSave() {
+			@Override
+			public void onSave() {
+				save();
+				exit();
+			}
+		});
+		mMapMenuToCommand.put(mnu4, saveResponder);
+
+		MenuItem mnu5 = menu.add(0, 4, 4, "Cancel");
+		{
+			mnu5.setIcon(R.drawable.ic_addmultimedia);
+			mnu5.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		}
+
+		OnExitListener cancelResponder = new OnExitListener(
+				new CommandCollection.OnExit() {
 					@Override
-					public void callback() {
-						save();
+					public void onExit() {
 						exit();
 					}
 				});
-		mMapMenuToCommand.put(mnu2, saveResponder);
-
-		MenuItem mnu3 = menu.add(0, 2, 2, "Cancel");
-		{
-			mnu1.setIcon(R.drawable.ic_addmultimedia);
-			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		}
-
-		OnCommand cancelResponder = new CommandCollection.OnExitActivity(
-				this, new OnCallbackListener() {
-					@Override
-					public void callback() {
-						cancel();
-					}
-				});
-		mMapMenuToCommand.put(mnu3, cancelResponder);
+		mMapMenuToCommand.put(mnu5, cancelResponder);
 	}
 
 	/**
@@ -259,15 +306,15 @@ public class PageEditActivity extends ActivityExtended {
 	 */
 	private void addNextPageButtons() {
 		for (final Page p : mPage.getPages()) {
-			TableRow tr = (TableRow) View.inflate(this, 
-									  R.layout.table_row, null);
+			TableRow tr = (TableRow) View.inflate(this, R.layout.table_row,
+					null);
 			TableRow trDivider = (TableRow) View.inflate(this,
-									R.layout.table_row, null);
+					R.layout.table_row, null);
 			TextView tv = (TextView) View.inflate(this,
-									R.layout.next_page_textview, null);
-			ImageButton ib = (ImageButton)View.inflate(this, 
-									R.layout.delete_imagebutton, null);									
-									
+					R.layout.next_page_textview, null);
+			ImageButton ib = (ImageButton) View.inflate(this,
+					R.layout.delete_imagebutton, null);
+
 			tv.setText(p.getTitle());
 			tv.setOnClickListener(new OnClickListener() {
 				@SuppressLint("NewApi")
@@ -278,15 +325,15 @@ public class PageEditActivity extends ActivityExtended {
 					mDataSingleton.getCurrentActivity().recreate();
 				}
 			});
-			ib.setOnClickListener(new OnClickListener(){
+			ib.setOnClickListener(new OnClickListener() {
 				@Override
-				public void onClick(View v) {					
+				public void onClick(View v) {
 					mDataSingleton.database.delete_page_option(mPage, p);
 					mDataSingleton.getCurrentActivity().recreate();
-				}				
+				}
 			});
-			
-			View v = (View) View.inflate(this, R.layout.divider, null);			
+
+			View v = (View) View.inflate(this, R.layout.divider, null);
 			tr.addView(tv);
 			tr.addView(ib);
 			trDivider.addView(v);
@@ -349,14 +396,14 @@ public class PageEditActivity extends ActivityExtended {
 	/**
 	 * @return <code>String</code> of the author of the page.
 	 */
-	protected String getAuthorText() {
+	private String getAuthorText() {
 		return mPageAuthorEditTextView.getText().toString();
 	}
 
 	/**
 	 * @return <code>String</code> of the title of the page.
 	 */
-	protected String getPageTitleText() {
+	private String getPageTitleText() {
 		return mPageTitleEditTextView.getText().toString();
 	}
 
@@ -370,8 +417,9 @@ public class PageEditActivity extends ActivityExtended {
 	 */
 	void setStoryTitle() {
 		ActionBar ab = getActionBar();
-		if(mStory == null){
-			Toast.makeText(this, "Error: Story is null", Toast.LENGTH_SHORT).show();
+		if (mStory == null) {
+			Toast.makeText(this, "Error: Story is null", Toast.LENGTH_SHORT)
+					.show();
 			return;
 		}
 		ab.setTitle(mStory.getTitle());
@@ -412,7 +460,8 @@ public class PageEditActivity extends ActivityExtended {
 	 * 
 	 * @param textSize
 	 *            is the size of the text.
-	 */	
+	 */
+	@SuppressWarnings("unused")
 	void setStoryText() {
 		// Make sure the layout is empty first.
 		mPageTextLayout.removeAllViewsInLayout();
@@ -491,9 +540,10 @@ public class PageEditActivity extends ActivityExtended {
 			textViewCounter++;
 			lastIndex = index;
 		}
-		
-		Toast.makeText(this, Integer.toString(textViewCounter), Toast.LENGTH_SHORT).show();
-				
+
+		Toast.makeText(this, Integer.toString(textViewCounter),
+				Toast.LENGTH_SHORT).show();
+
 		// If there are non-displayed multimedia, place them all at the end.
 		if (multimediaCounter < multimediaList.size()) {
 			for (final MultimediaAbstract m : multimediaList) {
@@ -502,10 +552,10 @@ public class PageEditActivity extends ActivityExtended {
 				}
 			}
 		}
-		
+
 		// If by the end still no EditText.
-		if(mStoryEditTextArray.size()==0){
-			addEditTextInPage("");			
+		if (mStoryEditTextArray.size() == 0) {
+			addEditTextInPage("");
 		}
 	}
 
@@ -523,7 +573,8 @@ public class PageEditActivity extends ActivityExtended {
 		iv.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if( FRAGMENT_INFLATED ) return; 
+				if (FRAGMENT_INFLATED)
+					return;
 				save();
 				clearSelection();
 				m.setIsSelected(true);
@@ -540,29 +591,32 @@ public class PageEditActivity extends ActivityExtended {
 		iv.setLayoutParams(lp1);
 		mPageTextLayout.addView(iv);
 	}
-	
+
 	/**
 	 * set FRAGMENT_INFLATED to val.
 	 */
-	public void setFRAGMENTINFLATED(boolean value){FRAGMENT_INFLATED = value;}
+	public void setFRAGMENTINFLATED(boolean value) {
+		FRAGMENT_INFLATED = value;
+	}
 
 	/**
 	 * <code>addEditTextInPage()</code> adds an EditText in Page body.
 	 */
-	private void addEditTextInPage(String text){
-		final EditText et = (EditText) LayoutInflater.from(this).inflate(R.layout.page_edittext, null);
+	private void addEditTextInPage(String text) {
+		final EditText et = (EditText) LayoutInflater.from(this).inflate(
+				R.layout.page_edittext, null);
 		et.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				cursorIndexChange(et.getSelectionStart(), et);
 			}
 		});
-		
-		et.setText(text);		
+
+		et.setText(text);
 		mPageTextLayout.addView(et);
 		mStoryEditTextArray.add(et);
 	}
-	
+
 	/**
 	 * Is an event handler when back key is pressed.
 	 */
@@ -584,7 +638,6 @@ public class PageEditActivity extends ActivityExtended {
 	 * 
 	 * @see android.app.Activity#onBackPressed()
 	 */
-	// TODO: Make sure to link to last activity when no oldPage.
 	@SuppressLint("NewApi")
 	@Override
 	public void onBackPressed() {
@@ -640,12 +693,15 @@ public class PageEditActivity extends ActivityExtended {
 	void cursorIndexChange(int index, EditText editTextClicked) {
 		// If a multimedia is selected, move it to where the user clicked
 		// and update.
-		
+
 		// Offset the index to not select any index in the middle of word..
+		// TODO: Move this to a method, setStoryText will need this.
 		String str = editTextClicked.getText().toString();
 		char[] charArray = str.toCharArray();
-		while( index != 0 && index != charArray.length && 
-				charArray[index] != ' ' && charArray[index] != '\n'){index++;}		
+		while (index != 0 && index != charArray.length
+				&& charArray[index] != ' ' && charArray[index] != '\n') {
+			index++;
+		}
 		index = index + getPageTextIndexOffset(editTextClicked);
 
 		int maxIndex = mPage.getText().length();
@@ -683,14 +739,16 @@ public class PageEditActivity extends ActivityExtended {
 		Intent addMultimediaIntent = new Intent(this,
 				AddMultimediaActivity.class);
 		addMultimediaIntent.putExtras(info);
-		startActivityForResult(addMultimediaIntent, this.GET_MULTIMEDIA_REQUESTCODE);
+		startActivityForResult(addMultimediaIntent,
+				GET_MULTIMEDIA_REQUESTCODE);
 	}
-	
+
 	/**
 	 * <code>swapMultimedia</code> is called when wanting to swap a currently
 	 * selected Multimedia. Usually from <code>MultimediaOptionsFragment</code>.
 	 * 
-	 * @param id refers to the Multimedia id being swapped.
+	 * @param id
+	 *            refers to the Multimedia id being swapped.
 	 */
 	public void swapMultimedia(int id) {
 		save();
@@ -698,7 +756,7 @@ public class PageEditActivity extends ActivityExtended {
 		Bundle info = new Bundle();
 		info.putInt("page_id", mPage.getID());
 		info.putInt("selectedMultimediaID", id);
-		
+
 		// Just place them all at start.
 		int index = 0;
 
@@ -706,8 +764,9 @@ public class PageEditActivity extends ActivityExtended {
 		Intent addMultimediaIntent = new Intent(this,
 				AddMultimediaActivity.class);
 		addMultimediaIntent.putExtras(info);
-		startActivityForResult(addMultimediaIntent, this.SWAP_MULTIMEDIA_REQUESTCODE);
-	}	
+		startActivityForResult(addMultimediaIntent,
+				SWAP_MULTIMEDIA_REQUESTCODE);
+	}
 
 	/**
 	 * <code>save</code> must be called when saving. <code>onPause</code> is the
@@ -715,17 +774,18 @@ public class PageEditActivity extends ActivityExtended {
 	 */
 	void save() {
 		// Null pointer check.
-		if(mPage == null){
-			Toast.makeText(this, "Error: Page is null.", Toast.LENGTH_SHORT).show();
+		if (mPage == null) {
+			Toast.makeText(this, "Error: Page is null.", Toast.LENGTH_SHORT)
+					.show();
 			return;
 		}
-		
+
 		String pageName = getPageTitleText();
 		String pageAuthor = getAuthorText();
 		String pageStory = getStoryText();
 
-		CheckBox cb = (CheckBox)findViewById(R.id.readOnlyCheckBox);
-		
+		CheckBox cb = (CheckBox) findViewById(R.id.readOnlyCheckBox);
+
 		mPage.setTitle(pageName);
 		mPage.setAuthor(pageAuthor);
 		mPage.setText(pageStory);
@@ -746,7 +806,7 @@ public class PageEditActivity extends ActivityExtended {
 		 * Multimedia's are only updated as opposed to modified.
 		 */
 		for (MultimediaAbstract m : mPage.getMultimedia()) {
-			mDataSingleton.database.update_multimedia(m, mPage.getID());			
+			mDataSingleton.database.update_multimedia(m, mPage.getID());
 		}
 	}
 
@@ -804,74 +864,116 @@ public class PageEditActivity extends ActivityExtended {
 		fragmentTransaction.commit();
 	}
 
-	// TODO: Accomodate AddMultimedia's return here.
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if( requestCode == ADDPAGE_REQUESTCODE){
+		if (requestCode == ADDPAGE_REQUESTCODE) {
 			mPage = mDataSingleton.getCurrentPage();
 			Page newPage = mDataSingleton.database.get_page_by_id(resultCode);
-			
-			// Have the Activity also return a resultCode concerning the failure/sucess of operation.
+
+			// Have the Activity also return a resultCode concerning the
+			// failure/sucess of operation.
 			// See if the user canceled the request.
-			if(newPage == null){
+			if (newPage == null) {
 				// No new page.
 				return;
 			}
-			
+
 			mDataSingleton.database.insert_page_option(mPage, newPage);
 			mPage.addPage(newPage);
 			restart();
 			return;
-		}else if(requestCode == GET_MULTIMEDIA_REQUESTCODE){
-			// Empty.
-			return;
-		}else if(requestCode == SWAP_MULTIMEDIA_REQUESTCODE){
+		} else if (requestCode == GET_MULTIMEDIA_REQUESTCODE) {
 			mPage = mDataSingleton.getCurrentPage();
 			mStory = mDataSingleton.getCurrentStory();
-			
-			Bundle bundle = data.getExtras();			
-			int newId = (int)bundle.getLong("NewMultimediaId");
+			// resultCode is newMultimedia index.
+			if(mCurrentCommand instanceof OnAddMultimediaListener){
+				Bundle bundle = data.getExtras();
+				int newId = (int) bundle.getLong("NewMultimediaId");				
+				
+				MultimediaAbstract newMultimedia = null;
+				// Check if new multimedia exist.				
+				for (MultimediaAbstract m : mPage.getMultimedia()) {
+					if (m.getID() == newId) {
+						newMultimedia = m;
+						break;
+					}
+				}
+				
+				if(newMultimedia == null) return;
+				
+				((OnAddMultimediaListener)mCurrentCommand).setMultimedia(newMultimedia);
+				mCommandManager.invokeCommand(mCurrentCommand);				
+			}else{
+				// Unknonwn state.
+			}				
+			return;
+		} else if (requestCode == SWAP_MULTIMEDIA_REQUESTCODE) {
+			mPage = mDataSingleton.getCurrentPage();
+			mStory = mDataSingleton.getCurrentStory();
+
+			Bundle bundle = data.getExtras();
+			int newId = (int) bundle.getLong("NewMultimediaId");
 			int selectedId = bundle.getInt("selectedMultimediaId");
-			
+
 			// Check if selected multimedia exist.
 			MultimediaAbstract selectedMultimedia = null;
 			ArrayList<MultimediaAbstract> mList = mPage.getMultimedia();
-			for( MultimediaAbstract m : mList ){
-				if( m.getID() == selectedId){
+			for (MultimediaAbstract m : mList) {
+				if (m.getID() == selectedId) {
 					selectedMultimedia = m;
 					break;
 				}
 			}
-			
-			if( selectedMultimedia == null ){
+
+			if (selectedMultimedia == null) {
 				// didn't find the new selected multimedia.
 				// ERROR.
 				return;
 			}
-			
+
 			// Check if to be swap exist.
 			MultimediaAbstract toBeSwapMultimedia = null;
-			for( MultimediaAbstract m : mList ){
-				if( m.getID() == newId){
+			for (MultimediaAbstract m : mList) {
+				if (m.getID() == newId) {
 					toBeSwapMultimedia = m;
 					break;
 				}
 			}
-			
-			if( toBeSwapMultimedia == null ){
+
+			if (toBeSwapMultimedia == null) {
 				// didn't find the new selected multimedia.
 				// ERROR.
 				return;
 			}
-			
+
 			// The swapping process.
-			toBeSwapMultimedia.setIndex(selectedMultimedia.getIndex());			
-			mDataSingleton.database.delete_mult(selectedMultimedia, mPage);			
-			mDataSingleton.database.update_multimedia(toBeSwapMultimedia, mPage.getID());
+			toBeSwapMultimedia.setIndex(selectedMultimedia.getIndex());
+			mDataSingleton.database.delete_mult(selectedMultimedia, mPage);
+			mDataSingleton.database.update_multimedia(toBeSwapMultimedia,
+					mPage.getID());
 			localUpdate();
 			return;
-		}else{
+		} else {
 			// UKNOWN STATE.
 		}
+	}
+
+	/**
+	 * This is done so that requestcode is sent automatically via intent too.
+	 * 
+	 * @param intent
+	 * @param requestCode
+	 */
+	@Override
+	public void startActivityForResult(Intent intent, int requestCode) {
+		if( requestCode == -1 ){
+			super.startActivityForResult(intent, 0);
+			return;
+		}
+		
+		Bundle data = intent.getExtras();
+		data.putLong("requestCode", requestCode);
+		intent.putExtras(data);
+		super.startActivityForResult(intent, requestCode);
 	}
 }

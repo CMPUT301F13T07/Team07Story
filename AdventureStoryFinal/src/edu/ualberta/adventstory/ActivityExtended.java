@@ -2,8 +2,9 @@ package edu.ualberta.adventstory;
 
 import java.util.HashMap;
 
-import edu.ualberta.controller.CommandCollection.OnCommand;
+import edu.ualberta.controller.CommandCollection.CommandAbstract;
 import edu.ualberta.controller.MultimediaControllerManager;
+import edu.ualberta.data.DbManager;
 import edu.ualberta.multimedia.TObservable;
 import android.app.Activity;
 import android.content.Intent;
@@ -22,8 +23,8 @@ abstract public class ActivityExtended extends Activity implements TObserver<TOb
 	// Not the base activity. Transfer this to the base activity then.
 	protected DataSingleton mDataSingleton;
 	// Maps Menu to a Command via hash table. This allows this module to avoid sphagetti code.
-	protected HashMap<MenuItem, OnCommand> mMapMenuToCommand = 
-										new HashMap<MenuItem, OnCommand>();
+	protected HashMap<MenuItem, CommandAbstract> mMapMenuToCommand = 
+										new HashMap<MenuItem, CommandAbstract>();
 	static final int PLAY_VIDEO_REQUESTCODE = 0;
 	
 	public ActivityExtended() {
@@ -52,16 +53,6 @@ abstract public class ActivityExtended extends Activity implements TObserver<TOb
 		i.putExtras(b);
 		
 		startActivityForResult(i, PLAY_VIDEO_REQUESTCODE);
-	}
-	
-	/* 
-	 * Stuff to be saved when onDestroy is called. This will
-	 * allow ActivityExtended to recall last state such as,
-	 * where we watching a video or not the last time we change
-	 * orientation.
-	 */
-	@Override
-	public void onSaveInstanceState(Bundle objects){
 	}
 
 	/**
@@ -94,5 +85,9 @@ abstract public class ActivityExtended extends Activity implements TObserver<TOb
 		Intent i = getIntent();
 		finish();
 		startActivity(i);
+	}
+	
+	public DbManager getDatabase(){
+		return mDataSingleton.database;
 	}
 }

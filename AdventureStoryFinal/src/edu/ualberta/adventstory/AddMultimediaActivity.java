@@ -9,6 +9,7 @@ package edu.ualberta.adventstory;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import edu.ualberta.data.DbManager;
 import edu.ualberta.multimedia.*;
 import edu.ualberta.utils.Page;
+import edu.ualberta.controller.CommandCollection;
+import edu.ualberta.controller.CommandCollection.OnActivityResultListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -102,6 +105,18 @@ public class AddMultimediaActivity extends Activity {
 	private long newSelectedMultimediaId;
 	
 	/**
+	 * Enables this activity to know what is the request being sent.
+	 */
+	private int requestCode;
+	
+	/**
+	 * Maps resultCode to an appropriate callback that set's the Intent data
+	 * to be return to the calling activity. This is done to avoid switch statements
+	 * as discussed in class.
+	 */
+	private HashMap<Integer, OnActivityResultListener> resultCodeToActivityResult;
+	
+	/**
 	 * loads database and current page from application class and loads arguments
 	 * @author: Lyle Rolleman
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -124,6 +139,8 @@ public class AddMultimediaActivity extends Activity {
 		 * @author Joey Andres
 		 */
 		selectedMultimediaId = args.getInt("selectedMultimediaID");
+		requestCode = (int) args.getLong("requestCode");
+		initReturnData();
 		
 		addMultimedia();
 	}
@@ -197,8 +214,8 @@ public class AddMultimediaActivity extends Activity {
 					else if (sids.contains(currid))
 						saveSoundToDB();
 				}
-				
-				swapMultimedia();
+								
+				setReturnData();
 				
 				finish();
 			}
@@ -212,20 +229,49 @@ public class AddMultimediaActivity extends Activity {
 	}
 	
 	/**
-	 *  Sends data if this activity is called on the purpose of swapping activity.
+	 * Initialize the callback that initialize the data to be returned to the caller 
+	 * activity for a specific requestcode.
+	 * @author Joey Andres
 	 */
-	private void swapMultimedia(){
-		/**
-		 * Note: This block of code below will not affect any other module
-		 * since they can ignore the existence of such return.
-		 * @author Joey Andres
-		 */
-		Intent data = new Intent();				
-		Bundle bundle = new Bundle();
-		bundle.putInt("selectedMultimediaId", selectedMultimediaId);
-		bundle.putLong("NewMultimediaId", newSelectedMultimediaId);
-		data.putExtras(bundle);
-		setResult(RESULT_OK, data);
+	private void initReturnData(){
+		resultCodeToActivityResult = new HashMap<Integer, OnActivityResultListener>();
+		
+		resultCodeToActivityResult.put(PageEditActivity.SWAP_MULTIMEDIA_REQUESTCODE, 
+				new OnActivityResultListener(new CommandCollection.OnActivityResult() {					
+					@Override
+					public void onActivityResult() {
+						Intent data = new Intent();				
+						Bundle bundle = new Bundle();
+						bundle.putInt("selectedMultimediaId", selectedMultimediaId);
+						bundle.putLong("NewMultimediaId", newSelectedMultimediaId);
+						data.putExtras(bundle);
+						setResult(RESULT_OK, data);
+					}
+				}));
+		
+		resultCodeToActivityResult.put(PageEditActivity.GET_MULTIMEDIA_REQUESTCODE, 
+				new OnActivityResultListener(new CommandCollection.OnActivityResult() {					
+					@Override
+					public void onActivityResult() {
+						Intent data = new Intent();
+						Bundle bundle = new Bundle();						
+						bundle.putLong("NewMultimediaId", newSelectedMultimediaId);
+						data.putExtras(bundle);
+						setResult(RESULT_OK, data);
+					}
+				}));
+		
+		// Add new callback methods here.
+	}
+	
+	/**
+	 * Sets the appropriate data to be returned based on teh requestCode.
+	 * @author Joey Andres
+	 */
+	private void setReturnData() {
+		OnActivityResultListener oarl = this.resultCodeToActivityResult.get(this.requestCode);
+		if(oarl != null)
+			oarl.execute();
 	}
 	
 	/**

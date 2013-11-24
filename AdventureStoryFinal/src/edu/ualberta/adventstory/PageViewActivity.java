@@ -24,9 +24,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import edu.ualberta.adventstory.R;
+import edu.ualberta.controller.CommandCollection;
+import edu.ualberta.controller.CommandCollection.OnStartPageEditListener;
 import edu.ualberta.controller.MultimediaControllerManager;
-import edu.ualberta.controller.CommandCollection.OnCallbackListener;
-import edu.ualberta.controller.CommandCollection.OnCommand;
+import edu.ualberta.controller.CommandCollection.OnCallback;
+import edu.ualberta.controller.CommandCollection.CommandAbstract;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
@@ -70,7 +72,7 @@ public class PageViewActivity extends ActivityExtended {
 
 		if (mViewPageOnly == false) {
 			setStoryTitle(mPage.getTitle());
-		}else{
+		} else {
 			setStoryTitle("Editing Page");
 		}
 
@@ -83,7 +85,7 @@ public class PageViewActivity extends ActivityExtended {
 				randomNextPage();
 			}
 		});
-		
+
 		setPageTitle(mPage.getTitle());
 		setStoryText();
 
@@ -111,7 +113,7 @@ public class PageViewActivity extends ActivityExtended {
 	}
 
 	private boolean MenuChoice(MenuItem item) {
-		OnCommand command = mMapMenuToCommand.get(item);
+		CommandAbstract command = mMapMenuToCommand.get(item);
 		if (command != null) {
 			command.execute();
 			return true;
@@ -132,11 +134,11 @@ public class PageViewActivity extends ActivityExtended {
 																		// to
 																		// change.
 			}
-			OnCommand startEditPageCommand = new OnCommand(
-					new OnCallbackListener() {
+			OnStartPageEditListener startEditPageCommand = 
+					new OnStartPageEditListener(new CommandCollection.OnStartPageEdit(){
 						@Override
-						public void callback() {
-							startPageEditActivity();
+						public void onStartPageEdit() {
+							startPageEditActivity();							
 						}
 					});
 			mMapMenuToCommand.put(mnu1, startEditPageCommand);
@@ -278,10 +280,11 @@ public class PageViewActivity extends ActivityExtended {
 			}
 		}
 	}
-	
-	private void  addTextViewInPage(String text){
-		TextView tv = (TextView) LayoutInflater.from(this).inflate(R.layout.page_textview, null);
-		tv.setText(text);		
+
+	private void addTextViewInPage(String text) {
+		TextView tv = (TextView) LayoutInflater.from(this).inflate(
+				R.layout.page_textview, null);
+		tv.setText(text);
 		mPageTextLayout.addView(tv);
 	}
 
