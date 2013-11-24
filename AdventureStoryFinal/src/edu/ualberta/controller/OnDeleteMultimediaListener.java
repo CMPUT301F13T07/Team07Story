@@ -4,19 +4,20 @@ import edu.ualberta.adventstory.ActivityExtended;
 import edu.ualberta.adventstory.DataSingleton;
 import edu.ualberta.controller.CommandCollection.CommandAbstract;
 import edu.ualberta.controller.CommandCollection.OnAddMultimedia;
+import edu.ualberta.controller.CommandCollection.OnDelete;
 import edu.ualberta.controller.CommandCollection.OnUndo;
 import edu.ualberta.data.DbManager;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
 
 /**
- * <code>OnAddMultimediaCommand</code> is the command for handling adding
+ * <code>OnDeleteMultimediaListener</code> is the command for handling deleting
  * Multimedias. Since this varies alot between implementation, the user must
  * setOnCommandExecute to define call back method.
  * 
  */
-public class OnAddMultimediaListener 
-					extends CommandAbstract<OnAddMultimedia, OnUndo> {
+public class OnDeleteMultimediaListener 
+					extends CommandAbstract<OnDelete, OnUndo> {
 	Page mPage;		
 	MultimediaAbstract mMultimedia;
 	ActivityExtended mActivityExtended;
@@ -24,8 +25,8 @@ public class OnAddMultimediaListener
 	 * @param onAddMultimedia is the callback. Set to null
 	 * to use default handling of AddMultimedia event.
 	 */
-	public OnAddMultimediaListener(OnAddMultimedia onAddMultimedia, OnUndo undo) {
-		super(onAddMultimedia, undo);
+	public OnDeleteMultimediaListener(OnDelete onDelete, OnUndo undo) {
+		super(onDelete, undo);
 		mPage = null;
 		mMultimedia = null;
 		mActivityExtended = null;
@@ -38,7 +39,7 @@ public class OnAddMultimediaListener
 	 * @param multimedia multimedia being added.
 	 * @param ae 
 	 */
-	public OnAddMultimediaListener(Page page, MultimediaAbstract multimedia, ActivityExtended ae) {
+	public OnDeleteMultimediaListener(Page page, MultimediaAbstract multimedia, ActivityExtended ae) {
 		super(null, null);			
 		mPage = page;
 		mMultimedia = multimedia;
@@ -62,7 +63,7 @@ public class OnAddMultimediaListener
 	}
 	
 	@Override
-	public void execute() {		
+	public void unexecute() {		
 		if(mCallbackExecute == null){			
 			// Check if already in current page.
 			for(MultimediaAbstract ma : mPage.getMultimedia()){
@@ -77,16 +78,15 @@ public class OnAddMultimediaListener
 			mPage.getMultimedia().add(mMultimedia);
 			mActivityExtended.localUpdate();
 		}else{
-			mCallbackExecute.onAddMultimedia();
+			mCallbackExecute.delete();
 		}
 	}		
 
 	@Override
-	public void unexecute() {
+	public void execute() {
 		if(mCallbackUnExecute == null){
 			DbManager db = mActivityExtended.getDatabase();
 			db.delete_mult(mMultimedia, mPage);
-		
 			// Delete multimedia in current page.
 			for(MultimediaAbstract ma : mPage.getMultimedia()){
 				if(mMultimedia.getID() == ma.getID()){
@@ -97,7 +97,7 @@ public class OnAddMultimediaListener
 			
 			mActivityExtended.localUpdate();
 		}else{
-			mCallbackExecute.onAddMultimedia();
+			mCallbackExecute.delete();
 		}
 	}
 
@@ -106,21 +106,21 @@ public class OnAddMultimediaListener
 		return true;
 	}
 	
-	public void setOnAddMultimediaListener(OnAddMultimedia callback) {
+	public void setOnDeleteMultimediaListener(OnDelete callback) {
 		mCallbackExecute = callback;
 	}
 	
-	public void setOnUndoAddMultimediaListener(OnUndo callback){
+	public void setOnUndoDeleteMultimediaListener(OnUndo callback){
 		mCallbackUnExecute = callback;
 	}
 
 	@Override
-	public void setExecuteCallback(OnAddMultimedia callback) {
-		setOnAddMultimediaListener(callback);
+	public void setExecuteCallback(OnDelete callback) {
+		setOnDeleteMultimediaListener(callback);
 	}
 
 	@Override
 	public void setUnExecuteCallback(OnUndo callback) {
-		setOnUndoAddMultimediaListener(callback);
+		setOnUndoDeleteMultimediaListener(callback);
 	}
 }

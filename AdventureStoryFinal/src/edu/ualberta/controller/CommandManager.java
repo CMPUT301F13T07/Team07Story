@@ -43,6 +43,15 @@ public class CommandManager {
 		}
 	}
 	
+	/**
+	 * Pops a command without executing it. This is done when the command is likely
+	 * to cause an exception due to unfinnished initializtion.
+	 * @return
+	 */
+	public CommandAbstract popCommand(){
+		return historyList.pop();
+	}
+	
 	public void undo(){
 		if(historyList.empty() == false){
 			CommandAbstract<OnCallback, OnUndo> command = historyList.pop();

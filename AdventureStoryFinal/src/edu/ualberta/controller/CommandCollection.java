@@ -49,6 +49,14 @@ public class CommandCollection {
 	public static interface OnRedo extends OnCallback {
 		void redo();
 	}
+	
+	public static interface OnDelete extends OnCallback{
+		void delete();
+	}
+	
+	public static interface OnMove extends OnCallback{
+		void onMove(int pos);
+	}
 
 	/**
 	 * asdjnfkassd

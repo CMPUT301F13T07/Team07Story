@@ -9,6 +9,7 @@ import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import edu.ualberta.controller.CommandCollection;
+import edu.ualberta.controller.OnMoveMultimediaListener;
 import edu.ualberta.controller.OnRedoListener;
 import edu.ualberta.controller.CommandCollection.OnRedo;
 import edu.ualberta.controller.OnUndoListener;
@@ -241,6 +243,7 @@ public class PageEditActivity extends ActivityExtended {
 		MenuItem mnu2 = menu.add(0, 1, 1, "Undo");
 		{
 			mnu2.setIcon(R.drawable.ic_undo);
+			mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		}
 
 		OnUndoListener undoResonder = new OnUndoListener(new OnUndo() {
@@ -256,7 +259,7 @@ public class PageEditActivity extends ActivityExtended {
 		MenuItem mnu3 = menu.add(0, 2, 2, "Redo");
 		{
 			mnu3.setIcon(R.drawable.ic_redo);
-			mnu3.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+			mnu3.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
 		}
 		
 		OnRedoListener redoResonder = new OnRedoListener(new OnRedo() {
@@ -611,14 +614,14 @@ public class PageEditActivity extends ActivityExtended {
 				cursorIndexChange(et.getSelectionStart(), et);
 			}
 		});
-
+		
 		et.setText(text);
 		mPageTextLayout.addView(et);
 		mStoryEditTextArray.add(et);
 	}
 
 	/**
-	 * Is an event handler when back key is pressed.
+	 * Is an event handler.
 	 */
 	@SuppressWarnings("deprecation")
 	@Override
@@ -629,6 +632,7 @@ public class PageEditActivity extends ActivityExtended {
 			onBackPressed();
 			return true;
 		}
+		
 		return super.onKeyDown(keyCode, event);
 	}
 
@@ -713,7 +717,8 @@ public class PageEditActivity extends ActivityExtended {
 
 		for (MultimediaAbstract m : ma) {
 			if (m.getIsSelected()) {
-				m.setIndex(index);
+				OnMoveMultimediaListener omml = new OnMoveMultimediaListener(mPage, m, index, this);
+				mCommandManager.invokeCommand(omml);
 				clearSelection();
 				return;
 			}
@@ -885,6 +890,12 @@ public class PageEditActivity extends ActivityExtended {
 		} else if (requestCode == GET_MULTIMEDIA_REQUESTCODE) {
 			mPage = mDataSingleton.getCurrentPage();
 			mStory = mDataSingleton.getCurrentStory();
+			
+			if(data == null) {
+				mCurrentCommand = null;
+				return;
+			}
+			
 			// resultCode is newMultimedia index.
 			if(mCurrentCommand instanceof OnAddMultimediaListener){
 				Bundle bundle = data.getExtras();
@@ -899,7 +910,10 @@ public class PageEditActivity extends ActivityExtended {
 					}
 				}
 				
-				if(newMultimedia == null) return;
+				if(newMultimedia == null) {
+					mCurrentCommand = null;
+					return;
+				}
 				
 				((OnAddMultimediaListener)mCurrentCommand).setMultimedia(newMultimedia);
 				mCommandManager.invokeCommand(mCurrentCommand);				
@@ -947,9 +961,9 @@ public class PageEditActivity extends ActivityExtended {
 			}
 
 			// The swapping process.
-			toBeSwapMultimedia.setIndex(selectedMultimedia.getIndex());
-			mDataSingleton.database.delete_mult(selectedMultimedia, mPage);
-			mDataSingleton.database.update_multimedia(toBeSwapMultimedia,
+			selectedMultimedia.setFileDir(toBeSwapMultimedia.getFileDir());
+			mDataSingleton.database.delete_mult(toBeSwapMultimedia, mPage);
+			mDataSingleton.database.update_multimedia(selectedMultimedia,
 					mPage.getID());
 			localUpdate();
 			return;

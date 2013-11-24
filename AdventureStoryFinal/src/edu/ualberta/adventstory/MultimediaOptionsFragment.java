@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import edu.ualberta.controller.CommandManager;
+import edu.ualberta.controller.OnDeleteMultimediaListener;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.multimedia.Picture;
 import edu.ualberta.multimedia.TObservable;
@@ -23,19 +25,20 @@ public class MultimediaOptionsFragment extends Fragment implements
 		TObserver<TObservable> {
 	// A simple static factory problem.
 	static public MultimediaOptionsFragment MultimediaOptionsFragmentFactory(
-			Page currentPage,  MultimediaAbstract selectedMultimedia) {
-		return new MultimediaOptionsFragment(currentPage,  selectedMultimedia);
+			Page currentPage, MultimediaAbstract selectedMultimedia) {
+		return new MultimediaOptionsFragment(currentPage, selectedMultimedia);
 	}
 
 	protected Page mCurrentPage; // Current page.
 	protected MultimediaAbstract mSelectedMultimedia;
-	
+
 	private TextView mMultimediaTypeTextView;
 	private TextView mMultimediaFilePath;
 	private Button mDeleteMultimediaButton;
 	private Button mChangeMultimediaButton;
 
-	private MultimediaOptionsFragment(Page currentPage, MultimediaAbstract selectedMultimedia) {
+	private MultimediaOptionsFragment(Page currentPage,
+			MultimediaAbstract selectedMultimedia) {
 		mCurrentPage = currentPage;
 		mSelectedMultimedia = selectedMultimedia;
 	}
@@ -61,7 +64,7 @@ public class MultimediaOptionsFragment extends Fragment implements
 		mDeleteMultimediaButton = (Button) getActivity().findViewById(
 				R.id.deleteMultimediaButton);
 		mChangeMultimediaButton = (Button) getActivity().findViewById(
-				R.id.changeMultimediaButton);					 
+				R.id.changeMultimediaButton);
 		LinearLayout mButtonLayout = (LinearLayout) getActivity().findViewById(
 				R.id.multimediaSizeLayout);
 		ImageButton mButtonSmallSize = (ImageButton) getActivity()
@@ -98,11 +101,13 @@ public class MultimediaOptionsFragment extends Fragment implements
 				}
 				for (MultimediaAbstract m : mCurrentPage.getMultimedia()) {
 					if (m.getIsSelected()) {
-						mCurrentPage.getMultimedia().remove(m);
+						OnDeleteMultimediaListener odm = new OnDeleteMultimediaListener(
+								mCurrentPage, m,
+								(ActivityExtended) getActivity());
+						CommandManager cm = CommandManager.getInstance();
+						cm.invokeCommand(odm);
+
 						closeFragment();
-						((PageEditActivity) getActivity()).mDataSingleton.database
-								.delete_mult(m, mCurrentPage);
-						((PageEditActivity) getActivity()).update(m);
 						break;
 					}
 				}
@@ -144,7 +149,7 @@ public class MultimediaOptionsFragment extends Fragment implements
 
 		mButtonLargeSize.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View v) {				
+			public void onClick(View v) {
 				if (mSelectedMultimedia instanceof Picture) {
 					Picture p = (Picture) mSelectedMultimedia;
 					p.setPictureSize(Picture.LARGE);
@@ -164,16 +169,16 @@ public class MultimediaOptionsFragment extends Fragment implements
 			mButtonLayout.setVisibility(View.INVISIBLE);
 		}
 	}
-	
+
 	@Override
 	public void update(TObservable model) {
 		((PageEditActivity) this.getActivity()).update(model);
 	}
 
 	private void closeFragment() {
-		((PageEditActivity)getActivity()).save();
-		((PageEditActivity)getActivity()).setFRAGMENTINFLATED(false);
+		((PageEditActivity) getActivity()).save();
+		((PageEditActivity) getActivity()).setFRAGMENTINFLATED(false);
 		getActivity().getFragmentManager().beginTransaction()
-				.remove(MultimediaOptionsFragment.this).commit();		
+				.remove(MultimediaOptionsFragment.this).commit();
 	}
 }
