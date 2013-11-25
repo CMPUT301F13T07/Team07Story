@@ -88,6 +88,8 @@ abstract public class ActivityExtended extends Activity implements TObserver<TOb
 	}
 	
 	public DbManager getDatabase(){
-		return mDataSingleton.database;
+		return mDataSingleton.database;		
 	}
+	
+	
 }

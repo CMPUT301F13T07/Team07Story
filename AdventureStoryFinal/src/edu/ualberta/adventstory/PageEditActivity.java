@@ -235,12 +235,7 @@ public class PageEditActivity extends ActivityExtended {
 				mPage, null, this);
 		mMapMenuToCommand.put(mnu1, addMultimediaResponder);
 
-		MenuItem mnu2 = menu.add(0, 1, 1, "Undo");
-		{
-			mnu2.setIcon(R.drawable.ic_undo);
-			mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		}
-
+		MenuItem mnu2 = menu.getItem(R.id.action_undo);
 		OnUndoListener undoResonder = new OnUndoListener(new OnUndo() {
 			@Override
 			public void undo() {
@@ -248,15 +243,9 @@ public class PageEditActivity extends ActivityExtended {
 				localUpdate();
 			}
 		});
-
 		mMapMenuToCommand.put(mnu2, undoResonder);
 
-		MenuItem mnu3 = menu.add(0, 2, 2, "Redo");
-		{
-			mnu3.setIcon(R.drawable.ic_redo);
-			mnu3.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		}
-		
+		MenuItem mnu3 = menu.getItem(R.id.action_redo);
 		OnRedoListener redoResonder = new OnRedoListener(new OnRedo() {
 			@Override
 			public void redo() {
@@ -264,7 +253,6 @@ public class PageEditActivity extends ActivityExtended {
 				localUpdate();
 			}
 		});
-		
 		mMapMenuToCommand.put(mnu3, redoResonder);
 
 		MenuItem mnu4 = menu.add(0, 3, 3, "Save");
@@ -297,13 +285,11 @@ public class PageEditActivity extends ActivityExtended {
 				});
 		mMapMenuToCommand.put(mnu5, cancelResponder);
 		
-		MenuItem mnu6 = menu.add(0, 4, 4, "Help");
-		{
-			mnu6.setIcon(R.drawable.ic_help);
-			mnu6.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		}
+		MenuItem mnu6 = menu.findItem(R.id.action_help);		
+		mMapMenuToCommand.put(mnu6, new OnStartHelpActivityListener(this, "editPage.html"));
 		
-		mMapMenuToCommand.put(mnu6, new OnStartHelpActivityListener(this, "editPage.html"));		
+		MenuItem mnu7 = menu.findItem(R.id.action_settings);
+		mMapMenuToCommand.put(mnu7, new OnStartSettingsActivityListener(this));
 	}
 
 	/**
@@ -888,6 +874,7 @@ public class PageEditActivity extends ActivityExtended {
 			mPage = mDataSingleton.getCurrentPage();
 			mStory = mDataSingleton.getCurrentStory();
 			
+			// Multimedia retreival fail.
 			if(data == null) {
 				mCurrentCommand = null;
 				return;
@@ -922,6 +909,12 @@ public class PageEditActivity extends ActivityExtended {
 			mPage = mDataSingleton.getCurrentPage();
 			mStory = mDataSingleton.getCurrentStory();
 
+			// Multimedia retreival fail.
+			if(data == null) {
+				mCurrentCommand = null;
+				return;
+			}
+			
 			Bundle bundle = data.getExtras();
 			int newId = (int) bundle.getLong("NewMultimediaId");
 			int selectedId = bundle.getInt("selectedMultimediaId");

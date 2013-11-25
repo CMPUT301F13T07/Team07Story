@@ -54,4 +54,8 @@ public class CallbackIntefaces {
 	public static interface OnStartHelpActivity extends OnCallback {
 		void onStartHelpActivity();
 	}
+	
+	public static interface OnStartSettingsActivity extends OnCallback{
+		void onStartSettingsActivity();
+	}
 }
