@@ -1,9 +1,7 @@
 package edu.ualberta.adventstory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.Stack;
 import java.util.TreeMap;
 
 import android.os.Bundle;
@@ -24,11 +22,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import edu.ualberta.adventstory.R;
-import edu.ualberta.controller.CommandCollection;
-import edu.ualberta.controller.CommandCollection.OnStartPageEditListener;
-import edu.ualberta.controller.MultimediaControllerManager;
-import edu.ualberta.controller.CommandCollection.OnCallback;
-import edu.ualberta.controller.CommandCollection.CommandAbstract;
+import edu.ualberta.controller.*;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
@@ -135,7 +129,7 @@ public class PageViewActivity extends ActivityExtended {
 																		// change.
 			}
 			OnStartPageEditListener startEditPageCommand = 
-					new OnStartPageEditListener(new CommandCollection.OnStartPageEdit(){
+					new OnStartPageEditListener(new CallbackIntefaces.OnStartPageEdit(){
 						@Override
 						public void onStartPageEdit() {
 							startPageEditActivity();							
@@ -325,7 +319,7 @@ public class PageViewActivity extends ActivityExtended {
 	@SuppressLint("NewApi")
 	@Override
 	public void onBackPressed() {
-		if (mDataSingleton.getOldPage() == null) {
+		if (mDataSingleton.peekPage() == null) {
 			super.onBackPressed();
 		} else {
 			mDataSingleton.revertPage();

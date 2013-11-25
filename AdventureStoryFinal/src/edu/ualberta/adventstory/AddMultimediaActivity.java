@@ -11,15 +11,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-
-
-
 import edu.ualberta.data.DbManager;
 import edu.ualberta.multimedia.*;
 import edu.ualberta.utils.Page;
-import edu.ualberta.controller.CommandCollection;
-import edu.ualberta.controller.CommandCollection.OnActivityResultListener;
+import edu.ualberta.controller.*;
+import edu.ualberta.controller.CallbackIntefaces.*;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -237,7 +233,7 @@ public class AddMultimediaActivity extends Activity {
 		resultCodeToActivityResult = new HashMap<Integer, OnActivityResultListener>();
 		
 		resultCodeToActivityResult.put(PageEditActivity.SWAP_MULTIMEDIA_REQUESTCODE, 
-				new OnActivityResultListener(new CommandCollection.OnActivityResult() {					
+				new OnActivityResultListener(new OnActivityResult() {					
 					@Override
 					public void onActivityResult() {
 						Intent data = new Intent();				
@@ -250,7 +246,7 @@ public class AddMultimediaActivity extends Activity {
 				}));
 		
 		resultCodeToActivityResult.put(PageEditActivity.GET_MULTIMEDIA_REQUESTCODE, 
-				new OnActivityResultListener(new CommandCollection.OnActivityResult() {					
+				new OnActivityResultListener(new OnActivityResult() {					
 					@Override
 					public void onActivityResult() {
 						Intent data = new Intent();

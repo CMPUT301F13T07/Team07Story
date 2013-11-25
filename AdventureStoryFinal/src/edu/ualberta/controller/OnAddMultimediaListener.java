@@ -2,9 +2,7 @@ package edu.ualberta.controller;
 
 import edu.ualberta.adventstory.ActivityExtended;
 import edu.ualberta.adventstory.DataSingleton;
-import edu.ualberta.controller.CommandCollection.CommandAbstract;
-import edu.ualberta.controller.CommandCollection.OnAddMultimedia;
-import edu.ualberta.controller.CommandCollection.OnUndo;
+import edu.ualberta.controller.CallbackIntefaces.*;
 import edu.ualberta.data.DbManager;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
@@ -65,11 +63,9 @@ public class OnAddMultimediaListener
 	public void execute() {		
 		if(mCallbackExecute == null){			
 			// Check if already in current page.
-			for(MultimediaAbstract ma : mPage.getMultimedia()){
-				if(mMultimedia.getID() == ma.getID()){
-					return;
-				}
-			}
+			MultimediaAbstract temp = PageAdapter.getMultimediaByID(mPage, mMultimedia.getID());
+			if(temp != null)
+				return;
 			
 			DbManager db = mActivityExtended.getDatabase();
 			db.insert_multimedia(mMultimedia, mPage.getID());
@@ -88,12 +84,7 @@ public class OnAddMultimediaListener
 			db.delete_mult(mMultimedia, mPage);
 		
 			// Delete multimedia in current page.
-			for(MultimediaAbstract ma : mPage.getMultimedia()){
-				if(mMultimedia.getID() == ma.getID()){
-					mPage.getMultimedia().remove(ma);
-					break;
-				}
-			}
+			PageAdapter.deleteMultimediaByID(mPage, mMultimedia.getID());
 			
 			mActivityExtended.localUpdate();
 		}else{

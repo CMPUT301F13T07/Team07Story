@@ -5,7 +5,6 @@ import java.util.Stack;
 import android.app.Activity;
 import android.app.Application;
 
-import edu.ualberta.controller.CommandCollection.CommandAbstract;
 import edu.ualberta.controller.CommandManager;
 import edu.ualberta.data.DbManager;
 import edu.ualberta.multimedia.MultimediaAbstract;
@@ -17,9 +16,12 @@ public class DataSingleton extends Application{
 	
 	Activity mCurrentActivity;
 	private Story mCurrentStory;
-	private Page mCurrentPage;
+	private Page mCurrentPage;	
 	private Stack<Page> mPageHistory;
 	protected String author;
+	
+	// Used by MultimediaOptionsFragment to save unsavable members.
+	private MultimediaAbstract mMultimediaSelected;	
 	
 	@Override
 	public void onCreate() {
@@ -32,6 +34,7 @@ public class DataSingleton extends Application{
 		mCurrentStory = null;
 		mCurrentPage = null;
 		author = null;
+		mMultimediaSelected = null;
 	}
 
 	public Activity getCurrentActivity(){return mCurrentActivity;}
@@ -39,8 +42,7 @@ public class DataSingleton extends Application{
 	public Story getCurrentStory(){ return mCurrentStory; }
 	public void setCurrentStory(Story story){ mCurrentStory = story; }
 	
-	// Returns the last page viewed.
-	public Page getOldPage(){ 
+	public Page peekPage(){ 
 		if(mPageHistory.empty() == false)
 			return mPageHistory.peek();
 		else 
@@ -82,5 +84,19 @@ public class DataSingleton extends Application{
 	public void clearPageStack(){
 		mPageHistory.clear();
 		mCurrentPage = null;
+	}
+	
+	/**
+	 * Used by <code>MultimediaOptionsFragment</code> to save data during events that
+	 * erases it's data. This is imperative when when orientation changes and 
+	 * <code>MultimediaOptionsFragment</code> requires a no-arg constructor. 
+	 * 
+	 * @param multimediaSelected
+	 */
+	public void saveMultimediaOptionsFragmentData(MultimediaAbstract multimediaSelected){
+		mMultimediaSelected = multimediaSelected;
+	}
+	public MultimediaAbstract getMultimediaOptionsFragmentData(){
+		return mMultimediaSelected;
 	}
 }

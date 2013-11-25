@@ -24,11 +24,12 @@
     <string name="labelSearchBy">Search By: </string>
     <string name="labelSearch">Search: </string>
     <string name="labelResults">Results: </string>
-	<string name="searchpreview">Page Preview</string>
-	<string name="buttonSelect">Select</string>
-	<string name="buttonReturn">Return</string>
-	<string name="randomStory">Read Random Story</string>
+    <string name="searchpreview">Page Preview</string>
+    <string name="buttonSelect">Select</string>
+    <string name="buttonReturn">Return</string>
+    <string name="randomStory">Read Random Story</string>
     <string name="listofpages">Select a page to begin your adventure: </string>
+
     <string-array name="first_page_array">
         <item>Existing Page</item>
         <item>New Page</item>
@@ -50,5 +51,6 @@
     <string name="title_activity_search">SearchActivity</string>
     <string name="title_activity_create_new">CreateNewActivity</string>
     <string name="title_activity_page_view">PageViewActivity</string>
+    <string name="title_activity_help">HelpActivity</string>
 
 </resources>

@@ -2,7 +2,7 @@ package edu.ualberta.adventstory;
 
 import java.util.HashMap;
 
-import edu.ualberta.controller.CommandCollection.CommandAbstract;
+import edu.ualberta.controller.*;
 import edu.ualberta.controller.MultimediaControllerManager;
 import edu.ualberta.data.DbManager;
 import edu.ualberta.multimedia.TObservable;

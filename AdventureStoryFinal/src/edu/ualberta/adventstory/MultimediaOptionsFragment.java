@@ -23,30 +23,30 @@ import edu.ualberta.utils.Page;
 @SuppressLint({ "ValidFragment", "NewApi" })
 public class MultimediaOptionsFragment extends Fragment implements
 		TObserver<TObservable> {
-	// A simple static factory problem.
-	static public MultimediaOptionsFragment MultimediaOptionsFragmentFactory(
-			Page currentPage, MultimediaAbstract selectedMultimedia) {
-		return new MultimediaOptionsFragment(currentPage, selectedMultimedia);
-	}
-
-	protected Page mCurrentPage; // Current page.
+	protected Page mCurrentPage; 
 	protected MultimediaAbstract mSelectedMultimedia;
 
-	private TextView mMultimediaTypeTextView;
-	private TextView mMultimediaFilePath;
 	private Button mDeleteMultimediaButton;
 	private Button mChangeMultimediaButton;
 
-	private MultimediaOptionsFragment(Page currentPage,
+	public MultimediaOptionsFragment(Page currentPage,
 			MultimediaAbstract selectedMultimedia) {
+		super();
 		mCurrentPage = currentPage;
 		mSelectedMultimedia = selectedMultimedia;
+	}
+	
+	/**
+	 * Default Constructor to avoid crash in orientation change.
+	 */
+	public MultimediaOptionsFragment(){
+		super();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
+		
 		// Inflate the layout for this fragment
 		return inflater.inflate(R.layout.fragment_pageedit_multimedia_options,
 				container, false);
@@ -56,11 +56,6 @@ public class MultimediaOptionsFragment extends Fragment implements
 	@Override
 	public void onStart() {
 		super.onStart();
-
-		mMultimediaTypeTextView = (TextView) getActivity().findViewById(
-				R.id.multimediaTypeTextView);
-		mMultimediaFilePath = (TextView) getActivity().findViewById(
-				R.id.multimediaFileNameTextView);
 		mDeleteMultimediaButton = (Button) getActivity().findViewById(
 				R.id.deleteMultimediaButton);
 		mChangeMultimediaButton = (Button) getActivity().findViewById(
@@ -75,22 +70,6 @@ public class MultimediaOptionsFragment extends Fragment implements
 				.findViewById(R.id.multimediaLargeSizeButton);
 		Button mExitButton = (Button) getActivity().findViewById(
 				R.id.exitButton);
-
-		// Set mMultimediaTypeTextView's string.
-		for (MultimediaAbstract m : mCurrentPage.getMultimedia()) {
-			if (m.getIsSelected()) {
-				mMultimediaTypeTextView.setText("Multimedia Editor");
-				break;
-			}
-		}
-
-		// Set mMultimediaFilePath string.
-		for (MultimediaAbstract m : mCurrentPage.getMultimedia()) {
-			if (m.getIsSelected()) {
-				mMultimediaFilePath.setText(m.getFileDir());
-				break;
-			}
-		}
 
 		mDeleteMultimediaButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -173,6 +152,12 @@ public class MultimediaOptionsFragment extends Fragment implements
 	@Override
 	public void update(TObservable model) {
 		((PageEditActivity) this.getActivity()).update(model);
+	}
+	
+	@Override
+	public void onPause(){
+		super.onPause();
+		this.closeFragment();
 	}
 
 	private void closeFragment() {

@@ -1,7 +1,6 @@
 package edu.ualberta.controller;
 
-import edu.ualberta.controller.CommandCollection.CommandAbstract;
-import edu.ualberta.controller.CommandCollection.OnRedo;
+import edu.ualberta.controller.CallbackIntefaces.*;
 
 /**
  * XXX DO NOT ADD THIS TO THE <code>CommandManager</code> stack.

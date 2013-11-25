@@ -1,0 +1,27 @@
+*{
+    background-color: #F7F3E8;
+}
+a:link, a:visited,#header01, #header02{    
+    background-color: #F2583E;
+    font-family: arial;
+    padding:2px;
+    color:#1A202C;
+    text-decoration:none;
+}
+
+a:hover{
+    color:#77BED2;
+}
+
+.contents, div.contents *{
+    background-color: #D5E1DD;
+    font-family: arial;
+}
+
+.contents p{
+    padding:5px;
+}
+
+.contents b{
+    color:F2583E;
+}

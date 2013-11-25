@@ -32,18 +32,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import edu.ualberta.controller.CommandCollection;
+import edu.ualberta.controller.*;
+import edu.ualberta.controller.CallbackIntefaces.*;
 import edu.ualberta.controller.OnMoveMultimediaListener;
 import edu.ualberta.controller.OnRedoListener;
-import edu.ualberta.controller.CommandCollection.OnRedo;
 import edu.ualberta.controller.OnUndoListener;
 import edu.ualberta.controller.CommandManager;
 import edu.ualberta.controller.OnAddMultimediaListener;
-import edu.ualberta.controller.CommandCollection.CommandAbstract;
-import edu.ualberta.controller.CommandCollection.OnExitListener;
-import edu.ualberta.controller.CommandCollection.OnSave;
-import edu.ualberta.controller.CommandCollection.OnUndo;
-import edu.ualberta.controller.CommandCollection.OnSaveListener;
 import edu.ualberta.controller.MultimediaControllerManager;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.multimedia.TObservable;
@@ -78,10 +73,10 @@ public class PageEditActivity extends ActivityExtended {
 	final public static int GET_MULTIMEDIA_REQUESTCODE = 2;
 	final public static int SWAP_MULTIMEDIA_REQUESTCODE = 3;
 
-	private CommandManager mCommandManager; // Manages Undo/Redo.
 	// Current Command being executed. This is used when AddMultimedia is being
 	// executed since it requires waiting for the callback.
 	CommandAbstract mCurrentCommand = null;
+	private CommandManager mCommandManager; // Manages Undo/Redo.
 
 	// Set to true when editing a page only, independent of the story.
 	private boolean mEditPageOnly = false;
@@ -123,8 +118,8 @@ public class PageEditActivity extends ActivityExtended {
 		CheckBox cb = (CheckBox) findViewById(R.id.readOnlyCheckBox);
 
 		setStoryTitle();
-		setPageTitle(22);
-		setPageAuthor(20);
+		setPageTitle();
+		setPageAuthor();
 		setStoryText();
 		cb.setChecked(mPage.getReadOnly());
 
@@ -289,18 +284,26 @@ public class PageEditActivity extends ActivityExtended {
 
 		MenuItem mnu5 = menu.add(0, 4, 4, "Cancel");
 		{
-			mnu5.setIcon(R.drawable.ic_addmultimedia);
+			mnu5.setIcon(R.drawable.ic_exit);
 			mnu5.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
 
 		OnExitListener cancelResponder = new OnExitListener(
-				new CommandCollection.OnExit() {
+				new OnExit() {
 					@Override
 					public void onExit() {
 						exit();
 					}
 				});
 		mMapMenuToCommand.put(mnu5, cancelResponder);
+		
+		MenuItem mnu6 = menu.add(0, 4, 4, "Help");
+		{
+			mnu6.setIcon(R.drawable.ic_help);
+			mnu6.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		}
+		
+		mMapMenuToCommand.put(mnu6, new OnStartHelpActivityListener(this, "editPage.html"));		
 	}
 
 	/**
@@ -435,10 +438,9 @@ public class PageEditActivity extends ActivityExtended {
 	 * @param textSize
 	 *            is the size of the text.
 	 */
-	void setPageTitle(float textSize) {
+	void setPageTitle() {
 		mPageTitleEditTextView.setSingleLine(true);
-		mPageTitleEditTextView.setText(mPage.getTitle());
-		mPageTitleEditTextView.setTextSize(textSize);
+		mPageTitleEditTextView.setText(mPage.getTitle());		
 	}
 
 	/**
@@ -449,10 +451,9 @@ public class PageEditActivity extends ActivityExtended {
 	 * @param textSize
 	 *            is the size of the text.
 	 */
-	void setPageAuthor(float textSize) {
+	void setPageAuthor() {
 		mPageAuthorEditTextView.setSingleLine(true);
-		mPageAuthorEditTextView.setText(mPage.getAuthor());
-		mPageAuthorEditTextView.setTextSize(textSize);
+		mPageAuthorEditTextView.setText(mPage.getAuthor());		
 	}
 
 	/**
@@ -577,8 +578,7 @@ public class PageEditActivity extends ActivityExtended {
 			@Override
 			public void onClick(View v) {
 				if (FRAGMENT_INFLATED)
-					return;
-				save();
+					return;				
 				clearSelection();
 				m.setIsSelected(true);
 				FRAGMENT_INFLATED = true;
@@ -645,7 +645,7 @@ public class PageEditActivity extends ActivityExtended {
 	@SuppressLint("NewApi")
 	@Override
 	public void onBackPressed() {
-		if (mDataSingleton.getOldPage() == null) {
+		if (mDataSingleton.peekPage() == null) {
 			super.onBackPressed();
 		} else {
 			mDataSingleton.revertPage();
@@ -848,8 +848,7 @@ public class PageEditActivity extends ActivityExtended {
 	 * <code>exit</code> provides a way of exiting to StartActivity.
 	 */
 	@Override
-	protected void exit() {
-		save();
+	protected void exit() {		
 		startActivity(new Intent(this, StartActivity.class));
 	}
 
@@ -859,9 +858,7 @@ public class PageEditActivity extends ActivityExtended {
 	 * Multimedia object.
 	 */
 	private void showMultimediaOptionsFragment(MultimediaAbstract m) {
-		MultimediaOptionsFragment mof = MultimediaOptionsFragment
-				.MultimediaOptionsFragmentFactory(mPage, m);
-
+		MultimediaOptionsFragment mof= new MultimediaOptionsFragment(mPage, m);
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
