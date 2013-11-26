@@ -6,6 +6,8 @@
  * 
  * Author: Kelsey Gaboriau wrote the set up for this class then each respective programmer
  * filled in necessary components in the buttons they are using.
+ * 
+ * The background for this application was found at http://alphacentauri900.blogspot.ca/2012/09/compass-background.html
  */
 package edu.ualberta.adventstory;
 

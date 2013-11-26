@@ -29,7 +29,9 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import edu.ualberta.data.DataManager;
 import edu.ualberta.data.DbManager;
+import edu.ualberta.data.WebClient;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
@@ -39,15 +41,16 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	
 	private EditText searchEntry;
 	private ListView listResults;
-	private Spinner searchBy;
+	private Spinner searchBy, searchOnline;
 	
 	// Database
+	private DataManager searchStruct;
 	private DbManager database;
+	private WebClient webClient;
 	
 	//private Spinner searchOnline;
 	private Bundle bundle;
-	private boolean isStory;
-	private boolean isTitle;
+	private boolean isStory, isTitle;
 	String parentActivity;
 	private boolean addPage;	// Set to true if adding page in PageEdit.
 	
@@ -56,8 +59,9 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	
 	// Create Adapter for results list
 	private ArrayAdapter<String> adapter2;
-	// Create an ArrayAdapter using the string array and a default spinner layout
+	// Create ArrayAdapter using the string array and a default spinner layout
 	private ArrayAdapter<CharSequence> adapter;
+	private ArrayAdapter<CharSequence> adapter3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,8 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		results = new ArrayList<String>();
 		displayResults = new ArrayList<String>();
 		database = DataSingleton.database;
+		webClient = new WebClient();
+		searchStruct = database;
 
 		addPage = false;		
 		addPage = bundle.getBoolean("ADD_PAGE");
@@ -92,7 +98,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		}
 		
 		// Initialize view variables
-		//searchOnline = (Spinner) findViewById(R.id.spinnerOnline);
+		searchOnline = (Spinner) findViewById(R.id.spinnerOnline);
 		searchBy = (Spinner) findViewById(R.id.spinnerSearchBy);
 		listResults = (ListView) findViewById(R.id.listResults);
 		searchEntry = (EditText) findViewById(R.id.searchEntry);
@@ -100,10 +106,12 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		// Initialize adapters
 		adapter = ArrayAdapter.createFromResource(this, R.array.searchBy_dropdown, android.R.layout.simple_spinner_item);
 		adapter2 = new ArrayAdapter<String>(this, R.layout.list_results, displayResults);
+		adapter3 = ArrayAdapter.createFromResource(this, R.array.online_toggle, android.R.layout.simple_spinner_item);
 		
 		// Set up adapters
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		searchBy.setAdapter(adapter);
+		searchOnline.setAdapter(adapter3);
 		listResults.setAdapter(adapter2);
 		
 		// Populate with all results
@@ -118,6 +126,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		listResults.setOnItemClickListener(this);
 		
 		searchBy.setOnItemSelectedListener(this);
+		searchOnline.setOnItemSelectedListener(this);
 			
 		// Checks to see if the user has input text into the search box
 		searchText();	
@@ -172,19 +181,19 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		// Check if the user is searching pages or stories
 		if (isStory && isTitle){
 			// Populate results with appropriate stories based on title
-			results = database.get_stories_by_title(searchEntry.getText().toString());
+			results = searchStruct.get_stories_by_title(searchEntry.getText().toString());
 			
 		} else if (isStory && !isTitle){
 			// Populate results with appropriate stories based on author
-			results = database.get_stories_by_author(searchEntry.getText().toString());
+			results = searchStruct.get_stories_by_author(searchEntry.getText().toString());
 			
 		} else if (!isStory && isTitle){
 			// Populate results with appropriate pages based on title
-			results = database.get_pages_by_title(searchEntry.getText().toString());
+			results = searchStruct.get_pages_by_title(searchEntry.getText().toString());
 			
 		} else {
 			// Populate results with appropriate pages based on author
-			results = database.get_pages_by_author(searchEntry.getText().toString());
+			results = searchStruct.get_pages_by_author(searchEntry.getText().toString());
 		}
 		
 		updateList(results);
@@ -210,14 +219,16 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 				searchResults();
 			}
 		}
-		// To be implemented with online functionality
-		/*if(searchOnline.getId() == R.id.spinnerOnline){
+
+		if(searchOnline.getId() == R.id.spinnerOnline){
 			if (selected == 0){
-				
+				searchStruct = database;
+				searchResults();
 			} else if (selected == 1){
-				
+				searchStruct = webClient;
+				searchResults();
 			}
-		}*/
+		}
 		
 	}
 

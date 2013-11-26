@@ -2,13 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal" 
+    android:background="@drawable/background"
+    tools:context=".MainActivity" >
 
         <Button
             android:id="@+id/publish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignLeft="@+id/randomStory"
+            android:layout_alignRight="@+id/randomStory"
             android:layout_below="@+id/newPage"
             android:text="@string/publish" />
 
@@ -16,7 +19,8 @@
             android:id="@+id/findStory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignLeft="@+id/randomStory"
+            android:layout_alignRight="@+id/randomStory"
             android:layout_below="@+id/publish"
             android:text="@string/findStory" />
 
@@ -24,7 +28,8 @@
             android:id="@+id/findPage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignLeft="@+id/randomStory"
+            android:layout_alignRight="@+id/randomStory"
             android:layout_below="@+id/findStory"
             android:text="@string/findPage" />
 
@@ -32,7 +37,8 @@
             android:id="@+id/newPage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignLeft="@+id/randomStory"
+            android:layout_alignRight="@+id/randomStory"
             android:layout_below="@+id/newStory"
             android:text="@string/newPage" />
 
@@ -40,18 +46,18 @@
             android:id="@+id/newStory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/randomStory"
+            android:layout_alignRight="@+id/randomStory"
             android:layout_marginTop="15dp"
             android:text="@string/newStory" />
 
         <Button
             android:id="@+id/randomStory"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/findPage"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="17dp"
-            android:text="@string/randomStory" />
+            android:text="@string/randomStory"
+            android:background="@drawable/custom_button" />
 
     </RelativeLayout>

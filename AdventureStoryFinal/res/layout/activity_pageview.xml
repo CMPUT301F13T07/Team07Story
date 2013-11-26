@@ -2,7 +2,8 @@
     android:id="@+id/pageEditMasterLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@drawable/background" >
 
     <ScrollView
         android:id="@+id/scrollView"
