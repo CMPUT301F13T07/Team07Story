@@ -218,14 +218,19 @@ public class WebClient implements DataManager{
 		else {
 			query = String.format(MASTER_QUERY, Constant.STORY_TITLE, search_title);
 		}
-		System.out.println("query: " + query);
 		JestResult result = execute_query(query, Constant.TABLE_STORY);
 		return result_to_story(result);
 	}
 
 	@Override
 	public ArrayList<Story> get_stories_by_author(String search_author) {
-		String query = String.format(MASTER_QUERY, Constant.STORY_AUTHOR, search_author);
+		String query;
+		if (search_author.isEmpty()) {
+			query = String.format(EMPTY_QUERY, Constant.TABLE_STORY);
+		}
+		else {
+			query = String.format(MASTER_QUERY, Constant.STORY_AUTHOR, search_author);
+		}
 		JestResult result = execute_query(query, Constant.TABLE_STORY);
 		return result_to_story(result);
 	}
@@ -239,14 +244,26 @@ public class WebClient implements DataManager{
 
 	@Override
 	public ArrayList<Page> get_pages_by_title(String search_title) {
-		String query = String.format(MASTER_QUERY, Constant.PAGE_TITLE, search_title);
+		String query;
+		if (search_title.isEmpty()) {
+			query = String.format(EMPTY_QUERY, Constant.TABLE_PAGE);
+		}
+		else {
+			query = String.format(MASTER_QUERY, Constant.PAGE_TITLE, search_title);
+		}
 		JestResult result = execute_query(query, Constant.TABLE_PAGE);
 		return result_to_page(result);
 	}
 
 	@Override
 	public ArrayList<Page> get_pages_by_author(String search_author) {
-		String query = String.format(MASTER_QUERY, Constant.PAGE_AUTHOR, search_author);
+		String query;
+		if (search_author.isEmpty()) {
+			query = String.format(EMPTY_QUERY, Constant.TABLE_PAGE);
+		}
+		else {
+			query = String.format(MASTER_QUERY, Constant.PAGE_AUTHOR, search_author);
+		}
 		JestResult result = execute_query(query, Constant.TABLE_PAGE);
 		return result_to_page(result);
 	}
