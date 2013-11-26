@@ -27,6 +27,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import edu.ualberta.data.DataManager;
@@ -58,9 +59,8 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	private ArrayList<String> displayResults;
 	
 	// Create Adapter for results list
-	private ArrayAdapter<String> adapter2;
-	// Create ArrayAdapter using the string array and a default spinner layout
 	private ArrayAdapter<CharSequence> adapter;
+	private ArrayAdapter<String> adapter2;
 	private ArrayAdapter<CharSequence> adapter3;
 
 	@Override
@@ -105,9 +105,13 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		
 		// Initialize adapters
 		adapter = ArrayAdapter.createFromResource(this, R.array.searchBy_dropdown, android.R.layout.simple_spinner_item);
-		adapter2 = new ArrayAdapter<String>(this, R.layout.list_results, displayResults);
+		if (isStory){
+			adapter2 = new ArrayAdapter<String>(this, R.layout.rowstorylayout, R.id.label, displayResults);
+		} else {
+			adapter2 = new ArrayAdapter<String>(this, R.layout.rowpagelayout, R.id.label, displayResults);
+		}
 		adapter3 = ArrayAdapter.createFromResource(this, R.array.online_toggle, android.R.layout.simple_spinner_item);
-		
+
 		// Set up adapters
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		searchBy.setAdapter(adapter);
