@@ -60,7 +60,8 @@ public class TestWebClient extends AndroidTestCase {
 		assertTrue(results.size() == 0);
 		
 		results = webclient.get_stories_by_title("");
-		assertEquals(results.size(), 5);
+		assertEquals(results.size(), 10);
+		assertEquals(results.get(0).getAuthor(), "test author");
 	}
 	
 	public void testget_stories_by_id() {

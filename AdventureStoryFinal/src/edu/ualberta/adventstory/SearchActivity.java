@@ -16,6 +16,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -67,6 +68,10 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_story_search);
+		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); 
+		StrictMode.setThreadPolicy(policy);
+		
 		if(isStory){
 			setTitle(R.string.findStory);
 		} else {
