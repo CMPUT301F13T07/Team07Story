@@ -2,51 +2,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@drawable/background" >
+    android:background="@drawable/background"
+    android:orientation="vertical" >
 
-    
-    <TextView
-        android:id="@+id/labelOnline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/labelOnline" />
-
-    <Spinner
-        android:id="@+id/spinnerOnline"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/online_toggle" />
+        android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/labelSearchBy"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/labelOnline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/labelOnline" />
+
+        <Spinner
+            android:id="@+id/spinnerOnline"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/online_toggle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinnerOnline"
-        android:text="@string/labelSearchBy" />
+        android:orientation="horizontal" >
 
-    <Spinner
-        android:id="@+id/spinnerSearchBy"
-        android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/labelSearchBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinnerOnline"
+            android:text="@string/labelSearchBy" />
+
+        <Spinner
+            android:id="@+id/spinnerSearchBy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/searchBy_dropdown" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:entries="@array/searchBy_dropdown" />
+        android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/labelSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/spinnerSearchBy"
-        android:text="@string/labelSearch" />
+        <TextView
+            android:id="@+id/labelSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinnerSearchBy"
+            android:text="@string/labelSearch" />
 
-    <EditText
-        android:id="@+id/searchEntry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:text="" >
+        <EditText
+            android:id="@+id/searchEntry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:text="" >
 
-        <requestFocus />
-    </EditText>
+            <requestFocus />
+        </EditText>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/labelResults"
