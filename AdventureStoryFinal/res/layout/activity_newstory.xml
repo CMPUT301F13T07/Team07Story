@@ -51,7 +51,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:text="@string/buttonCancel"
-        android:onClick="cancel" />
+        android:onClick="cancel"
+        android:background="@drawable/custom_button" />
 
     <Button
         android:id="@+id/buttonSubmit"
@@ -60,7 +61,8 @@
         android:layout_above="@+id/buttonCancel"
         android:layout_alignParentLeft="true"
         android:text="@string/buttonSubmit"
-        android:onClick="submit" />
+        android:onClick="submit"
+        android:background="@drawable/custom_button" />
 
     <EditText
         android:id="@+id/activity_newstory_editauthor"
