@@ -33,6 +33,7 @@ public class WebClient implements DataManager{
             							 "    }\n" +
             							 "  }\n" +
             							 "}";
+    private static String EMPTY_QUERY = "{\"query\":{\"term\":{\"_type\":\"%s\"}}}";
     
     public WebClient() {
 		ClientConfig clientConfig = new ClientConfig.Builder(CON_URL).multiThreaded(false).build();
@@ -121,6 +122,7 @@ public class WebClient implements DataManager{
 		ArrayList<Story> all_stories = new ArrayList<Story>();
 		
 		List<ES_Story> articles = result.getSourceAsObjectList(ES_Story.class);
+		System.out.println("matching number: " + articles.size());
 		for (int i = 0; i < articles.size(); i++) {
 			ES_Story es_story = articles.get(i);
 			
@@ -209,7 +211,14 @@ public class WebClient implements DataManager{
 	
 	@Override
 	public ArrayList<Story> get_stories_by_title(String search_title) {
-		String query = String.format(MASTER_QUERY, Constant.STORY_TITLE, search_title);
+		String query;
+		if (search_title.isEmpty()){
+			query = String.format(EMPTY_QUERY, Constant.TABLE_STORY);
+		}
+		else {
+			query = String.format(MASTER_QUERY, Constant.STORY_TITLE, search_title);
+		}
+		System.out.println("query: " + query);
 		JestResult result = execute_query(query, Constant.TABLE_STORY);
 		return result_to_story(result);
 	}

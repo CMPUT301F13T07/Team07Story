@@ -58,6 +58,9 @@ public class TestWebClient extends AndroidTestCase {
 		
 		results = webclient.get_stories_by_title("nothing");
 		assertTrue(results.size() == 0);
+		
+		results = webclient.get_stories_by_title("");
+		assertEquals(results.size(), 5);
 	}
 	
 	public void testget_stories_by_id() {
