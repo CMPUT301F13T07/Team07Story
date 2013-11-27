@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@drawable/background" >
+    android:background="@drawable/background2" >
 
     <TextView
         android:id="@+id/activity_newstory_texttitle"
@@ -52,6 +52,7 @@
         android:layout_alignParentLeft="true"
         android:text="@string/buttonCancel"
         android:onClick="cancel"
+        android:layout_marginTop="10dp"
         android:background="@drawable/custom_button" />
 
     <Button
