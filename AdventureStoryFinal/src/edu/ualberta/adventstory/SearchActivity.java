@@ -298,6 +298,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		} else {
 			page = (Page) results.get(position);
 			((DataSingleton)getApplicationContext()).setCurrentPage(page);
+			((DataSingleton)getApplicationContext()).setCurrentStory(null);
 			title = page.getTitle();
 			text = page.getText();
 			

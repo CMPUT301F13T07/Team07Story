@@ -24,8 +24,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import edu.ualberta.adventstory.R;
-import edu.ualberta.controller.CommandAbstract;
-import edu.ualberta.controller.MultimediaControllerManager;
 import edu.ualberta.controller.*;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
@@ -68,10 +66,11 @@ public class PageViewActivity extends ActivityExtended {
 		Button buttonRandomNextPage = (Button) findViewById(R.id.randomChoiceButton);
 		mPageTitleTextView = (TextView) findViewById(R.id.pageTitle);
 
-		if (mViewPageOnly == false) {
-			setStoryTitle(mPage.getTitle());
-		} else {
-			setStoryTitle("Editing Page");
+		if (mStory != null) {
+			setStoryTitle(mStory.getTitle());
+		}
+		else {
+			setStoryTitle("Page View");
 		}
 
 		if (mPage.getPages().size() == 0) {
@@ -112,7 +111,8 @@ public class PageViewActivity extends ActivityExtended {
 					   Toast.LENGTH_LONG).show();
             return true;
         case R.id.action_home:
-        	finish();
+        	Intent intent = new Intent(this, StartActivity.class);
+    		startActivity(intent);
 		}
 		return MenuChoice(item);
 	}
