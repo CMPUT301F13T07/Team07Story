@@ -189,8 +189,7 @@ public class PageViewActivity extends ActivityExtended {
 	}
 
 	void setPageTitle(String pageTitle) {
-		pageTitle = "Page: " + pageTitle;
-		mPageTitleTextView.setSingleLine(true);
+		pageTitle = "Page: " + pageTitle;		
 		mPageTitleTextView.setText(pageTitle);
 	}
 
