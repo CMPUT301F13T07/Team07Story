@@ -147,45 +147,7 @@ public class AddMultimediaActivity extends Activity {
 	 * @author: Lyle Rolleman
 	 */
 	private void addMultimedia() {
-		File folderF = new File(folder);
-		File movfolder = new File(mfolder);
-		File sofolder = new File(sfolder);
-        if (!folderF.exists()) {
-            folderF.mkdir();
-        }
-        if (!movfolder.exists()) {
-            movfolder.mkdir();
-        }
-        if (!sofolder.exists()) {
-            sofolder.mkdir();
-        }
-        File[] files = folderF.listFiles();
-        File[] mfiles = movfolder.listFiles();
-        File[] sfiles = sofolder.listFiles();
-		if (files != null) {
-			for (int i=0; i<files.length; i++) {
-				if (!medialist.contains(files[i].getName())) {
-					medialist.add(files[i].getName());
-					picids.add(medialist.size() - 1);
-				}
-			}
-		}
-		if (mfiles != null) {
-			for (int i=0; i<mfiles.length; i++) {
-				if (!medialist.contains(mfiles[i].getName())) {
-					medialist.add(mfiles[i].getName());
-					movids.add(medialist.size() - 1);
-				}
-			}
-		}
-		if (sfiles != null) {
-			for (int i=0; i<sfiles.length; i++) {
-				if (!medialist.contains(sfiles[i].getName())) {
-					medialist.add(sfiles[i].getName());
-					sids.add(medialist.size() - 1);
-				}
-			}
-		}
+		addFilesToList();
 		
 		Button takephoto = (Button) findViewById(R.id.takephoto);
 		Button finish = (Button) findViewById(R.id.finish);
@@ -313,45 +275,7 @@ public class AddMultimediaActivity extends Activity {
 	 * @author: Lyle Rolleman
 	 */
 	private void retakeMultimedia() {
-		File folderF = new File(folder);
-		File movfolder = new File(mfolder);
-		File sofolder = new File(sfolder);
-        if (!folderF.exists()) {
-            folderF.mkdir();
-        }
-        if (!movfolder.exists()) {
-            movfolder.mkdir();
-        }
-        if (!sofolder.exists()) {
-            sofolder.mkdir();
-        }
-        File[] files = folderF.listFiles();
-        File[] mfiles = movfolder.listFiles();
-        File[] sfiles = sofolder.listFiles();
-		if (files != null) {
-			for (int i=0; i<files.length; i++) {
-				if (!medialist.contains(files[i].getName())) {
-					medialist.add(files[i].getName());
-					picids.add(medialist.size() - 1);
-				}
-			}
-		}
-		if (mfiles != null) {
-			for (int i=0; i<mfiles.length; i++) {
-				if (!medialist.contains(mfiles[i].getName())) {
-					medialist.add(mfiles[i].getName());
-					movids.add(medialist.size() - 1);
-				}
-			}
-		}
-		if (sfiles != null) {
-			for (int i=0; i<sfiles.length; i++) {
-				if (!medialist.contains(sfiles[i].getName())) {
-					medialist.add(sfiles[i].getName());
-					sids.add(medialist.size() - 1);
-				}
-			}
-		}
+		addFilesToList();
 		
 		Button retakePhoto = (Button) findViewById(R.id.retakephoto);
 		Button refinish = (Button) findViewById(R.id.refinish);
@@ -420,18 +344,56 @@ public class AddMultimediaActivity extends Activity {
             	iv.setImageDrawable(Drawable.createFromPath(imageuri.getPath()));
             	File Ffolder = new File(folder);
         		File[] files = Ffolder.listFiles();
-        		if (files != null) {
-        			for (int i=0; i<files.length; i++) {
-        				if (!medialist.contains(files[i].getName())) {
-        					medialist.add(files[i].getName());
-        					picids.add(medialist.size() - 1);
-        				}
-        			}
-        		}
+        		addFilesToList();
         			
         		adapter.notifyDataSetChanged();
         		retakeMultimedia();
             }
         }
     }
+	
+	/**
+	 * Populates list of files to display. 
+	 */
+	private void addFilesToList() {
+		File folderF = new File(folder);
+		File movfolder = new File(mfolder);
+		File sofolder = new File(sfolder);
+        if (!folderF.exists()) {
+            folderF.mkdir();
+        }
+        if (!movfolder.exists()) {
+            movfolder.mkdir();
+        }
+        if (!sofolder.exists()) {
+            sofolder.mkdir();
+        }
+        File[] files = folderF.listFiles();
+        File[] mfiles = movfolder.listFiles();
+        File[] sfiles = sofolder.listFiles();
+		if (files != null) {
+			for (int i=0; i<files.length; i++) {
+				if (!medialist.contains(files[i].getName())) {
+					medialist.add(files[i].getName());
+					picids.add(medialist.size() - 1);
+				}
+			}
+		}
+		if (mfiles != null) {
+			for (int i=0; i<mfiles.length; i++) {
+				if (!medialist.contains(mfiles[i].getName())) {
+					medialist.add(mfiles[i].getName());
+					movids.add(medialist.size() - 1);
+				}
+			}
+		}
+		if (sfiles != null) {
+			for (int i=0; i<sfiles.length; i++) {
+				if (!medialist.contains(sfiles[i].getName())) {
+					medialist.add(sfiles[i].getName());
+					sids.add(medialist.size() - 1);
+				}
+			}
+		}
+	}
 }
