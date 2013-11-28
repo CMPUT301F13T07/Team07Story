@@ -237,13 +237,17 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		}
 
 		if(searchOnline.getId() == R.id.spinnerOnline){
-			if (selected == 0){
-				searchStruct = database;
-				searchResults();
-			} else if (selected == 1){
-				searchStruct = webClient;
-				searchResults();
-			}
+				if (selected == 0){
+					searchStruct = database;
+					searchResults();
+				} else if (selected == 1){
+					if(!webClient.isConnected(this)){
+						webClient.buildDialog(this).show();
+					} else {  
+					searchStruct = webClient;
+					searchResults();
+					}
+				}
 		}
 		
 	}
