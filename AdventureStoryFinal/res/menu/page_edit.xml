@@ -30,9 +30,4 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_home"/>	
-	<item
-        android:id="@+id/action_cancel"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_cancel"/>
 </menu>
