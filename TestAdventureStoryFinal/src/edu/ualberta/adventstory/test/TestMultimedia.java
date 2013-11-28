@@ -123,7 +123,7 @@ public class TestMultimedia extends AndroidTestCase {
 		}
 		return true;
 	}
-	
+	/*
 	public void testloadBitmap(){
 		Bitmap bmNullFromLoad = mPictureNullDirectory.loadPhoto(getContext());
 		Bitmap bmNullFromResource = BitmapFactory.decodeResource(
@@ -146,6 +146,6 @@ public class TestMultimedia extends AndroidTestCase {
 		bmFromResource = BitmapFactory.decodeResource(
 				getContext().getResources(), R.drawable.ic_video);
 		assertTrue( compareBitmap(bmVideo, bmFromResource));
-	}
+	}*/
 	
 }

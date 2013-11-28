@@ -33,6 +33,7 @@ public class LoginActivity extends Activity {
 	 */
 	private void login() {
 		setContentView(R.layout.login);
+		setTitle(R.string.app_name);
 		lstat = (TextView) findViewById(R.id.lstatus);
 		final EditText author = (EditText) findViewById(R.id.authorinput);
 		

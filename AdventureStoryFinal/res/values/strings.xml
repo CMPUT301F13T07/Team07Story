@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
@@ -57,3 +58,65 @@
     <string name="title_activity_help">HelpActivity</string>
 
 </resources>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Create Your Own Adventure!</string>
+    <string name="action_help">Help</string>
+    <string name="action_home">Home</string>
+    <string name="action_save">Save</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_redo">Redo</string>
+    <string name="action_cancel">Cancel</string>    
+    <string name="action_cache">Cache</string>    
+    <string name="hello_world">Hello world!</string>
+    <string name="newStory">Make a New Story</string>
+    <string name="newPage">Make a New Page</string>
+    <string name="findPage">Find a Page</string>
+    <string name="findStory">Find a Story</string>
+    <string name="publish">Publish a Story</string>
+    <string name="newstory">New Story</string>
+    <string name="createstory">Let\'s create your story!</string>
+    <string name="createpage">Let\'s create your page!</string>
+    <string name="addmedia">Adding media</string>
+    <string name="title">Title: </string>
+    <string name="titlehint">Story title</string>
+    <string name="author">Author: </string>
+    <string name="authorhint">Author\'s name</string>
+    <string name="firstpage">First Page</string>
+    <string name="buttonSubmit">Submit</string>
+    <string name="buttonCancel">Cancel</string>
+    <string name="labelOnline">Online: </string>
+    <string name="labelSearchBy">Search By: </string>
+    <string name="labelSearch">Search: </string>
+    <string name="labelResults">Results: </string>
+	<string name="searchpreview">Page Preview</string>
+	<string name="buttonSelect">Select</string>
+	<string name="buttonReturn">Return</string>
+	<string name="randomStory">Read Random Story</string>
+    <string name="listofpages">Select a page to begin your adventure: </string>
+    <string-array name="first_page_array">
+        <item>Existing Page</item>
+        <item>New Page</item>
+    </string-array>
+    <string-array name="online_toggle">
+        <item>No</item>
+        <item>Yes</item>
+    </string-array>
+    <string-array name="searchBy_dropdown">
+        <item>Title</item>
+        <item>Author</item>
+    </string-array>
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_storysearch">StorySearchActivity</string>
+    <string name="title_activity_createnewstory">CreateNewStoryActivity</string>
+    <string name="title_activity_test">TEST</string>
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_create_new">CreateNewActivity</string>
+    <string name="title_activity_page_view">PageViewActivity</string>
+
+</resources>
+>>>>>>> master

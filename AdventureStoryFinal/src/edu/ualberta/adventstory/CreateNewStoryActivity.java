@@ -1,13 +1,14 @@
 package edu.ualberta.adventstory;
 
-import java.io.Serializable;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 import edu.ualberta.data.DbManager;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
@@ -26,6 +27,31 @@ public class CreateNewStoryActivity extends Activity {
 		mTitle = (EditText) findViewById(R.id.activity_newstory_edittitle);
 		mAuthor = (EditText) findViewById(R.id.activity_newstory_editauthor);
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_help:
+            	Toast.makeText(getApplicationContext(), 
+            				"Enter a story title and author. You may choose an "
+            				+ "existing page as your first page, or create a new "
+            				+ "page.",
+            				Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.action_home:
+            	finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 	
 	/**
 	 * Returns user to startActivity

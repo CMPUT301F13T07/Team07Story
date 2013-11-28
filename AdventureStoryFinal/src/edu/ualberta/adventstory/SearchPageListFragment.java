@@ -47,9 +47,9 @@ public class SearchPageListFragment extends ListFragment {
 	public void onStart(){
 		super.onStart();
 		pageList = (ArrayList<Page>) getArguments().getSerializable("pageList");
-		ListAdapter myListAdapter = new ArrayAdapter<Page>(getActivity(), 
-				R.layout.fragment_searchstorypagelist, R.id.fragmentpagetext , pageList);
-		setListAdapter(myListAdapter);
+	    ListAdapter adapter = new ArrayAdapter<Page>(getActivity(),
+	            R.layout.rowpagelayout, R.id.label, pageList);
+	    setListAdapter(adapter);
 		
 	}
 	
