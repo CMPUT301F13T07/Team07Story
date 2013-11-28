@@ -267,7 +267,7 @@ public class PageEditActivity extends ActivityExtended {
 			@Override
 			public void onSave() {
 				save();
-				finish();
+				goToViewActivity();
 			}
 		});
 		mMapMenuToCommand.put(mnu4, saveResponder);
@@ -281,6 +281,14 @@ public class PageEditActivity extends ActivityExtended {
 		}));
 	}
 
+	/**
+	 * Returns user to the PageViewActivity
+	 */
+	public void goToViewActivity() {
+		Intent intent = new Intent(this, PageViewActivity.class);
+		startActivity(intent);
+	}
+	
 	/**
 	 * <code>addNextPageButtons</code> is used for adding listView elements for
 	 * next page.
