@@ -5,7 +5,6 @@ import java.util.Stack;
 import android.app.Activity;
 import android.app.Application;
 
-import edu.ualberta.controller.CommandCollection.CommandAbstract;
 import edu.ualberta.controller.CommandManager;
 import edu.ualberta.data.DbManager;
 import edu.ualberta.multimedia.MultimediaAbstract;

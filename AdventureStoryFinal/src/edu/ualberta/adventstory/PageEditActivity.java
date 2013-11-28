@@ -32,18 +32,16 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import edu.ualberta.controller.CommandCollection;
+import edu.ualberta.controller.CommandAbstract;
+import edu.ualberta.controller.GenericListener;
+import edu.ualberta.controller.OnExitListener;
 import edu.ualberta.controller.OnMoveMultimediaListener;
 import edu.ualberta.controller.OnRedoListener;
-import edu.ualberta.controller.CommandCollection.OnRedo;
+import edu.ualberta.controller.OnSaveListener;
 import edu.ualberta.controller.OnUndoListener;
 import edu.ualberta.controller.CommandManager;
+import edu.ualberta.controller.CallbackIntefaces.*;
 import edu.ualberta.controller.OnAddMultimediaListener;
-import edu.ualberta.controller.CommandCollection.CommandAbstract;
-import edu.ualberta.controller.CommandCollection.OnExitListener;
-import edu.ualberta.controller.CommandCollection.OnSave;
-import edu.ualberta.controller.CommandCollection.OnUndo;
-import edu.ualberta.controller.CommandCollection.OnSaveListener;
 import edu.ualberta.controller.MultimediaControllerManager;
 import edu.ualberta.data.WebClient;
 import edu.ualberta.multimedia.MultimediaAbstract;
@@ -276,13 +274,21 @@ public class PageEditActivity extends ActivityExtended {
 
 		MenuItem mnu5 = menu.findItem(R.id.action_cancel);
 		OnExitListener cancelResponder = new OnExitListener(
-				new CommandCollection.OnExit() {
+				new OnExit() {
 					@Override
 					public void onExit() {
 						exit();
 					}
 				});
 		mMapMenuToCommand.put(mnu5, cancelResponder);
+		
+		MenuItem mnu6 = menu.findItem(R.id.action_cache);
+		mMapMenuToCommand.put(mnu6, new GenericListener(new OnCallbackGeneric(){
+			@Override
+			public void callback() {
+				mWebClient.insert_page(mPage);
+			}			
+		}));
 	}
 
 	/**
@@ -909,6 +915,11 @@ public class PageEditActivity extends ActivityExtended {
 			mPage = mDataSingleton.getCurrentPage();
 			mStory = mDataSingleton.getCurrentStory();
 
+			if(data == null) {
+				mCurrentCommand = null;
+				return;
+			}
+			
 			Bundle bundle = data.getExtras();
 			int newId = (int) bundle.getLong("NewMultimediaId");
 			int selectedId = bundle.getInt("selectedMultimediaId");
@@ -944,11 +955,10 @@ public class PageEditActivity extends ActivityExtended {
 				return;
 			}
 
-			// The swapping process.
+			/// The swapping process.
 			selectedMultimedia.setFileDir(toBeSwapMultimedia.getFileDir());
 			mDataSingleton.database.delete_mult(toBeSwapMultimedia, mPage);
-			mDataSingleton.database.update_multimedia(selectedMultimedia,
-					mPage.getID());
+			mDataSingleton.database.update_multimedia(selectedMultimedia, mPage.getID());
 			localUpdate();
 			return;
 		} else {

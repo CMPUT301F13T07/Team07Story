@@ -2,10 +2,7 @@ package edu.ualberta.controller;
 
 import edu.ualberta.adventstory.ActivityExtended;
 import edu.ualberta.adventstory.DataSingleton;
-import edu.ualberta.controller.CommandCollection.CommandAbstract;
-import edu.ualberta.controller.CommandCollection.OnAddMultimedia;
-import edu.ualberta.controller.CommandCollection.OnDelete;
-import edu.ualberta.controller.CommandCollection.OnUndo;
+import edu.ualberta.controller.CallbackIntefaces.*;
 import edu.ualberta.data.DbManager;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;

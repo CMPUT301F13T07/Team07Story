@@ -2,10 +2,9 @@ package edu.ualberta.controller;
 
 import java.util.Stack;
 
-import edu.ualberta.controller.CommandCollection.CommandAbstract;
+import edu.ualberta.controller.CallbackIntefaces.OnCallback;
+import edu.ualberta.controller.CallbackIntefaces.OnUndo;
 import edu.ualberta.controller.OnUndoListener;
-import edu.ualberta.controller.CommandCollection.OnCallback;
-import edu.ualberta.controller.CommandCollection.OnUndo;
 
 /**
  * <code>CommandManager</code> manages Commands in

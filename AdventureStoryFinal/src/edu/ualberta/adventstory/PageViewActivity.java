@@ -24,11 +24,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import edu.ualberta.adventstory.R;
-import edu.ualberta.controller.CommandCollection;
-import edu.ualberta.controller.CommandCollection.OnStartPageEditListener;
+import edu.ualberta.controller.CommandAbstract;
 import edu.ualberta.controller.MultimediaControllerManager;
-import edu.ualberta.controller.CommandCollection.OnCallback;
-import edu.ualberta.controller.CommandCollection.CommandAbstract;
+import edu.ualberta.controller.*;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
@@ -105,8 +103,7 @@ public class PageViewActivity extends ActivityExtended {
 		getMenuInflater().inflate(R.menu.page_view, menu);
 		CreateMenu(menu);
 		return true;
-	}
-
+	}	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -136,19 +133,9 @@ public class PageViewActivity extends ActivityExtended {
 			MenuItem mnu1 = menu.add(0, 0, 0, "Edit Page");
 			{
 				mnu1.setIcon(R.drawable.ic_edit_page);
-				mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM); // This
-																		// is
-																		// subject
-																		// to
-																		// change.
+				mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM); 
 			}
-			OnStartPageEditListener startEditPageCommand = 
-					new OnStartPageEditListener(new CommandCollection.OnStartPageEdit(){
-						@Override
-						public void onStartPageEdit() {
-							startPageEditActivity();							
-						}
-					});
+			OnStartPageEditListener startEditPageCommand = new OnStartPageEditListener(this);
 			mMapMenuToCommand.put(mnu1, startEditPageCommand);
 		}
 	}
@@ -341,18 +328,7 @@ public class PageViewActivity extends ActivityExtended {
 		}
 	}
 
-	/**
-	 * starts PageEditActivity().
-	 */
-	private void startPageEditActivity() {
-		if (mPage.getReadOnly() == false) {
-			startActivityForResult(new Intent(this, PageEditActivity.class),
-					START_EDITPAGE_RESULTCODE);
-		} else {
-			Toast.makeText(this, "Page is Read Only. Access Deneid.",
-					Toast.LENGTH_SHORT).show();
-		}
-	}
+
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
