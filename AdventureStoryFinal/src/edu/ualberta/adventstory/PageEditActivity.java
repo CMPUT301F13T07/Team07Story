@@ -271,16 +271,6 @@ public class PageEditActivity extends ActivityExtended {
 			}
 		});
 		mMapMenuToCommand.put(mnu4, saveResponder);
-
-		MenuItem mnu5 = menu.findItem(R.id.action_cancel);
-		OnExitListener cancelResponder = new OnExitListener(
-				new OnExit() {
-					@Override
-					public void onExit() {
-						exit();
-					}
-				});
-		mMapMenuToCommand.put(mnu5, cancelResponder);
 		
 		MenuItem mnu6 = menu.findItem(R.id.action_cache);
 		mMapMenuToCommand.put(mnu6, new GenericListener(new OnCallbackGeneric(){
