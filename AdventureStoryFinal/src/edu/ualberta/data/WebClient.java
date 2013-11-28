@@ -10,6 +10,12 @@ import io.searchbox.core.Search;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.multimedia.Picture;
 import edu.ualberta.multimedia.SoundClip;
@@ -333,5 +339,49 @@ public class WebClient implements DataManager{
 	public int number_stories() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	/**
+	 * Checks whether the user is connected to the Internet or not.
+	 * http://stackoverflow.com/questions/18258582/how-to-check-internet-connection-and-spawn-a-dialog-if-not-connected
+	 * @param context
+	 * @return
+	 */
+	public boolean isConnected(Context context) {
+
+	    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netinfo = cm.getActiveNetworkInfo();
+
+	    if (netinfo != null && netinfo.isConnectedOrConnecting()) {
+	        android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+	        android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+	        if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) 
+	        	return true;
+	        else 
+	        	return false;
+	    } else
+	        return false;
+	}
+	/**
+	 * Displays a dialog if there is no Internet connection
+	 * @param c
+	 * @return
+	 */
+	public AlertDialog.Builder buildDialog(Context c) {
+
+	    AlertDialog.Builder builder = new AlertDialog.Builder(c);
+	    builder.setTitle("No Internet connection.");
+	    builder.setMessage("You have no internet connection");
+
+	    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+	        @Override
+	        public void onClick(DialogInterface dialog, int which) {
+
+	            dialog.dismiss();
+	        }
+	    });
+
+	    return builder;
 	}
 }
