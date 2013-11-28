@@ -9,7 +9,6 @@ import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -70,13 +69,13 @@ public class PageEditActivity extends ActivityExtended {
 	private Story mStory;
 	private Page mPage;
 	private Button mButtonAddMultimedia; // Button for adding multimedias.
-		
+
 	private boolean FRAGMENT_INFLATED = false;
 
 	final public static int ADDPAGE_REQUESTCODE = 1;
 	final public static int GET_MULTIMEDIA_REQUESTCODE = 2;
 	final public static int SWAP_MULTIMEDIA_REQUESTCODE = 3;
-	
+
 	private WebClient mWebClient;
 
 	private CommandManager mCommandManager; // Manages Undo/Redo.
@@ -144,7 +143,7 @@ public class PageEditActivity extends ActivityExtended {
 				addMultimedia();
 
 				OnAddMultimediaListener addMultimediaResponder = new OnAddMultimediaListener(
-																				mPage, null, ae);
+						mPage, null, ae);
 				mCurrentCommand = addMultimediaResponder;
 			}
 		});
@@ -161,7 +160,7 @@ public class PageEditActivity extends ActivityExtended {
 
 		addNextPageButtons();
 		mCommandManager = CommandManager.getInstance();
-		
+
 		mWebClient = new WebClient();
 	}
 
@@ -211,14 +210,15 @@ public class PageEditActivity extends ActivityExtended {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-        case R.id.action_help:
-        	Toast.makeText(getApplicationContext(), "Press the disk button to save your changes.\n"
-        											+ "Read-Only makes the page non-editable by "
-        											+ "everyone but you.",
-					   Toast.LENGTH_LONG).show();
-            return true;
-        case R.id.action_home:
-        	finish();
+		case R.id.action_help:
+			Toast.makeText(
+					getApplicationContext(),
+					"Press the disk button to save your changes.\n"
+							+ "Read-Only makes the page non-editable by "
+							+ "everyone but you.", Toast.LENGTH_LONG).show();
+			return true;
+		case R.id.action_home:
+			finish();
 		}
 		CommandAbstract command = mMapMenuToCommand.get(item);
 		if (command != null) {
@@ -252,14 +252,14 @@ public class PageEditActivity extends ActivityExtended {
 		});
 		mMapMenuToCommand.put(mnu2, undoResonder);
 
-		MenuItem mnu3 = menu.findItem(R.id.action_redo);				
+		MenuItem mnu3 = menu.findItem(R.id.action_redo);
 		OnRedoListener redoResonder = new OnRedoListener(new OnRedo() {
 			@Override
 			public void redo() {
 				mCommandManager.redo();
 				localUpdate();
 			}
-		});		
+		});
 		mMapMenuToCommand.put(mnu3, redoResonder);
 
 		MenuItem mnu4 = menu.findItem(R.id.action_save);
@@ -271,14 +271,18 @@ public class PageEditActivity extends ActivityExtended {
 			}
 		});
 		mMapMenuToCommand.put(mnu4, saveResponder);
-		
+
 		MenuItem mnu6 = menu.findItem(R.id.action_cache);
-		mMapMenuToCommand.put(mnu6, new GenericListener(new OnCallbackGeneric(){
-			@Override
-			public void callback() {
-				mWebClient.insert_page(mPage);
-			}			
-		}));
+		mMapMenuToCommand.put(mnu6, new GenericListener(
+				new OnCallbackGeneric() {
+					@Override
+					public void callback() {
+						mWebClient.insert_page(mPage);
+						for (MultimediaAbstract m : mPage.getMultimedia()) {
+							mWebClient.insert_multimedia(m, mPage.getID());
+						}
+					}
+				}));
 	}
 
 	/**
@@ -530,9 +534,6 @@ public class PageEditActivity extends ActivityExtended {
 			lastIndex = index;
 		}
 
-		Toast.makeText(this, Integer.toString(textViewCounter),
-				Toast.LENGTH_SHORT).show();
-
 		// If there are non-displayed multimedia, place them all at the end.
 		if (multimediaCounter < multimediaList.size()) {
 			for (final MultimediaAbstract m : multimediaList) {
@@ -600,7 +601,7 @@ public class PageEditActivity extends ActivityExtended {
 				cursorIndexChange(et.getSelectionStart(), et);
 			}
 		});
-		
+
 		et.setText(text);
 		mPageTextLayout.addView(et);
 		mStoryEditTextArray.add(et);
@@ -618,7 +619,7 @@ public class PageEditActivity extends ActivityExtended {
 			onBackPressed();
 			return true;
 		}
-		
+
 		return super.onKeyDown(keyCode, event);
 	}
 
@@ -703,7 +704,8 @@ public class PageEditActivity extends ActivityExtended {
 
 		for (MultimediaAbstract m : ma) {
 			if (m.getIsSelected()) {
-				OnMoveMultimediaListener omml = new OnMoveMultimediaListener(mPage, m, index, this);
+				OnMoveMultimediaListener omml = new OnMoveMultimediaListener(
+						mPage, m, index, this);
 				mCommandManager.invokeCommand(omml);
 				clearSelection();
 				return;
@@ -730,8 +732,7 @@ public class PageEditActivity extends ActivityExtended {
 		Intent addMultimediaIntent = new Intent(this,
 				AddMultimediaActivity.class);
 		addMultimediaIntent.putExtras(info);
-		startActivityForResult(addMultimediaIntent,
-				GET_MULTIMEDIA_REQUESTCODE);
+		startActivityForResult(addMultimediaIntent, GET_MULTIMEDIA_REQUESTCODE);
 	}
 
 	/**
@@ -755,8 +756,7 @@ public class PageEditActivity extends ActivityExtended {
 		Intent addMultimediaIntent = new Intent(this,
 				AddMultimediaActivity.class);
 		addMultimediaIntent.putExtras(info);
-		startActivityForResult(addMultimediaIntent,
-				SWAP_MULTIMEDIA_REQUESTCODE);
+		startActivityForResult(addMultimediaIntent, SWAP_MULTIMEDIA_REQUESTCODE);
 	}
 
 	/**
@@ -874,46 +874,47 @@ public class PageEditActivity extends ActivityExtended {
 		} else if (requestCode == GET_MULTIMEDIA_REQUESTCODE) {
 			mPage = mDataSingleton.getCurrentPage();
 			mStory = mDataSingleton.getCurrentStory();
-			
-			if(data == null) {
+
+			if (data == null) {
 				mCurrentCommand = null;
 				return;
 			}
-			
+
 			// resultCode is newMultimedia index.
-			if(mCurrentCommand instanceof OnAddMultimediaListener){
+			if (mCurrentCommand instanceof OnAddMultimediaListener) {
 				Bundle bundle = data.getExtras();
-				int newId = (int) bundle.getLong("NewMultimediaId");				
-				
+				int newId = (int) bundle.getLong("NewMultimediaId");
+
 				MultimediaAbstract newMultimedia = null;
-				// Check if new multimedia exist.				
+				// Check if new multimedia exist.
 				for (MultimediaAbstract m : mPage.getMultimedia()) {
 					if (m.getID() == newId) {
 						newMultimedia = m;
 						break;
 					}
 				}
-				
-				if(newMultimedia == null) {
+
+				if (newMultimedia == null) {
 					mCurrentCommand = null;
 					return;
 				}
-				
-				((OnAddMultimediaListener)mCurrentCommand).setMultimedia(newMultimedia);
-				mCommandManager.invokeCommand(mCurrentCommand);				
-			}else{
+
+				((OnAddMultimediaListener) mCurrentCommand)
+						.setMultimedia(newMultimedia);
+				mCommandManager.invokeCommand(mCurrentCommand);
+			} else {
 				// Unknonwn state.
-			}				
+			}
 			return;
 		} else if (requestCode == SWAP_MULTIMEDIA_REQUESTCODE) {
 			mPage = mDataSingleton.getCurrentPage();
 			mStory = mDataSingleton.getCurrentStory();
 
-			if(data == null) {
+			if (data == null) {
 				mCurrentCommand = null;
 				return;
 			}
-			
+
 			Bundle bundle = data.getExtras();
 			int newId = (int) bundle.getLong("NewMultimediaId");
 			int selectedId = bundle.getInt("selectedMultimediaId");
@@ -949,10 +950,11 @@ public class PageEditActivity extends ActivityExtended {
 				return;
 			}
 
-			/// The swapping process.
+			// / The swapping process.
 			selectedMultimedia.setFileDir(toBeSwapMultimedia.getFileDir());
 			mDataSingleton.database.delete_mult(toBeSwapMultimedia, mPage);
-			mDataSingleton.database.update_multimedia(selectedMultimedia, mPage.getID());
+			mDataSingleton.database.update_multimedia(selectedMultimedia,
+					mPage.getID());
 			localUpdate();
 			return;
 		} else {
@@ -968,11 +970,11 @@ public class PageEditActivity extends ActivityExtended {
 	 */
 	@Override
 	public void startActivityForResult(Intent intent, int requestCode) {
-		if( requestCode == -1 ){
+		if (requestCode == -1) {
 			super.startActivityForResult(intent, 0);
 			return;
 		}
-		
+
 		Bundle data = intent.getExtras();
 		data.putLong("requestCode", requestCode);
 		intent.putExtras(data);
