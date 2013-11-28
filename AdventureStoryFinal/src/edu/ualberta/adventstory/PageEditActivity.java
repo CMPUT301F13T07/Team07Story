@@ -798,8 +798,6 @@ public class PageEditActivity extends ActivityExtended {
 		for (MultimediaAbstract m : mPage.getMultimedia()) {
 			mDataSingleton.database.update_multimedia(m, mPage.getID());
 		}
-		
-		mWebClient.insert_page(mPage);
 	}
 
 	/**
