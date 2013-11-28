@@ -4,6 +4,11 @@
     <string name="app_name">Create Your Own Adventure!</string>
     <string name="action_help">Help</string>
     <string name="action_home">Home</string>
+    <string name="action_save">Save</string>
+    <string name="action_undo">Undo</string>
+    <string name="action_redo">Redo</string>
+    <string name="action_cancel">Cancel</string>    
+    <string name="action_cache">Cache</string>    
     <string name="hello_world">Hello world!</string>
     <string name="newStory">Make a New Story</string>
     <string name="newPage">Make a New Page</string>

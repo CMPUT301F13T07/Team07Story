@@ -45,6 +45,7 @@ import edu.ualberta.controller.CommandCollection.OnSave;
 import edu.ualberta.controller.CommandCollection.OnUndo;
 import edu.ualberta.controller.CommandCollection.OnSaveListener;
 import edu.ualberta.controller.MultimediaControllerManager;
+import edu.ualberta.data.WebClient;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.multimedia.TObservable;
 import edu.ualberta.utils.Page;
@@ -71,12 +72,14 @@ public class PageEditActivity extends ActivityExtended {
 	private Story mStory;
 	private Page mPage;
 	private Button mButtonAddMultimedia; // Button for adding multimedias.
-
+		
 	private boolean FRAGMENT_INFLATED = false;
 
 	final public static int ADDPAGE_REQUESTCODE = 1;
 	final public static int GET_MULTIMEDIA_REQUESTCODE = 2;
 	final public static int SWAP_MULTIMEDIA_REQUESTCODE = 3;
+	
+	private WebClient mWebClient;
 
 	private CommandManager mCommandManager; // Manages Undo/Redo.
 	// Current Command being executed. This is used when AddMultimedia is being
@@ -160,6 +163,8 @@ public class PageEditActivity extends ActivityExtended {
 
 		addNextPageButtons();
 		mCommandManager = CommandManager.getInstance();
+		
+		mWebClient = new WebClient();
 	}
 
 	/*
@@ -239,22 +244,7 @@ public class PageEditActivity extends ActivityExtended {
 	 */
 	@SuppressLint("NewApi")
 	void CreateMenu(Menu menu) {
-		MenuItem mnu1 = menu.add(0, 0, 0, "Add Multimedia");
-		{
-			mnu1.setIcon(R.drawable.ic_addmultimedia);
-			mnu1.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		}
-
-		OnAddMultimediaListener addMultimediaResponder = new OnAddMultimediaListener(
-				mPage, null, this);
-		mMapMenuToCommand.put(mnu1, addMultimediaResponder);
-
-		MenuItem mnu2 = menu.add(0, 1, 1, "Undo");
-		{
-			mnu2.setIcon(R.drawable.ic_undo);
-			mnu2.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		}
-
+		MenuItem mnu2 = menu.findItem(R.id.action_undo);
 		OnUndoListener undoResonder = new OnUndoListener(new OnUndo() {
 			@Override
 			public void undo() {
@@ -262,31 +252,19 @@ public class PageEditActivity extends ActivityExtended {
 				localUpdate();
 			}
 		});
-
 		mMapMenuToCommand.put(mnu2, undoResonder);
 
-		MenuItem mnu3 = menu.add(0, 2, 2, "Redo");
-		{
-			mnu3.setIcon(R.drawable.ic_redo);
-			mnu3.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-		}
-		
+		MenuItem mnu3 = menu.findItem(R.id.action_redo);				
 		OnRedoListener redoResonder = new OnRedoListener(new OnRedo() {
 			@Override
 			public void redo() {
 				mCommandManager.redo();
 				localUpdate();
 			}
-		});
-		
+		});		
 		mMapMenuToCommand.put(mnu3, redoResonder);
 
-		MenuItem mnu4 = menu.add(0, 3, 3, "Save");
-		{
-			mnu4.setIcon(R.drawable.ic_save);
-			mnu4.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		}
-
+		MenuItem mnu4 = menu.findItem(R.id.action_save);
 		OnSaveListener saveResponder = new OnSaveListener(new OnSave() {
 			@Override
 			public void onSave() {
@@ -296,12 +274,7 @@ public class PageEditActivity extends ActivityExtended {
 		});
 		mMapMenuToCommand.put(mnu4, saveResponder);
 
-		MenuItem mnu5 = menu.add(0, 4, 4, "Cancel");
-		{
-			mnu5.setIcon(R.drawable.ic_addmultimedia);
-			mnu5.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		}
-
+		MenuItem mnu5 = menu.findItem(R.id.action_cancel);
 		OnExitListener cancelResponder = new OnExitListener(
 				new CommandCollection.OnExit() {
 					@Override
@@ -822,6 +795,8 @@ public class PageEditActivity extends ActivityExtended {
 		for (MultimediaAbstract m : mPage.getMultimedia()) {
 			mDataSingleton.database.update_multimedia(m, mPage.getID());
 		}
+		
+		mWebClient.insert_page(mPage);
 	}
 
 	/**
