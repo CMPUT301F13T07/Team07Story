@@ -182,6 +182,7 @@ public class PageViewActivity extends ActivityExtended {
 		recreate();
 	}
 
+	@SuppressLint("NewApi")
 	void setStoryTitle(String title) {
 		ActionBar ab = getActionBar();
 		ab.setTitle(title);
@@ -287,6 +288,7 @@ public class PageViewActivity extends ActivityExtended {
 	 * <code>addImageViewInPage</code> helper method for
 	 * <code>setStoryText</code>.
 	 */
+	@SuppressLint("NewApi")
 	private void addImageViewInPage(final MultimediaAbstract m) {
 		final ImageView iv = new ImageView(this);
 		iv.setOnClickListener(new OnClickListener() {
