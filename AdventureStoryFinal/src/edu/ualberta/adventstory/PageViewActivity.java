@@ -109,6 +109,12 @@ public class PageViewActivity extends ActivityExtended {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+        case R.id.action_help:
+        	Toast.makeText(getApplicationContext(), "To edit this page, press the pencil.",
+					   Toast.LENGTH_LONG).show();
+            return true;
+		}
 		return MenuChoice(item);
 	}
 

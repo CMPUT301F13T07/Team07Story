@@ -207,7 +207,14 @@ public class PageEditActivity extends ActivityExtended {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
+		switch (item.getItemId()) {
+        case R.id.action_help:
+        	Toast.makeText(getApplicationContext(), "Press the disk button to save your changes.\n"
+        											+ "Read-Only makes the page non-editable by "
+        											+ "everyone but you.",
+					   Toast.LENGTH_LONG).show();
+            return true;
+		}
 		CommandAbstract command = mMapMenuToCommand.get(item);
 		if (command != null) {
 			if (command instanceof OnAddMultimediaListener) {

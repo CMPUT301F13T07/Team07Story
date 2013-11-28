@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 import edu.ualberta.data.DataManager;
 import edu.ualberta.data.DbManager;
 import edu.ualberta.data.WebClient;
@@ -154,14 +155,18 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.new_page:
-            		// TODO: add page to database if it is a part of a story
-            		Page newPage = new Page("", "", "", null);
-            		int id = (int) database.insert_page(newPage);
-            		newPage.setID(id);
-            		((DataSingleton)getApplicationContext()).setCurrentPage(newPage);
-            		((DataSingleton)getApplicationContext()).setCurrentStory(null);
-            		startActivity(new Intent(getBaseContext(), PageEditActivity.class));
+            	Page newPage = new Page("", "", "", null);
+            	int id = (int) database.insert_page(newPage);
+            	newPage.setID(id);
+            	((DataSingleton)getApplicationContext()).setCurrentPage(newPage);
+            	((DataSingleton)getApplicationContext()).setCurrentStory(null);
+            	startActivity(new Intent(getBaseContext(), PageEditActivity.class));
                 return true;
+            case R.id.action_help:
+            	Toast.makeText(getApplicationContext(), "Enter your search options.\n"
+            											+ "Press an item to view it.",
+						   Toast.LENGTH_LONG).show();
+            	return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
