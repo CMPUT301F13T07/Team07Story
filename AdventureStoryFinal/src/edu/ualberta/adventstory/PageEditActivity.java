@@ -532,9 +532,6 @@ public class PageEditActivity extends ActivityExtended {
 			lastIndex = index;
 		}
 
-		Toast.makeText(this, Integer.toString(textViewCounter),
-				Toast.LENGTH_SHORT).show();
-
 		// If there are non-displayed multimedia, place them all at the end.
 		if (multimediaCounter < multimediaList.size()) {
 			for (final MultimediaAbstract m : multimediaList) {
