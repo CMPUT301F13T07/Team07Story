@@ -167,6 +167,8 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
             											+ "Press an item to view it.",
 						   Toast.LENGTH_LONG).show();
             	return true;
+            case R.id.action_home:
+            	finish();
             default:
                 return super.onOptionsItemSelected(item);
         }

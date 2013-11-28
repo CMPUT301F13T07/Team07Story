@@ -114,6 +114,8 @@ public class PageViewActivity extends ActivityExtended {
         	Toast.makeText(getApplicationContext(), "To edit this page, press the pencil.",
 					   Toast.LENGTH_LONG).show();
             return true;
+        case R.id.action_home:
+        	finish();
 		}
 		return MenuChoice(item);
 	}

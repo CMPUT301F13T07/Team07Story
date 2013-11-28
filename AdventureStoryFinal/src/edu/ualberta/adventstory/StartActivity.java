@@ -108,7 +108,7 @@ public class StartActivity extends Activity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.action_help:
-            	Toast.makeText(getApplicationContext(), "Please press a button to continue.",
+            	Toast.makeText(getApplicationContext(), "Press a button to continue.",
 						   Toast.LENGTH_LONG).show();
                 return true;
             default:

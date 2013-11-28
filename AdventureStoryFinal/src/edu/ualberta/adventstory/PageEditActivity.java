@@ -214,6 +214,8 @@ public class PageEditActivity extends ActivityExtended {
         											+ "everyone but you.",
 					   Toast.LENGTH_LONG).show();
             return true;
+        case R.id.action_home:
+        	finish();
 		}
 		CommandAbstract command = mMapMenuToCommand.get(item);
 		if (command != null) {

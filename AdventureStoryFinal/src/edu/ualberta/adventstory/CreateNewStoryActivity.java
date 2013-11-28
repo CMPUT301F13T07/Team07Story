@@ -31,7 +31,7 @@ public class CreateNewStoryActivity extends Activity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.start, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
     
@@ -46,6 +46,8 @@ public class CreateNewStoryActivity extends Activity {
             				+ "page.",
             				Toast.LENGTH_LONG).show();
                 return true;
+            case R.id.action_home:
+            	finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
