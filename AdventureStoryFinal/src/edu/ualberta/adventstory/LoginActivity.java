@@ -28,6 +28,10 @@ public class LoginActivity extends Activity {
 		login();
 	}
 	
+	public void onBackPressed() {
+	    login();
+	}
+	
 	/**
 	 * Gets user input for login, checks against DB and continues to StartActivity.
 	 */
