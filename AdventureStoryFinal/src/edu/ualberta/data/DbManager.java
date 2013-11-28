@@ -333,6 +333,7 @@ public class DbManager implements DataManager{
 	    values.put(Constant.PAGE_TITLE, page.getTitle());
 	    values.put(Constant.PAGE_AUTHOR, page.getAuthor());
 	    values.put(Constant.PAGE_TEXT, page.getText());
+	    values.put(Constant.READONLY, page.getReadOnly());
 	    
 	    return update(Constant.TABLE_PAGE, values, where);
 	}
