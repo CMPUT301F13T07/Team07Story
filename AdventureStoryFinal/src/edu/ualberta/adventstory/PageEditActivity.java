@@ -267,20 +267,10 @@ public class PageEditActivity extends ActivityExtended {
 			@Override
 			public void onSave() {
 				save();
-				exit();
+				finish();
 			}
 		});
 		mMapMenuToCommand.put(mnu4, saveResponder);
-
-		MenuItem mnu5 = menu.findItem(R.id.action_cancel);
-		OnExitListener cancelResponder = new OnExitListener(
-				new OnExit() {
-					@Override
-					public void onExit() {
-						exit();
-					}
-				});
-		mMapMenuToCommand.put(mnu5, cancelResponder);
 		
 		MenuItem mnu6 = menu.findItem(R.id.action_cache);
 		mMapMenuToCommand.put(mnu6, new GenericListener(new OnCallbackGeneric(){
@@ -788,8 +778,6 @@ public class PageEditActivity extends ActivityExtended {
 				|| pageStory.length() <= 0) {
 			// Things to do if one of the inputs are empty.
 			// - Just have all of them have some default values.
-			Toast.makeText(this, "One of the text inputs are invalid.",
-					Toast.LENGTH_LONG).show();
 			mDataSingleton.database.update_page(new Page(mPage.getID(),
 					"Untitled", "Unknown", "Unfilled", null));
 		}
@@ -801,8 +789,6 @@ public class PageEditActivity extends ActivityExtended {
 		for (MultimediaAbstract m : mPage.getMultimedia()) {
 			mDataSingleton.database.update_multimedia(m, mPage.getID());
 		}
-		
-		mWebClient.insert_page(mPage);
 	}
 
 	/**
