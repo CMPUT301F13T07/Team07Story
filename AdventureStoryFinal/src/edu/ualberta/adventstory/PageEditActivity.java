@@ -792,19 +792,6 @@ public class PageEditActivity extends ActivityExtended {
 	}
 
 	/**
-	 * <code>cancel</code> For now cancel is no use.
-	 * 
-	 * TODO: Discuss with team what to do when cancelling. - Do I delete the
-	 * current page? - If there's only one page, Do I also delete the current
-	 * story? - Or do I just save whatever is typed?
-	 * 
-	 * @deprecated
-	 */
-	private void cancel() {
-		exit();
-	}
-
-	/**
 	 * <code>addPage</code> is the method to call when adding page. Usually
 	 * attached with a button associated for adding page.
 	 * 
