@@ -297,9 +297,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			finish();
 		}else if(isStory) {
 			story = (Story) results.get(position);
-			//Log.w("debug", story.getID().toString() + " " + story.toString() + " " + story.getRoot().toString());
 			story.setRoot(story.getRoot().clone());
-			//Log.w("debug", story.getRoot().toString());
 			loadStory(story.getRoot());
 			((DataSingleton)getApplicationContext()).setCurrentStory(story);
 			pageList = story.getAllPages();

@@ -50,7 +50,6 @@ public class SearchPageListFragment extends ListFragment {
 		Button downloadall = (Button) view.findViewById(R.id.downloadall);
 		
 		if (!getArguments().getBoolean("isWeb")) {
-			Log.w("debug", "isNotWeb");
 			downloadall.setClickable(false);
 			downloadall.setBackgroundColor(Color.parseColor("#808080"));
 		}
@@ -59,10 +58,8 @@ public class SearchPageListFragment extends ListFragment {
 				//Log.w("debug", "Button clicked");
 				
 				Story story = ((DataSingleton)getActivity().getApplicationContext()).getCurrentStory();
-				//Log.w("debug", story.toString() + " " + story.getRoot().toString());
 				database = ((DataSingleton)getActivity().getApplicationContext()).database;
 				saveEntireStory(story.getRoot());
-				//story.getRoot().setID((int)database.insert_page(story.getRoot()));
 				database.update_page(story.getRoot());
 				story.setID((int)database.insert_story(story));
 				
@@ -72,6 +69,10 @@ public class SearchPageListFragment extends ListFragment {
 		return view;
 	}
 	
+	/**
+	* Recursively runs through the tree and dumps it into the database
+	* @param page
+	*/
 	private void saveEntireStory(Page page) {
 		ArrayList<Page> pages = page.getPages();
 		page.setID( (int) database.insert_page(page));
