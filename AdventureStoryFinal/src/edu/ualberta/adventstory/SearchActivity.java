@@ -268,6 +268,19 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		
 	}
 	
+	/**
+	 * Loads the entire story into RAM so that functions like getAllPages can be used
+	 * If there are any problems, bug Lyle
+	 * @param page
+	 */
+	private void loadStory(Page page) {
+		ArrayList<Page> pages = searchStruct.get_page_options(page.getID());
+		for (int i=0; i<pages.size(); i++) {
+			page.addPage(pages.get(i));
+			loadStory(pages.get(i));
+		}
+	}
+	
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 		Story story;
@@ -281,6 +294,8 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			finish();
 		}else if(isStory) {
 			story = (Story) results.get(position);
+			story.setRoot(story.getRoot().clone());
+			loadStory(story.getRoot());
 			((DataSingleton)getApplicationContext()).setCurrentStory(story);
 			pageList = story.getAllPages();
 
