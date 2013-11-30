@@ -60,9 +60,7 @@ public class SearchPageListFragment extends ListFragment {
 				Story story = ((DataSingleton)getActivity().getApplicationContext()).getCurrentStory();
 				database = ((DataSingleton)getActivity().getApplicationContext()).database;
 				saveEntireStory(story.getRoot());
-				database.update_page(story.getRoot());
 				story.setID((int)database.insert_story(story));
-				
 			}
 			
 		});  
