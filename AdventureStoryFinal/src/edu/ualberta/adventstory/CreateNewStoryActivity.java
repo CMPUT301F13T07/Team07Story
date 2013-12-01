@@ -129,4 +129,11 @@ public class CreateNewStoryActivity extends Activity {
 		startActivity(intent);
 	}
 
+		
+		/**
+		 */
+		public Story setTitle(){
+			return null;
+		}
+
 }
