@@ -7,24 +7,12 @@
     tools:context=".MainActivity" >
 
         <Button
-            android:id="@+id/publish"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/randomStory"
-            android:layout_alignRight="@+id/randomStory"
-            android:layout_below="@+id/newPage"
-            android:layout_marginTop="10dp"
-            android:text="@string/publish"
-            android:background="@drawable/custom_button"
-            android:textColor="@color/white" />
-
-        <Button
             android:id="@+id/findStory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/randomStory"
             android:layout_alignRight="@+id/randomStory"
-            android:layout_below="@+id/publish"
+            android:layout_below="@+id/newPage"
             android:layout_marginTop="10dp"
             android:text="@string/findStory"
             android:background="@drawable/custom_button"

@@ -26,7 +26,7 @@ import edu.ualberta.utils.Page;
 
 public class StartActivity extends Activity {
 
-	private Button mkStory, publish, searchPage, searchStory, mkPage, randomStory;
+	private Button mkStory, searchPage, searchStory, mkPage, randomStory;
 	public DataManager database;
 
     @Override
@@ -39,7 +39,6 @@ public class StartActivity extends Activity {
         
         // Define Buttons
         mkStory = (Button)findViewById(R.id.newStory);
-    	publish = (Button)findViewById(R.id.publish);
     	searchPage = (Button)findViewById(R.id.findPage);
     	searchStory = (Button)findViewById(R.id.findStory);
     	mkPage = (Button)findViewById(R.id.newPage);
@@ -50,12 +49,6 @@ public class StartActivity extends Activity {
     		public void onClick(View v){
     			// Bring up EditOptionActivity
     			newStory();
-    		}
-    	});
-    	
-    	publish.setOnClickListener(new OnClickListener(){
-    		public void onClick(View v){
-    			// Call code for publishing a story
     		}
     	});
     	
