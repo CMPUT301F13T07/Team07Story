@@ -245,17 +245,7 @@ public class Page implements Serializable{
 			getAllPages(ops.get(i), level+1);
 	}
 	
-	/**
-	 * searches do not return in any particular order at the moment, can do this later if desirable
-	 * Implementation:
-	 * All the searches are pretty much the same, look to see if the caller if the caller equals the provided 
-	 * string/Integer, adding it to the list if it does. Changes the caller by recursively running through the children
-	 * of each, and so on and so forth. each return combines the arraylists of the individual calls providing a list
-	 * of all matches. Will return an empty arraylist if there are no matches. 
-	 * @author: Lyle Rolleman
-	 * @param: t
-	 * @return: All the pages which match that title
-	 */
+	
 		
 	@Override
 	/**
