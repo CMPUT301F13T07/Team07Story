@@ -101,7 +101,9 @@ public class PageViewActivity extends ActivityExtended {
 	@Override
 	protected void onPause(){		
 		SoundClipController scc = new SoundClipController();
-		scc.stopAudio();
+		/*if(scc.isplayingAudio == false){
+			scc.stopAudio();
+		}*/
 		super.onPause();
 	}
 
