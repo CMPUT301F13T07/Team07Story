@@ -26,7 +26,7 @@ import edu.ualberta.utils.Utility;
  */
 public class SoundClipController extends MultimediaController {
 
-	public static MediaPlayer mediaPlayer;
+	public static MediaPlayer mediaPlayer = new MediaPlayer();
 	private static SoundPool soundPool;
 	public static boolean isplayingAudio = false;
 
@@ -41,7 +41,8 @@ public class SoundClipController extends MultimediaController {
 
 	public static void stopAudio() {
 		isplayingAudio = false;
-		mediaPlayer.stop();
+		if(mediaPlayer != null)
+			mediaPlayer.stop();
 	}
 
 	@Override
