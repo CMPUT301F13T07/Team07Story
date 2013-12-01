@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/background2" >
 
     <Button
         android:id="@+id/takephoto"
@@ -10,7 +11,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="Take Photo" />
+        android:text="Take Photo"
+        android:textColor="@color/white"
+        android:background="@drawable/custom_button" />
 
     <Button
         android:id="@+id/finish"
@@ -20,7 +23,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:text="Finish" />
+        android:text="Finish"
+        android:textColor="@color/white"
+        android:background="@drawable/custom_button" />
 
     <LinearLayout
         android:layout_width="wrap_content"
