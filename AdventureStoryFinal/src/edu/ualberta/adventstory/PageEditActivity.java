@@ -39,6 +39,7 @@ import edu.ualberta.controller.OnSaveListener;
 import edu.ualberta.controller.OnUndoListener;
 import edu.ualberta.controller.CommandManager;
 import edu.ualberta.controller.PageAdapter;
+import edu.ualberta.controller.SoundClipController;
 import edu.ualberta.controller.CallbackIntefaces.*;
 import edu.ualberta.controller.OnAddMultimediaListener;
 import edu.ualberta.controller.MultimediaControllerManager;
@@ -192,7 +193,7 @@ public class PageEditActivity extends ActivityExtended {
 	 */
 	@Override
 	public void onPause() {
-		save();
+		save();		
 		super.onPause();
 	}
 
