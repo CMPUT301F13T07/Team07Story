@@ -234,7 +234,7 @@ public class Page implements Serializable{
 	 * For internal use
 	 * @author: Lyle Rolleman
 	 * @param: o
-	 * @param: the current "height" in the tree
+	 * @param: level
 	 */
 	private void getAllPages(Page o, int level) {
 		if (level >= levellist.size()) 
@@ -245,64 +245,8 @@ public class Page implements Serializable{
 			getAllPages(ops.get(i), level+1);
 	}
 	
-	/**
-	 * searches do not return in any particular order at the moment, can do this later if desirable
-	 * Implementation:
-	 * All the searches are pretty much the same, look to see if the caller if the caller equals the provided 
-	 * string/Integer, adding it to the list if it does. Changes the caller by recursively running through the children
-	 * of each, and so on and so forth. each return combines the arraylists of the individual calls providing a list
-	 * of all matches. Will return an empty arraylist if there are no matches. 
-	 * @author: Lyle Rolleman
-	 * @param: t
-	 * @return: All the pages which match that title
-	 */
-	public ArrayList<Page> searchByTitle(String t) {
-		ArrayList<Page> res = new ArrayList<Page>();
-		
-		if (this.getTitle().equals(t))
-			res.add(this);
-		ArrayList<Page> ops = this.getPages();
-		for (int i=0; i<ops.size(); i++)
-			res.addAll(ops.get(i).searchByTitle(t));
-		return res;
-	}
 	
-	/**
-	 * @param: a
-	 * @author: Lyle Rolleman
-	 * @return: The list of pages which match the key
-	 */
-	public ArrayList<Page> searchByAuthor(String a) {
-		ArrayList<Page> res = new ArrayList<Page>();
 		
-		if (this.getAuthor().equals(a))
-			res.add(this);
-		ArrayList<Page> ops = this.getPages();
-		for (int i=0; i<ops.size(); i++)
-			res.addAll(ops.get(i).searchByAuthor(a));
-		return res;
-	}
-	
-	/**
-	 * @param: id
-	 * @author: Lyle Rolleman
-	 * @return: The list matching the key
-	 */
-	public ArrayList<Page> searchByID(Integer id) {
-		ArrayList<Page> res = new ArrayList<Page>();
-		
-		if (this.getID() == null && id == null) {
-			res.add(this);
-		} else {
-			if (this.getID().equals(id))
-				res.add(this);
-		}
-		ArrayList<Page> ops = this.getPages();
-		for (int i=0; i<ops.size(); i++)
-			res.addAll(ops.get(i).searchByID(id));
-		return res;
-	}
-	
 	@Override
 	/**
 	 * @return: A string representation of the Page
