@@ -90,4 +90,8 @@ abstract public class ActivityExtended extends Activity implements TObserver<TOb
 	public DbManager getDatabase(){
 		return mDataSingleton.database;
 	}
+	
+	protected void goToHome(){
+		startActivity(new Intent(this, StartActivity.class));
+	}
 }
