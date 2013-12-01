@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,7 +54,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	
 	//private Spinner searchOnline;
 	private Bundle bundle;
-	private boolean isStory, isTitle;
+	private boolean isStory, isTitle, isWeb;
 	String parentActivity;
 	private boolean addPage;	// Set to true if adding page in PageEdit.
 	
@@ -239,12 +240,14 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		if(searchOnline.getId() == R.id.spinnerOnline){
 				if (selected == 0){
 					searchStruct = database;
+					isWeb = false;
 					searchResults();
 				} else if (selected == 1){
 					if(!webClient.isConnected(this)){
 						webClient.buildDialog(this).show();
 					} else {  
 					searchStruct = webClient;
+					isWeb = true;
 					searchResults();
 					}
 				}
@@ -268,6 +271,19 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		
 	}
 	
+	/**
+	 * Loads the entire story into RAM so that functions like getAllPages can be used
+	 * If there are any problems, bug Lyle
+	 * @param page
+	 */
+	private void loadStory(Page page) {
+		ArrayList<Page> pages = searchStruct.get_page_options(page.getID());
+		for (int i=0; i<pages.size(); i++) {
+			page.addPage(pages.get(i));
+			loadStory(pages.get(i));
+		}
+	}
+	
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 		Story story;
@@ -281,11 +297,14 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			finish();
 		}else if(isStory) {
 			story = (Story) results.get(position);
+			story.setRoot(story.getRoot().clone());
+			loadStory(story.getRoot());
 			((DataSingleton)getApplicationContext()).setCurrentStory(story);
 			pageList = story.getAllPages();
 
 			Bundle bundle = new Bundle();
 			bundle.putSerializable("pageList", pageList);
+			bundle.putBoolean("isWeb", isWeb);
 			FragmentManager fragmentManager = getFragmentManager();
 			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 			SearchPageListFragment listpages = new SearchPageListFragment();

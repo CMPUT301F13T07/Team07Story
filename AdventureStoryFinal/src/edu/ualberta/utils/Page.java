@@ -185,7 +185,9 @@ public class Page implements Serializable{
 	*@author: Lyle Rolleman
 	*/
 	public Page clone() {
-		return new Page(this.id, this.title, this.author, this.text, this.multimedia, null);
+		Page page = new Page(this.id, this.title, this.author, this.text, this.multimedia, null);
+		page.setReadOnly(this.getReadOnly());
+		return page;
 	}
 	
 	/**

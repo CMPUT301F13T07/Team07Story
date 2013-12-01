@@ -123,7 +123,6 @@ public class PageViewActivity extends ActivityExtended {
 			command.execute();
 			return true;
 		}
-
 		return false;
 	}
 
@@ -296,9 +295,7 @@ public class PageViewActivity extends ActivityExtended {
 				MultimediaControllerManager.play(getBaseContext(), m);
 			}
 		});
-
 		iv.setPadding(5, 5, 5, 5);
-
 		LayoutParams lp1 = new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT);
 		iv.setImageBitmap(MultimediaControllerManager.loadBitmap(this, m));

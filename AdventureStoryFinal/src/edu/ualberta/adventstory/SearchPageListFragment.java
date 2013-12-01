@@ -15,15 +15,21 @@ import android.annotation.TargetApi;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.content.DialogInterface.OnClickListener;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import edu.ualberta.data.DbManager;
 import edu.ualberta.utils.Page;
+import edu.ualberta.utils.Story;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressLint("NewApi")
@@ -33,13 +39,46 @@ public class SearchPageListFragment extends ListFragment {
 	private String title;
 	private String text;
 	private Page page;
+	private DbManager database;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(
-					R.layout.fragment_searchstorypagelist, container, false);
+		View view = inflater.inflate(
+				R.layout.fragment_searchstorypagelist, container, false);
+		Button downloadall = (Button) view.findViewById(R.id.downloadall);
+		
+		if (!getArguments().getBoolean("isWeb")) {
+			downloadall.setClickable(false);
+			downloadall.setBackgroundColor(Color.parseColor("#808080"));
+		}
+		downloadall.setOnClickListener(new View.OnClickListener() {  
+			public void onClick(View v) {                 
+				//Log.w("debug", "Button clicked");
+				
+				Story story = ((DataSingleton)getActivity().getApplicationContext()).getCurrentStory();
+				database = ((DataSingleton)getActivity().getApplicationContext()).database;
+				saveEntireStory(story.getRoot());
+				story.setID((int)database.insert_story(story));
+			}
+			
+		});  
+		return view;
+	}
+	
+	/**
+	* Recursively runs through the tree and dumps it into the database
+	* @param page
+	*/
+	private void saveEntireStory(Page page) {
+		ArrayList<Page> pages = page.getPages();
+		page.setID( (int) database.insert_page(page));
+		database.update_page(page);
+		for (int i=0; i<pages.size(); i++) {
+			database.insert_page_option(page, pages.get(i));
+			saveEntireStory(pages.get(i));
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -51,7 +90,10 @@ public class SearchPageListFragment extends ListFragment {
 	            R.layout.rowpagelayout, R.id.label, pageList);
 	    setListAdapter(adapter);
 		
+	    
 	}
+	
+	 
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
@@ -59,6 +101,7 @@ public class SearchPageListFragment extends ListFragment {
 		page = (Page) pageList.get(position);
 		((DataSingleton)getActivity().getApplicationContext()).setCurrentPage(page);
 	}
+	
 	/**
 	 * This method creates a new preview fragment on the selected page
 	 * @param position

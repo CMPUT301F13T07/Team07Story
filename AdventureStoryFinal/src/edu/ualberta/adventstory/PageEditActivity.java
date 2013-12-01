@@ -33,12 +33,12 @@ import android.widget.Toast;
 
 import edu.ualberta.controller.CommandAbstract;
 import edu.ualberta.controller.GenericListener;
-import edu.ualberta.controller.OnExitListener;
 import edu.ualberta.controller.OnMoveMultimediaListener;
 import edu.ualberta.controller.OnRedoListener;
 import edu.ualberta.controller.OnSaveListener;
 import edu.ualberta.controller.OnUndoListener;
 import edu.ualberta.controller.CommandManager;
+import edu.ualberta.controller.PageAdapter;
 import edu.ualberta.controller.CallbackIntefaces.*;
 import edu.ualberta.controller.OnAddMultimediaListener;
 import edu.ualberta.controller.MultimediaControllerManager;
@@ -123,8 +123,8 @@ public class PageEditActivity extends ActivityExtended {
 		CheckBox cb = (CheckBox) findViewById(R.id.readOnlyCheckBox);
 
 		setStoryTitle();
-		setPageTitle(22);
-		setPageAuthor(20);
+		setPageTitle();
+		setPageAuthor();
 		setStoryText();
 		cb.setChecked(mPage.getReadOnly());
 
@@ -132,7 +132,7 @@ public class PageEditActivity extends ActivityExtended {
 			@Override
 			// Click background to deselect any selection.
 			public void onClick(View v) {
-				clearSelection();
+				PageAdapter.clearMultimediaSelection(mPage);
 			}
 		});
 
@@ -141,7 +141,6 @@ public class PageEditActivity extends ActivityExtended {
 			@Override
 			public void onClick(View v) {
 				addMultimedia();
-
 				OnAddMultimediaListener addMultimediaResponder = new OnAddMultimediaListener(
 						mPage, null, ae);
 				mCurrentCommand = addMultimediaResponder;
@@ -169,20 +168,14 @@ public class PageEditActivity extends ActivityExtended {
 	 * getCurrentStory since this in situations when we call an Activity to
 	 * expect a return, it will go back here,setStoryText and not in onCreate
 	 * anymore.
-	 * 
 	 * @see android.app.Activity#onResume()
 	 */
 	@Override
 	protected void onResume() {
-		super.onResume();
-		/*
-		 * These are placed here to acquire data when screen orientation changed
-		 * since onCreate is not called in such situation.
-		 */
+		super.onResume();		
 		mPage = mDataSingleton.getCurrentPage();
 		mStory = mDataSingleton.getCurrentStory();
 		setStoryText();
-
 		mDataSingleton.setCurrentActivity(this);
 	}
 
@@ -195,10 +188,6 @@ public class PageEditActivity extends ActivityExtended {
 	}
 
 	/*
-	 * onPause is where the save() instead of onDestroy since onPause is where
-	 * the views are still in place and thus we can still extract data's from
-	 * them.
-	 * 
 	 * @see android.app.Activity#onPause()
 	 */
 	@Override
@@ -235,9 +224,7 @@ public class PageEditActivity extends ActivityExtended {
 	 * <code>CreateMenu</code> here is responsible for creating Actionbar items
 	 * and mapping these MenuItems to their corresponding Command and Callback
 	 * method via Hash table.
-	 * 
 	 * @see PageEditActivity.mMapMenuToCommand
-	 * 
 	 * @param menu
 	 */
 	@SuppressLint("NewApi")
@@ -292,7 +279,7 @@ public class PageEditActivity extends ActivityExtended {
 		Intent intent = new Intent(this, PageViewActivity.class);
 		startActivity(intent);
 	}
-	
+
 	/**
 	 * <code>addNextPageButtons</code> is used for adding listView elements for
 	 * next page.
@@ -353,9 +340,7 @@ public class PageEditActivity extends ActivityExtended {
 
 		StringBuilder sb = new StringBuilder();
 
-		for (String s : fragmented) {
-			sb.append(s);
-		}
+		for (String s : fragmented) {sb.append(s);}
 		return sb.toString();
 	}
 
@@ -411,8 +396,7 @@ public class PageEditActivity extends ActivityExtended {
 	void setStoryTitle() {
 		ActionBar ab = getActionBar();
 		if (mStory == null) {
-			Toast.makeText(this, "Error: Story is null", Toast.LENGTH_SHORT)
-					.show();
+			ab.setTitle("PageEdit");
 			return;
 		}
 		ab.setTitle(mStory.getTitle());
@@ -420,15 +404,14 @@ public class PageEditActivity extends ActivityExtended {
 
 	/**
 	 * <code>setPageTitle</code> set's the <code>EditText</code> for page title.
-	 * This is done via getTitle method in <code>Page</code>
+	 * This is done via getTitle method in <code>Page</code
 	 * 
 	 * @param textSize
 	 *            is the size of the text.
 	 */
-	void setPageTitle(float textSize) {
+	void setPageTitle() {
 		mPageTitleEditTextView.setSingleLine(true);
 		mPageTitleEditTextView.setText(mPage.getTitle());
-		mPageTitleEditTextView.setTextSize(textSize);
 	}
 
 	/**
@@ -439,10 +422,9 @@ public class PageEditActivity extends ActivityExtended {
 	 * @param textSize
 	 *            is the size of the text.
 	 */
-	void setPageAuthor(float textSize) {
+	void setPageAuthor() {
 		mPageAuthorEditTextView.setSingleLine(true);
 		mPageAuthorEditTextView.setText(mPage.getAuthor());
-		mPageAuthorEditTextView.setTextSize(textSize);
 	}
 
 	/**
@@ -461,10 +443,7 @@ public class PageEditActivity extends ActivityExtended {
 		mStoryEditTextArray.clear();
 
 		ArrayList<MultimediaAbstract> multimediaList = mPage.getMultimedia();
-		// Add an observer to these models/observable.
-		for (MultimediaAbstract m : multimediaList) {
-			m.addObserver(this);
-		}
+		PageAdapter.attachView(mPage, this);
 
 		// If no multimedia.
 		if (multimediaList == null) {
@@ -563,18 +542,19 @@ public class PageEditActivity extends ActivityExtended {
 		iv.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (FRAGMENT_INFLATED)
+				if (FRAGMENT_INFLATED) {
 					return;
+				}
 				save();
-				clearSelection();
+				PageAdapter.clearMultimediaSelection(mPage);
 				m.setIsSelected(true);
-				FRAGMENT_INFLATED = true;
+				FRAGMENT_INFLATED = true; // Disable another fragment from
+											// opening.
 				showMultimediaOptionsFragment(m);
 			}
 		});
 
 		iv.setPadding(5, 5, 5, 5);
-
 		LayoutParams lp1 = new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT);
 		iv.setImageBitmap(MultimediaControllerManager.loadBitmap(this, m));
@@ -601,7 +581,6 @@ public class PageEditActivity extends ActivityExtended {
 				cursorIndexChange(et.getSelectionStart(), et);
 			}
 		});
-
 		et.setText(text);
 		mPageTextLayout.addView(et);
 		mStoryEditTextArray.add(et);
@@ -619,7 +598,6 @@ public class PageEditActivity extends ActivityExtended {
 			onBackPressed();
 			return true;
 		}
-
 		return super.onKeyDown(keyCode, event);
 	}
 
@@ -658,28 +636,14 @@ public class PageEditActivity extends ActivityExtended {
 	 */
 	@Override
 	public void localUpdate() {
-		// Things to update.
 		setStoryText();
-	}
-
-	/**
-	 * <code>clearSelection</code> clear all trace of selection. This is
-	 * required as opposed to doing it mannually.
-	 */
-	void clearSelection() {
-		ArrayList<MultimediaAbstract> ma = mPage.getMultimedia();
-		for (MultimediaAbstract m : ma) {
-			m.setIsSelected(false);
-		}
 	}
 
 	/**
 	 * <code>cursorIndexChange</code> is usually placed inside
 	 * <code>EditTextEx</code> callback method.
 	 * 
-	 * @author JoeyAndres
 	 * @param index
-	 * @version 1.0
 	 */
 	void cursorIndexChange(int index, EditText editTextClicked) {
 		// If a multimedia is selected, move it to where the user clicked
@@ -700,25 +664,19 @@ public class PageEditActivity extends ActivityExtended {
 			index = maxIndex;
 		}
 
-		ArrayList<MultimediaAbstract> ma = mPage.getMultimedia();
-
-		for (MultimediaAbstract m : ma) {
-			if (m.getIsSelected()) {
-				OnMoveMultimediaListener omml = new OnMoveMultimediaListener(
-						mPage, m, index, this);
-				mCommandManager.invokeCommand(omml);
-				clearSelection();
-				return;
-			}
+		MultimediaAbstract selectedMultimedia = PageAdapter
+				.getSelectedMultimedia(mPage);
+		if (selectedMultimedia != null) {
+			OnMoveMultimediaListener omml = new OnMoveMultimediaListener(mPage,
+					selectedMultimedia, index, this);
+			mCommandManager.invokeCommand(omml);
+			PageAdapter.clearMultimediaSelection(mPage);
 		}
 	}
 
 	/**
 	 * <code>addMultimedia</code> is called when adding Multimedia in
 	 * PageEditActivity.
-	 * 
-	 * @author JoeyAndres
-	 * @version 1.0
 	 */
 	void addMultimedia() {
 		save();
@@ -886,8 +844,7 @@ public class PageEditActivity extends ActivityExtended {
 					return;
 				}
 
-				((OnAddMultimediaListener) mCurrentCommand)
-						.setMultimedia(newMultimedia);
+				((OnAddMultimediaListener) mCurrentCommand).setMultimedia(newMultimedia);
 				mCommandManager.invokeCommand(mCurrentCommand);
 			} else {
 				// Unknonwn state.
@@ -951,7 +908,6 @@ public class PageEditActivity extends ActivityExtended {
 
 	/**
 	 * This is done so that requestcode is sent automatically via intent too.
-	 * 
 	 * @param intent
 	 * @param requestCode
 	 */

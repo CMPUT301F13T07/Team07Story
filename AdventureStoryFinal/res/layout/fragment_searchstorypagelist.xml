@@ -13,8 +13,16 @@
     <ListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="0dip" 
-        android:layout_weight="1">
+        android:layout_height="0dip"
+        android:layout_weight="0.76" >
+
     </ListView>
+
+    <Button
+        android:id="@+id/downloadall"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Download Entire Story" />
 
 </LinearLayout>
