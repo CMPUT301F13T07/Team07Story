@@ -94,6 +94,16 @@ public class PageViewActivity extends ActivityExtended {
 		super.onResume();
 		mDataSingleton.setCurrentActivity(this);
 	}
+	
+	/**
+	 * Implemented to turn SoundClipController audio play.
+	 */
+	@Override
+	protected void onPause(){		
+		SoundClipController scc = new SoundClipController();
+		scc.stopAudio();
+		super.onPause();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

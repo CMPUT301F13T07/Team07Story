@@ -14,5 +14,5 @@ public class SoundClip extends MultimediaAbstract {
 		if(obj == null) return false;
 		if(obj == this) return true;
 		return super.equals(obj);
-	}
+	}	
 }

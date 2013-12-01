@@ -8,54 +8,54 @@ import java.io.IOException;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
+import android.net.Uri;
 import edu.ualberta.adventstory.R;
 import edu.ualberta.multimedia.MultimediaAbstract;
 import edu.ualberta.utils.Utility;
 
 /**
- * <code>SoundClipController</code> helpse abstract the loadBitmap, Play, Pause and Stop method
- *  as this is system dependent therefore not suitable in the model package.
+ * <code>SoundClipController</code> helpse abstract the loadBitmap, Play, Pause
+ * and Stop method as this is system dependent therefore not suitable in the
+ * model package.
+ * 
  * @author Joey
- *
+ * 
  */
 public class SoundClipController extends MultimediaController {
-	 MediaPlayer mediaPlayer = new MediaPlayer();
-	 
-	@Override
-	public void play(Context context, MultimediaAbstract ma) {
-		File file = new File(ma.getFileDir());
-		byte[] byteArray;		
-	    try {
-	    	// Load byte Array.
-	    	byteArray = Utility.load(file, context);
-	    	
-	        // create temp file that will hold byte array
-	    	File tempMp3 = File.createTempFile("kurchina", "mp3", 
-	    										context.getCacheDir());
-	        tempMp3.deleteOnExit();
-	        FileOutputStream fos = new FileOutputStream(tempMp3);
-	        fos.write(byteArray);
-	        fos.close();
 
-	        // Tried passing path directly, but kept getting 
-	        // "Prepare failed.: status=0x1"
-	        // so using file descriptor instead
-	        FileInputStream fis = new FileInputStream(tempMp3);
-	        mediaPlayer.setDataSource(fis.getFD());
+	public static MediaPlayer mediaPlayer;
+	private static SoundPool soundPool;
+	public static boolean isplayingAudio = false;
 
-	        mediaPlayer.prepare();
-	        mediaPlayer.start();
-	    } catch (IOException ex) {
-	        String s = ex.toString();
-	        ex.printStackTrace();
-	    }
+	public static void playAudio(Context c, String fileName) {
+		mediaPlayer = MediaPlayer.create(c, Uri.parse(fileName));
+		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 100);
+		if (!mediaPlayer.isPlaying()) {
+			isplayingAudio = true;
+			mediaPlayer.start();
+		}
+	}
+
+	public static void stopAudio() {
+		isplayingAudio = false;
+		mediaPlayer.stop();
 	}
 
 	@Override
 	public Bitmap loadBitmap(Context context, MultimediaAbstract ma) {
-		return BitmapFactory.decodeResource(
-				context.getResources(), R.drawable.ic_audio);
+		return BitmapFactory.decodeResource(context.getResources(),
+				R.drawable.ic_audio);
 	}
 
+	@Override
+	public void play(Context context, MultimediaAbstract ma) {
+		if(isplayingAudio == true){
+			stopAudio();
+		}else{
+			playAudio(context, ma.getFileDir());
+		}
+	}
 }

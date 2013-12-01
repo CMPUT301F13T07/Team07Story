@@ -39,6 +39,7 @@ import edu.ualberta.controller.OnSaveListener;
 import edu.ualberta.controller.OnUndoListener;
 import edu.ualberta.controller.CommandManager;
 import edu.ualberta.controller.PageAdapter;
+import edu.ualberta.controller.SoundClipController;
 import edu.ualberta.controller.CallbackIntefaces.*;
 import edu.ualberta.controller.OnAddMultimediaListener;
 import edu.ualberta.controller.MultimediaControllerManager;
@@ -192,7 +193,7 @@ public class PageEditActivity extends ActivityExtended {
 	 */
 	@Override
 	public void onPause() {
-		save();
+		save();		
 		super.onPause();
 	}
 
@@ -755,19 +756,6 @@ public class PageEditActivity extends ActivityExtended {
 		for (MultimediaAbstract m : mPage.getMultimedia()) {
 			mDataSingleton.database.update_multimedia(m, mPage.getID());
 		}
-	}
-
-	/**
-	 * <code>cancel</code> For now cancel is no use.
-	 * 
-	 * TODO: Discuss with team what to do when cancelling. - Do I delete the
-	 * current page? - If there's only one page, Do I also delete the current
-	 * story? - Or do I just save whatever is typed?
-	 * 
-	 * @deprecated
-	 */
-	private void cancel() {
-		exit();
 	}
 
 	/**

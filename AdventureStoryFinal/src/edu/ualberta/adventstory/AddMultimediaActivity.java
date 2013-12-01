@@ -3,7 +3,9 @@ package edu.ualberta.adventstory;
 /**
  * The Add Multimedia Activity
  * Allows a user to select a piece of media from the list for adding to a page as well as going to the camera
- * app to take a new picture. 
+ * app to take a new picture.
+ * Requires music and movies to be in a Music and Movies folder on the 
+ * sdcard (respectively).  
  * @author: Lyle Rolleman
  */
 
