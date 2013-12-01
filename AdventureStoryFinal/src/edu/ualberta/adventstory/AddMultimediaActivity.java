@@ -3,7 +3,9 @@ package edu.ualberta.adventstory;
 /**
  * The Add Multimedia Activity
  * Allows a user to select a piece of media from the list for adding to a page as well as going to the camera
- * app to take a new picture. 
+ * app to take a new picture.
+ * Requires music and movies to be in a Music and Movies folder on the 
+ * sdcard (respectively).  
  * @author: Lyle Rolleman
  */
 
@@ -26,6 +28,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,6 +36,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AddMultimediaActivity extends Activity {
 	
@@ -118,7 +122,7 @@ public class AddMultimediaActivity extends Activity {
 	 * @author: Lyle Rolleman
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) { 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_addmedia);
 		setTitle(R.string.addmedia);
@@ -141,6 +145,22 @@ public class AddMultimediaActivity extends Activity {
 		
 		addMultimedia();
 	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_help:
+            	Toast.makeText(getApplicationContext(), 
+            				"Take a photo or select a multimedia option below. If your multimedia is not"
+            			+ "in the list below, make sure you have them in a Pictures, Movies or Music folder on the sd card",
+            				Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.action_home:
+            	finish();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 	
 	/**
 	 * Allows for selecting of multimedia and taking of photos

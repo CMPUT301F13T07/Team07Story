@@ -175,6 +175,10 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
         }
     }
     
+    /**
+     * This method is called when the user puts text into the search bar. I updates
+     * the results list provided with the items matching the user input.
+     */
 	private void searchText() {
 		searchEntry.addTextChangedListener(new TextWatcher(){
 			public void afterTextChanged(Editable s) {	
@@ -194,6 +198,11 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		
 	}
 	
+	/**
+	 * This method checks what the user wants the search text to correspond to. Either searching
+	 * online or not as well as searching author or title. It then updates the results list 
+	 * based on these values.
+	 */
 	public void searchResults(){
 		// Check if the user is searching pages or stories
 		if (isStory && isTitle){
@@ -217,6 +226,11 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		
 	}
 
+	/**
+	 * This method controls the spinner selections when the user either updates the search
+	 * online parameter or the author/title search parameter. These parameters are then used
+	 * in the searchResults method in order to properly update the search results.
+	 */
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, 
             int pos, long id) {
@@ -284,6 +298,10 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		}
 	}
 	
+	/**
+	 * This method delegates responsibility once the user has selected an item in the 
+	 * results list.
+	 */
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 		Story story;
