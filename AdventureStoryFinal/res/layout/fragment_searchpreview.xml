@@ -48,14 +48,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/buttonReturn" />
+                    android:text="@string/buttonReturn"
+                    android:background="@drawable/custom_button"
+            		android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/buttonselect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/buttonSelect" />
+                    android:text="@string/buttonSelect"
+                    android:background="@drawable/custom_button"
+            		android:textColor="@color/white" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
