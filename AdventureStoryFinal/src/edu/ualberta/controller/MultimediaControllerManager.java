@@ -18,12 +18,13 @@ import edu.ualberta.multimedia.Video;
  * @author Joey
  *
  */
-public class MultimediaControllerManager {
-	public static void play(Context context, MultimediaAbstract ma){
+public class MultimediaControllerManager {		
+	public static void play(Context context, MultimediaAbstract ma){				
 		if(ma.getClass().toString().equals(Picture.class.toString())){
 			// Don't do anything.
 		}else if(ma.getClass().toString().equals(SoundClip.class.toString())){
-			
+			SoundClipController scc = new SoundClipController();
+			scc.play(context, ma);
 		}else if(ma.getClass().toString().equals(Video.class.toString())){
 			VideoController vc = new VideoController();
 			vc.play(context, ma);
