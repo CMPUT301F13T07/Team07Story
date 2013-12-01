@@ -25,5 +25,5 @@ public class VideoController extends MultimediaController{
 	public Bitmap loadBitmap(Context context, MultimediaAbstract ma){
 		return BitmapFactory.decodeResource(
 				context.getResources(), R.drawable.ic_video);
-	}
+	}	
 }
