@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:text="Register"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/custom_button" />
+        android:background="@drawable/custom_button"
+        android:textColor="@color/white" />
 
 </LinearLayout>

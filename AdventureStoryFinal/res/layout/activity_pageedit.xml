@@ -88,7 +88,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Add Multimedia"
-            android:background="@drawable/custom_button" />
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white" />
         <!-- Add page button. -->
 
         <Button
@@ -96,7 +97,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Add Next Page"
-            android:background="@drawable/custom_button" />
+            android:background="@drawable/custom_button"
+            android:textColor="@color/white" />
 
         <TableLayout
             android:layout_width="fill_parent" 
