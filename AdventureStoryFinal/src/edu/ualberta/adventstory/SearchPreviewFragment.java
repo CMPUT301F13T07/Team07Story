@@ -31,7 +31,7 @@ public class SearchPreviewFragment extends Fragment {
 
 	private String title;
 	private String text;
-
+	private String previewText;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -51,14 +51,19 @@ public class SearchPreviewFragment extends Fragment {
 		
 		Button mReturn = (Button) this.getActivity().findViewById(R.id.buttonreturn);
 		Button mSelect = (Button) this.getActivity().findViewById(R.id.buttonselect);
-
 		
 		title = getArguments().getString("title");
 		text = getArguments().getString("text");
-
+		
+		// Gets 200 words max for preview text
+		if (text.length() > 200) {
+			previewText = text.substring(0, 200);
+		} else {
+			previewText = text;
+		}
 		// Set the page texts, not quite sure how to pull from database by id yet.
 		pageTitle.setText(title);
-		pageText.setText(text);
+		pageText.setText(previewText);
 		
 		// Sets the button usage
     	mReturn.setOnClickListener(new OnClickListener(){
@@ -77,7 +82,7 @@ public class SearchPreviewFragment extends Fragment {
     	});	
 	}
 	
-	/*
+	/**
 	 * This method changes to the PageView activity
 	 */
 	private void displayPage() {

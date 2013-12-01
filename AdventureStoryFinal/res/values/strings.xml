@@ -8,8 +8,7 @@
     <string name="action_undo">Undo</string>
     <string name="action_redo">Redo</string>
     <string name="action_cancel">Cancel</string>    
-    <string name="action_cache">Cache</string>    
-    <string name="hello_world">Hello world!</string>
+    <string name="action_cache">Upload</string>    
     <string name="newStory">Make a New Story</string>
     <string name="newPage">Make a New Page</string>
     <string name="findPage">Find a Page</string>
