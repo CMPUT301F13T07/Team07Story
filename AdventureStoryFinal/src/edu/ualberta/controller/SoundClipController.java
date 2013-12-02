@@ -14,10 +14,9 @@ import android.media.SoundPool;
 import android.net.Uri;
 import edu.ualberta.adventstory.R;
 import edu.ualberta.multimedia.MultimediaAbstract;
-import edu.ualberta.utils.Utility;
 
 /**
- * <code>SoundClipController</code> helpse abstract the loadBitmap, Play, Pause
+ * <code>SoundClipController</code> helps abstract the loadBitmap, Play, Pause
  * and Stop method as this is system dependent therefore not suitable in the
  * model package.
  * 
