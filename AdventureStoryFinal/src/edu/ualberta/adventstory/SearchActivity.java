@@ -342,7 +342,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		} else {
 			page = (Page) results.get(position);
 			((DataSingleton)getApplicationContext()).setCurrentPage(page);
-			//((DataSingleton)getApplicationContext()).setCurrentStory(null);
+
 			title = page.getTitle();
 			text = page.getText();
 			
@@ -362,10 +362,11 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			
 			if (parentActivity != null && parentActivity.compareTo("CreateNewStoryActivity") == 0) {
 				story = ((DataSingleton)getApplicationContext()).getCurrentStory();
-				System.out.println("story title: " + story.getTitle());
-				System.out.println("page title: " + page.getTitle());
 				story.setRoot(page);
 				database.update_story(story);
+			}
+			else {
+				((DataSingleton)getApplicationContext()).setCurrentStory(null);
 			}
 		}
 	}
