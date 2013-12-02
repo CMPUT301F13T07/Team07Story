@@ -51,7 +51,7 @@
     <string name="title_activity_storysearch">StorySearchActivity</string>
     <string name="title_activity_createnewstory">CreateNewStoryActivity</string>
     <string name="title_activity_test">TEST</string>
-    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_start">Adventure Story</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="title_activity_create_new">CreateNewActivity</string>
     <string name="title_activity_page_view">PageViewActivity</string>
