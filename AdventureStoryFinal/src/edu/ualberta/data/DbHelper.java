@@ -12,7 +12,13 @@ import android.util.Log;
 
 public class DbHelper extends SQLiteOpenHelper{
 	
-	
+	/**
+	 * 
+	 * @param context
+	 * @param name
+	 * @param factory
+	 * @param version
+	 */
     public DbHelper(Context context, String name, CursorFactory factory, 
     				int version) {
     	super(context, name, factory, version);

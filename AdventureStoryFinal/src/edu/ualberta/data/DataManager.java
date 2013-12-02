@@ -41,7 +41,6 @@ public interface DataManager {
 	/**
 	 * Inserts a new multimedia item into the multimedia table
 	 * @param mult
-	 * @return
 	 */
 	public abstract long insert_multimedia(MultimediaAbstract mult, int page_id);
 	
@@ -59,7 +58,6 @@ public interface DataManager {
 	 * Updates a story's author, title, and or root page
 	 * @param old
 	 * @param updated
-	 * @return
 	 */
 	public abstract long update_story(Story story);
 	
@@ -69,7 +67,6 @@ public interface DataManager {
 	 * @see insert_page_option
 	 * @see delete_page_option
 	 * @param page
-	 * @return
 	 */
 	public abstract long update_page(Page page);
 	
@@ -83,7 +80,6 @@ public interface DataManager {
 	/**
 	 * Deletes a page and its connection to its children from the db
 	 * @param page
-	 * @return
 	 */
 	public abstract long delete_page(Page page);
 	
@@ -91,15 +87,12 @@ public interface DataManager {
 	 * Deletes page, child row from page_children table
 	 * @param page
 	 * @param child
-	 * @return
 	 */
 	public abstract long delete_page_option(Page page, Page child);
 	
 	/**
 	 * Deletes a multimedia object from a page
 	 * @param mult
-	 * @param page
-	 * @return
 	 */
 	public abstract long delete_mult(MultimediaAbstract mult, Page page);
 }
