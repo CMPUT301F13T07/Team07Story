@@ -85,8 +85,9 @@ public class SearchPreviewFragment extends Fragment {
 	/**
 	 * This method changes to the PageView activity
 	 */
-	private void displayPage() {
+	private void displayPage() {		
 		Intent i = new Intent(getActivity(), PageViewActivity.class);
 		startActivityForResult(i, 0);
+		((SearchActivity)getActivity()).finish();
 	}
 }

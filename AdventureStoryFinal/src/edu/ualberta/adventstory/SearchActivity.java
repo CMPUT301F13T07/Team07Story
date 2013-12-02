@@ -325,7 +325,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			story.setRoot(story.getRoot().clone());
 			loadStory(story.getRoot());
 			((DataSingleton)getApplicationContext()).setCurrentStory(story);
-			pageList = story.getAllPages();
+			pageList = story.getAllPages();						
 
 			Bundle bundle = new Bundle();
 			bundle.putSerializable("pageList", pageList);
