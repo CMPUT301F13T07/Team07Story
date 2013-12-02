@@ -145,7 +145,7 @@ public class StartActivity extends Activity {
 		startActivity(new Intent(getBaseContext(), PageEditActivity.class));
 	}
 	
-	/* Called when the user clicks on read random story button and stories are available */
+	/** Called when the user clicks on read random story button and stories are available **/
 	private void readRandom(int index){
 		// Set the DataSingleton
 		((DataSingleton)getApplicationContext()).setCurrentStory(database.get_story_by_id(index));
@@ -155,7 +155,7 @@ public class StartActivity extends Activity {
 		startActivity(randStoryIntent);
 	}
 	
-	/* Random number generator used to find a random story */
+	/** Random number generator used to find a random story **/
 	private int randomGen(int high){
 		double rand = Math.random();
 		double num = rand * high;

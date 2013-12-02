@@ -235,11 +235,11 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 	public void onItemSelected(AdapterView<?> parent, View view, 
             int pos, long id) {
 		// Handles user selections from drop down menus
-		Spinner searchBy = (Spinner)parent;
-        //Spinner searchOnline = (Spinner)parent;
+		Spinner sBy = (Spinner)parent;
+        Spinner sOnline = (Spinner)parent;
 		// Set isTitle boolean to reflect spinner selection
 		long selected = (long) parent.getItemIdAtPosition(pos);
-		if(searchBy.getId() == R.id.spinnerSearchBy){
+		if(sBy.getId() == R.id.spinnerSearchBy){
 			if (selected == 0){
 				// User selected to search by title
 				isTitle = true;
@@ -251,7 +251,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			}
 		}
 
-		if(searchOnline.getId() == R.id.spinnerOnline){
+		if(sOnline.getId() == R.id.spinnerOnline){
 				if (selected == 0){
 					searchStruct = database;
 					isWeb = false;
