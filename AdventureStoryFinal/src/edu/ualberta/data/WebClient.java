@@ -23,7 +23,9 @@ import edu.ualberta.multimedia.Video;
 import edu.ualberta.utils.Page;
 import edu.ualberta.utils.Story;
 
-// https://github.com/CMPUT301F13T03/adventure.datetime
+/**
+ * Source: https://github.com/CMPUT301F13T03/adventure.datetime 
+ */
 
 public class WebClient implements DataManager{
 	private static final String CON_URL = "http://cmput301.softwareprocess.es:8080";
