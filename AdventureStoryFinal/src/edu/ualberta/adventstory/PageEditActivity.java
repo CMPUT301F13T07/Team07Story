@@ -265,9 +265,13 @@ public class PageEditActivity extends ActivityExtended {
 				new OnCallbackGeneric() {
 					@Override
 					public void callback() {
-						mWebClient.insert_page(mPage);
-						for (MultimediaAbstract m : mPage.getMultimedia()) {
-							mWebClient.insert_multimedia(m, mPage.getID());
+						if(!mWebClient.isConnected(PageEditActivity.this)){
+							mWebClient.buildDialog(PageEditActivity.this).show();
+						} else {  
+							mWebClient.insert_page(mPage);
+							for (MultimediaAbstract m : mPage.getMultimedia()) {
+								mWebClient.insert_multimedia(m, mPage.getID());
+							}
 						}
 					}
 				}));
