@@ -160,7 +160,14 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
             	int id = (int) database.insert_page(newPage);
             	newPage.setID(id);
             	((DataSingleton)getApplicationContext()).setCurrentPage(newPage);
-            	((DataSingleton)getApplicationContext()).setCurrentStory(null);
+            	if (parentActivity != null && parentActivity.compareTo("CreateNewStoryActivity") == 0) {
+            		Story story = ((DataSingleton)getApplicationContext()).getCurrentStory();
+    				story.setRoot(newPage);
+    				database.update_story(story);
+            	}
+            	else {
+            		((DataSingleton)getApplicationContext()).setCurrentStory(null);
+            	}
             	startActivity(new Intent(getBaseContext(), PageEditActivity.class));
                 return true;
             case R.id.action_help:
@@ -313,7 +320,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			page = (Page) results.get(position);
 			this.setResult((int)page.getID());
 			finish();
-		}else if(isStory) {
+		} else if(isStory) {
 			story = (Story) results.get(position);
 			story.setRoot(story.getRoot().clone());
 			loadStory(story.getRoot());
@@ -335,7 +342,7 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 		} else {
 			page = (Page) results.get(position);
 			((DataSingleton)getApplicationContext()).setCurrentPage(page);
-			((DataSingleton)getApplicationContext()).setCurrentStory(null);
+			//((DataSingleton)getApplicationContext()).setCurrentStory(null);
 			title = page.getTitle();
 			text = page.getText();
 			
@@ -355,6 +362,8 @@ public class SearchActivity extends Activity implements OnItemSelectedListener,
 			
 			if (parentActivity != null && parentActivity.compareTo("CreateNewStoryActivity") == 0) {
 				story = ((DataSingleton)getApplicationContext()).getCurrentStory();
+				System.out.println("story title: " + story.getTitle());
+				System.out.println("page title: " + page.getTitle());
 				story.setRoot(page);
 				database.update_story(story);
 			}
