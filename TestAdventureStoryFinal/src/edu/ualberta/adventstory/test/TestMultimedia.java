@@ -123,29 +123,4 @@ public class TestMultimedia extends AndroidTestCase {
 		}
 		return true;
 	}
-	/*
-	public void testloadBitmap(){
-		Bitmap bmNullFromLoad = mPictureNullDirectory.loadPhoto(getContext());
-		Bitmap bmNullFromResource = BitmapFactory.decodeResource(
-				getContext().getResources(), R.drawable.ic_picture);
-		assertTrue( compareBitmap(bmNullFromLoad, bmNullFromResource));
-		
-		Bitmap bmValidFromLoad = mPictureValidDirectory.loadPhoto(getContext());
-		Bitmap bmValidFromSd = BitmapFactory.decodeFile(mPictureValidDirectory.getFileDir());
-		assertTrue( compareBitmap(bmValidFromLoad, bmValidFromSd));
-		
-		Bitmap bmSound = mSound.loadPhoto(getContext());
-		Bitmap bmFromResource = BitmapFactory.decodeResource(
-				getContext().getResources(), R.drawable.ic_audio);
-		assertTrue( compareBitmap(bmSound, bmFromResource));
-		
-		// To prove that compareBitmap don't arbitrarily return true.
-		assertFalse(compareBitmap(bmNullFromLoad, bmSound));
-		
-		Bitmap bmVideo = mVideo.loadPhoto(getContext());
-		bmFromResource = BitmapFactory.decodeResource(
-				getContext().getResources(), R.drawable.ic_video);
-		assertTrue( compareBitmap(bmVideo, bmFromResource));
-	}*/
-	
 }
