@@ -155,8 +155,6 @@ public class WebClient implements DataManager{
 			ArrayList<Page> options = new ArrayList<Page>();
 			options = get_page_options(page.getID());
 			
-			System.out.println("options size: " + options.size());
-			
 			page.setPages(options);
 			
 			all_pages.add(page);

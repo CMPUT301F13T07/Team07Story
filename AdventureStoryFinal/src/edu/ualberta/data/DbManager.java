@@ -225,30 +225,40 @@ public class DbManager implements DataManager{
 	 * @return ArrayList<Page>
 	 */
 	public ArrayList<Page> page_from_cursor(Cursor c) {
+		ArrayList<Page> pages = new ArrayList<Page>();
+				
+		while (c.moveToNext()) {
+			pages.add(extract_from_cursor(c));
+		}
+		
+		return pages;
+	}
+	
+	/**
+	 * Extracts a page's parameters from a cursor
+	 * @param c
+	 * @return page
+	 */
+	public Page extract_from_cursor(Cursor c) {
 		Integer id;
 	    String title;
 	    String author;
 		String text;
 		Boolean readonly;
 		
-		ArrayList<Page> pages = new ArrayList<Page>();
-				
-		while (c.moveToNext()) {
-			id = c.getInt(c.getColumnIndex(Constant.PAGE_ID));
-			title = c.getString(c.getColumnIndex(Constant.PAGE_TITLE));
-			author = c.getString(c.getColumnIndex(Constant.PAGE_AUTHOR));
-			text = c.getString(c.getColumnIndex(Constant.PAGE_TEXT));
-			readonly = c.getInt(c.getColumnIndex(Constant.READONLY)) > 0;
-			
-			ArrayList<Page> options = new ArrayList<Page>();
-			options = get_page_options(id);
-			
-			Page page = new Page(id, title, author, text, options);
-			page.setReadOnly(readonly);
-			pages.add(page);
-		}
+		id = c.getInt(c.getColumnIndex(Constant.PAGE_ID));
+		title = c.getString(c.getColumnIndex(Constant.PAGE_TITLE));
+		author = c.getString(c.getColumnIndex(Constant.PAGE_AUTHOR));
+		text = c.getString(c.getColumnIndex(Constant.PAGE_TEXT));
+		readonly = c.getInt(c.getColumnIndex(Constant.READONLY)) > 0;
 		
-		return pages;
+		ArrayList<Page> options = new ArrayList<Page>();
+		options = get_page_options(id);
+		
+		Page page = new Page(id, title, author, text, options);
+		page.setReadOnly(readonly);
+		
+		return page;
 	}
 	
 	/**
